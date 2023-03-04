@@ -22,11 +22,11 @@ Picture info (Object, the key is the unique picture label):
 
 ## Functionality
 
-Users can create an account to store their picture information
-Allows users to upload pictures
-Filters pictures by location
-Allows users to add tags to their pictures, which are later used to filter the pictures
-Allows users to comment and like the pictures
+- Users can create an account to store their picture information
+- Allows users to upload pictures
+- Filters pictures by location
+- Allows users to add tags to their pictures, which are later used to filter the pictures
+- Allows users to comment and like the pictures
 
 
 [MIT License](https://opensource.org/licenses/MIT)
