@@ -1,11 +1,10 @@
 # Team 1 Project
 
 ## Team Overview
-### Team-1:
-Iris Xia @Barricature\
-Qiao Li @QiaoLi0622\
-Elvira Rui Xiong @rxion19\
-Max Tian @mstian2024
+Iris Xia [@Barricature](https://github.com/Barricature)\
+Qiao Li [@QiaoLi0622](https://github.com/QiaoLi0622)\
+Elvira Rui Xiong [@rxion19](https://github.com/rxion19)\
+Max Tian [@mstian2024](https://github.com/mstian2024)
 
 ## Innovative Idea
 
