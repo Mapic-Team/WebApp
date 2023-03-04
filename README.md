@@ -1,7 +1,7 @@
 # Team 1 Project
 
 ## Team Overview
-Team-1:<br/>
+# Team-1:
 Iris Xia @Barricature\
 Qiao Li @QiaoLi0622\
 Elvira Rui Xiong @rxion19\
