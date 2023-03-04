@@ -1,6 +1,11 @@
 # Team 1 Project
 
 ## Team Overview
+Team-1:
+Iris Xia @Barricature
+Qiao Li @QiaoLi0622
+Elvira Rui Xiong @rxion19
+Max Tian @mstian2024
 
 ## Innovative Idea
 
