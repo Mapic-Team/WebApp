@@ -8,7 +8,8 @@ Max Tian [@mstian2024](https://github.com/mstian2024)
 
 ## Innovative Idea
 
-Our Application is inspired by the Apple Map function that allows users to see pictures by their location. The core functionality of our app, however, lies in that people can socialize on this web app through browsing and interacting with each other’s photos. In addition to allowing people to see and comment on pictures, we also provide auxiliary filters to help people find pictures under the tags they’re interested in.
+Our website is inspired by the Apple Map's function allowing users to see pictures by location. It is a photo-sharing platform that allows users to upload and geotag their travel photos on a map. Users can upload their photos and tag them with a location, which is displayed on an interactive map that other users can explore. The platform also includes social features such as commenting, liking, and following other users. The website allows users to socialize with each other, share their travel experiences, and build their own photo portfolios. 
+Existing social media platforms like Facebook and Instagram allow users to share their travel photos and experiences, but they lack the ability to organize and present those photos in a map-based format. In this case, our website’s map-centric approach provides a unique way for users to explore and discover new locations through the lens of others. Overall, it offers a unique and immersive way for users to explore the world around them through photos and stories and to connect with other users who share their interests and experiences.
 
 ## Data
 
