@@ -23,11 +23,12 @@ Picture info (Object, the key is the unique picture label):
 
 ## Functionality
 
-- Users can create an account to store their picture information
-- Allows users to upload pictures
-- Filters pictures by location
-- Allows users to add tags to their pictures, which are later used to filter the pictures
-- Allows users to comment and like the pictures
+- User registration and authentication: Users can create an account and log in to the website to upload and view photos.
+- User profiles: Each user has a profile page that displays their uploaded photos and other information.
+- Photo Portfolio: Users can use the website to build their own photo portfolios and share them with others.
+- Photo uploading and geotagging: Users can upload photos to the website and geotag them on a map, allowing them to be discovered and browsed by other users.
+- Discovering stories: Users can explore other users' photos and stories based on location, category, date, or popularity.
+- Social features: Users can interact with each other's photos by commenting and liking them.
 
 
 [MIT License](https://opensource.org/licenses/MIT)
