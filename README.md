@@ -1,5 +1,8 @@
 # Team 1 Project
 
+## Application Name
+### Mapic
+
 ## Team Overview
 Iris Xia [@Barricature](https://github.com/Barricature)\
 Qiao Li [@QiaoLi0622](https://github.com/QiaoLi0622)\
