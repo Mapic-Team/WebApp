@@ -30,17 +30,17 @@ I want to travel to a nice place during the break, and I would like some suggest
 
 ## HTML & CSS Mockup
 
-Reiciendis velit dolorum voluptas earum. Rerum nobis accusantium laudantium minima incidunt. Magnam aut minus minus. Cumque unde voluptatibus soluta molestias perspiciatis aperiam accusantium laborum quo.
+This section contains the HTML and CSS mockup of the website. The map is based on [Leaflet.js](https://leafletjs.com/) and [OpenStreetMap](https://www.openstreetmap.org/). 
 
 ![HTML & CSS Mockup 1](mockup-home-1.png)
 ![HTML & CSS Mockup 1](mockup-home-2.png)
 ![HTML & CSS Mockup 1](mockup-home-3.png)
 
-Natus est molestias est et autem non in. Laudantium consequatur facilis perferendis. Saepe similique sapiente rem ut. Laudantium natus voluptas delectus molestiae ab omnis quidem. Maxime cumque porro ea deleniti incidunt nihil cupiditate sunt. Nihil eaque porro nemo veritatis.
+The first two pictures above demonstrate how users interacted with the map. Users can zoom in and out, and they can also click the photos on the map to view the details of the pictures. The third picture shows interface when the user clicks picture pop-ups on the map. 
 
 ![HTML & CSS Mockup 2](mockup-profile.png)
 
-Ipsam architecto nulla ut dolor dolor sit mollitia deleniti minus. Velit quia iste.
+The picture above is a mockup of the user's profile page. 
 
 ## References
 
