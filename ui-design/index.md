@@ -4,19 +4,15 @@
 
 ## Wireframe
 
-Facilis quas ut iste nam et. Doloribus ut nostrum nobis ut ut eos quia vel soluta. Minus dolorem error neque voluptas ex.
+The following wireframes were created using [Wireframe.cc](https://wireframe.cc/).
 
 ![Wireframe 1](homewireframe.png)
 
-Consequuntur reiciendis illo non suscipit necessitatibus dolores doloribus sed atque. Quos rem excepturi ut eum et eaque facere et. Illo quos voluptatem ratione sint numquam dolor assumenda. Ea et et sapiente distinctio et aut aspernatur necessitatibus est.
- 
-Est velit debitis enim. Esse et et quos animi animi. Quibusdam et porro et praesentium maiores dolores facilis. Voluptas molestias sapiente aperiam culpa. Et doloribus maiores omnis quisquam dolores.
- 
-Esse est et ut rem et praesentium quibusdam eaque. Aut consectetur illum placeat repellendus nam. Exercitationem dolorem tempora.
+The homepage of the website features a map as the primary element. At the top of the page, there is a fixed navigation bar that floats above the map. On the left side of the navigation bar, there are two tabs: "Mapic" and "Browse." On the right side of the navigation bar, there is a user avatar and a "Profile" link. In the bottom-left corner of the map, there is a button that allows users to find their current location. In addition, the map contains numerous pop-ups, which include thumbnail images of user-uploaded photos. A floating page appears above the map when a user clicks on a pop-up. This page contains a larger version of the photo, a description of the photo, and a comment box below the image. Users can use this comment box to send comments to the photo owner.
 
 ![Wireframe 2](profilewireframe.png)
 
-Qui commodi beatae. Quaerat saepe tempora nisi labore ducimus corporis adipisci repellat nihil. Dolores est sed ratione consequatur est magnam cupiditate. Repellendus molestias qui doloribus. Deserunt quidem temporibus. Sunt hic laudantium vitae natus est.
+Another significant page is the user's profile. The user's profile page has a navigation bar on the left side. At the top of the navigation bar is the website's name. Below the name, there are three tabs: "Statistics," "Settings," and "Privacy." At the bottom of the navigation bar, there is a "Log Out" button. The user's personal information is displayed on the right side of the page, including their avatar, username, and unique account ID. Below the personal information, there is a description section for the user. To the right of the description, the user's most liked and commented photos are showcased, along with their locations.
 
 ## Stories
 
