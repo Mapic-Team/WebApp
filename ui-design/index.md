@@ -36,11 +36,13 @@ I want to travel to a nice place during the break, and I would like some suggest
 
 Reiciendis velit dolorum voluptas earum. Rerum nobis accusantium laudantium minima incidunt. Magnam aut minus minus. Cumque unde voluptatibus soluta molestias perspiciatis aperiam accusantium laborum quo.
 
-![HTML & CSS Mockup 1](mockup-1.png)
+![HTML & CSS Mockup 1](mockup-home-1.png)
+![HTML & CSS Mockup 1](mockup-home-2.png)
+![HTML & CSS Mockup 1](mockup-home-3.png)
 
 Natus est molestias est et autem non in. Laudantium consequatur facilis perferendis. Saepe similique sapiente rem ut. Laudantium natus voluptas delectus molestiae ab omnis quidem. Maxime cumque porro ea deleniti incidunt nihil cupiditate sunt. Nihil eaque porro nemo veritatis.
 
-![HTML & CSS Mockup 2](mockup-2.png)
+![HTML & CSS Mockup 2](mockup-profile.png)
 
 Ipsam architecto nulla ut dolor dolor sit mollitia deleniti minus. Velit quia iste.
 
