@@ -16,6 +16,8 @@ Another significant page is the user's profile. The user's profile page has a na
 
 ![Wireframe 3](/docs/ui-design/screenshots/swwireframe.png)
 
+Our webpage also provides a “secondary view” page, where the user can browse the pictures in completely immersive mode. Under this mode, the picture is enlarged and display on the center of the page, with links underneath the picture that allows the user to interact with the picture by checking the author’s profile, or like and comment. The side bars on each side supply auxiliary functions. On the left side, the user can look up images by tags. On the right side, the user have a list of currently trending photos they can choose to visit.
+
 ## Stories
 
 ### Story 1
