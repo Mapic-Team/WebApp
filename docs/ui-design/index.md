@@ -14,6 +14,8 @@ The homepage of the website features a map as the primary element. At the top of
 
 Another significant page is the user's profile. The user's profile page has a navigation bar on the left side. At the top of the navigation bar is the website's name. Below the name, there are three tabs: "Statistics," "Settings," and "Privacy." At the bottom of the navigation bar, there is a "Log Out" button. The user's personal information is displayed on the right side of the page, including their avatar, username, and unique account ID. Below the personal information, there is a description section for the user. To the right of the description, the user's most liked and commented photos are showcased, along with their locations.
 
+![Wireframe 3](swwireframe.png)
+
 ## Stories
 
 ### Story 1
@@ -41,6 +43,10 @@ The first two pictures above demonstrate how users interacted with the map. User
 ![HTML & CSS Mockup 2](mockup-profile.png)
 
 The picture above is a mockup of the user's profile page. 
+
+![HTML & CSS Mockup 3](mockup-secondaryview.png)
+
+The picture above is a mockup of the secondary view.
 
 ## References
 
