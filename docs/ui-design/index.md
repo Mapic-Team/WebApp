@@ -14,7 +14,7 @@ The homepage of the website features a map as the primary element. At the top of
 
 Another significant page is the user's profile. The user's profile page has a navigation bar on the left side. At the top of the navigation bar is the website's name. Below the name, there are three tabs: "Statistics," "Settings," and "Privacy." At the bottom of the navigation bar, there is a "Log Out" button. The user's personal information is displayed on the right side of the page, including their avatar, username, and unique account ID. Below the personal information, there is a description section for the user. To the right of the description, the user's most liked and commented photos are showcased, along with their locations.
 
-![Wireframe 3](/docs/ui-design/screenshots/swwireframe.jpeg)
+![Wireframe 3](/docs/ui-design/screenshots/svwireframe.jpeg)
 
 Our webpage also provides a “secondary view” page, where the user can browse the pictures in completely immersive mode. Under this mode, the picture is enlarged and display on the center of the page, with links underneath the picture that allows the user to interact with the picture by checking the author’s profile, or like and comment. The side bars on each side supply auxiliary functions. On the left side, the user can look up images by tags. On the right side, the user have a list of currently trending photos they can choose to visit.
 
