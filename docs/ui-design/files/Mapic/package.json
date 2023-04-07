@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "exif-js": "^2.3.0",
+    "leaflet.locatecontrol": "^0.79.0"
+  }
+}
