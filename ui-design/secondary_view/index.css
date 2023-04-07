@@ -121,6 +121,24 @@ img {
     background-color: grey;
 }
 
+.popup {
+    width: 0px;
+    background-color: gray;
+    overflow: visible;
+    color: white;
+    text-align: left;
+    position: relative;
+}
+
+.popup > p {
+    margin: 20px;
+    width: 300px;
+}
+
+.popup :hover {
+    text-decoration: none;
+}
+
 .like {
     grid-column: 3 / 4;
     grid-row: 2 / 3;

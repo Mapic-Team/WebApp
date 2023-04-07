@@ -17,6 +17,23 @@ for(let i = 0; i < 10; i++) {
     const comment = document.createElement('p');
     comment.textContent = 'Comment'
     comment.className = 'comment'
+    function toggle() {
+        let opened = false;
+        const popup = document.createElement('div');
+        popup.className = ('popup')
+        popup.innerHTML = '<p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>';
+        function open() {
+            if(!opened) {
+                comment.appendChild(popup);
+                opened = true;
+            } else {
+                comment.removeChild(popup);  
+                opened = false;
+            } 
+        }
+        return open;    
+    }
+    comment.addEventListener('click', toggle());
     const like = document.createElement('p');
     like.textContent = 'LIKE'
     like.className = 'like'
