@@ -17,7 +17,7 @@
     <div class = "main-container d-flex ">
         <div class = "sidebar" id = "side_nav">
             <div class = "header-box">
-                <a href = #><h1 class = "fs-1 bg-white text-dark px-5 me-2 d-block">MAPIC</h1></a>
+                <a href = "../Mapic/index.html"><h1 class = "fs-1 bg-white text-dark px-5 me-2 d-block">MAPIC</h1></a>
 
             </div>
             <ul class = "list-unstyled px-2">
@@ -37,7 +37,8 @@
                 <div class = "image">
                     <img id="circle" src="lostshinjukuslice.png" class="mx-auto d-block border-10"></img>
                     <h2 class = "text-center" >MaxT#3</h2>
-                    <button type = "button" class="mx-auto d-block btn-sm btn btn-link"> change picture</button>
+                    <button type = "button" id = "picChange" class="mx-auto d-block btn-sm btn btn-link"> change picture</button>
+                    <input id="file-input" type="file" name="name" style="display: none;" />
                 </img>
                 </div>
                 <div class = "container"> 
@@ -117,7 +118,9 @@
             console.log($(this).data('rel'))
             $("section:nth-of-type("+$(this).data('rel')+")").removeClass('hidden').siblings("section").addClass("hidden")
         });
-
+        $('#picChange').on('click',function(){
+            $('#file-input').trigger('click');
+        })
        // $('#saveDesc').on("click", function(){
            // var databack = $("#staticBackdrop #newDesc").val().trim();
             //console.log(databack);
