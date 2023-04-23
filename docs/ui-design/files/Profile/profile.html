@@ -27,7 +27,7 @@
             </ul>
             <hr class ="h-color mx-2">
             <div class = logout>
-                <button type ="button" class = "btn btn-lg btn-block btn-light"><i class="fa fa-sign-out" aria-hidden="true"></i>logout</button>
+                <button type ="button" id = "logout" class = "btn btn-lg btn-block btn-light"><i class="fa fa-sign-out" aria-hidden="true"></i>logout</button>
             </div> 
 
         </div>
@@ -36,9 +36,9 @@
             <section class = "statistics " id = "statistics">
                 <div class = "image">
                     <img id="circle" src="lostshinjukuslice.png" class="mx-auto d-block border-10"></img>
-                    <h2 class = "text-center" >MaxT#3</h2>
+                    <h2 class = "text-center" id = "userid">MaxT#3</h2>
                     <button type = "button" id = "picChange" class="mx-auto d-block btn-sm btn btn-link"> change picture</button>
-                    <input id="file-input" type="file" name="name" style="display: none;" />
+                    <input id="file-input" type="file" name="name" accept="image/*" style="display: none;" />
                 </img>
                 </div>
                 <div class = "container"> 
@@ -119,7 +119,7 @@
             $("section:nth-of-type("+$(this).data('rel')+")").removeClass('hidden').siblings("section").addClass("hidden")
         });
         $('#picChange').on('click',function(){
-            $('#file-input').trigger('click')
+            $('#file-input').trigger('click');
         })
        // $('#saveDesc').on("click", function(){
            // var databack = $("#staticBackdrop #newDesc").val().trim();

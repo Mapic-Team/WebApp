@@ -8,18 +8,29 @@ const newDesc = document.getElementById('newDesc');
 const themElems = ['content','modal-header','modal-body','newDesc','modal-dialog']
 const picChange = document.getElementById('file-input');
 const image = document.getElementById("circle");
+let reader = new FileReader();
+const logout = document.getElementById("logout");
+let user = "";
+
+if(localStorage.getItem('user') != null){
+    user = localStorage.getItem('user');
+    document.getElementById('userid') = user;
+}
 
 //initilize it to false, but we'll update it according to the db later
 var privateCheck = false;
+
 dark.addEventListener("click", (event) => {
     //TODO LINK IT TO THE POUCHDB
     //remove the previous lists 
     updateTheme('darkTheme');
+    localStorage.setItem("theme","black");
 });
 
 light.addEventListener("click", (event)=>{
     //TODO LINK IT TO THE POUCHDB
     updateTheme('whiteTheme');
+    localStorage.setItem("theme","white");
 });
 
 privatemode.addEventListener("click", (event) =>{
@@ -43,16 +54,25 @@ function handleFiles(){
     reader.onload = readerEvent =>{
         var content = readerEvent.target.result;
         image.src = content;
+        console.log(content);
+        sessionStorage.setItem("pic",content);
         //probably add db to this?
     }
+    
 }
+
+logout.addEventListener("click", (event) => {
+    localStorage.clear()
+    
+    location.href = "../Mapic/index.html"
+});
 //TODO RETRIEVE DB PART.
 function getfromDB(){}
-function updateDB(){}
+function updateDB(update,x){}
 
 function updateTheme(theme){
     for(let elem in themElems){
-        console.log(themElems[elem]);
+        //console.log(themElems[elem]);
         document.getElementById(themElems[elem]).setAttribute("class", themElems[elem]);
         document.getElementById(themElems[elem]).classList.add(theme);
     }
