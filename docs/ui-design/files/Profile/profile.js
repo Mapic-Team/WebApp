@@ -14,7 +14,8 @@ let user = "";
 
 if(localStorage.getItem('user') != null){
     user = localStorage.getItem('user');
-    document.getElementById('userid') = user;
+    console.log(user)
+    document.getElementById('userid').innerHTML = user;0
 }
 
 //initilize it to false, but we'll update it according to the db later
