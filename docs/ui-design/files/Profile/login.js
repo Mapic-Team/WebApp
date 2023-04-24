@@ -1,4 +1,6 @@
-const themeChange = ["logUser","logPass","card","body","signNam","signPass"]
+import * as check from "profCrud.js";
+const {users} = require("front-end/userProfileCRUD.js");
+var md5 = require('md5');
 const logUser =  document.getElementById("logUser");
 const logPass = document.getElementById("logPass");
 const signNam = document.getElementById("signNam");
@@ -25,41 +27,48 @@ function updateTheme(theme){
     }
 }
 
-document.getElementById("signup").addEventListener("click" ,(event)=>{
-    if(isValidSignUp()){
+document.getElementById("signup").addEventListener("click" ,async (event)=>{
+    if(await isValidSignUp()){
         localStorage.setItem("login", "True");
         localStorage.setItem("user", signNam.value);
         location.href = "profile.html"
     }
 });
 
-document.getElementById("login").addEventListener("click" ,(event)=>{
-    if(isValidLogin()){
-       // localStorage.setItem("login", "True");
-        //localStorage.setItem("user", signNam.value);
-        //location.href = "profile.html"
+document.getElementById("login").addEventListener("click" ,async (event)=>{
+    if(await isValidLogin()){
+        localStorage.setItem("login", "True");
+        localStorage.setItem("user", signNam.value);
+        location.href = "profile.html"
     }
 });
 /**
  * This function checks if the login info is valid or not after looking at the pouch DB stuff
  */
-function isValidLogin(){
-    if(isEmpty(signNam.value)||isEmpty(signPass.value)){
+async function isValidLogin(){
+    let exists = await check.check_Profile(logUser.value);
+    if(isEmpty(logUser.value)||isEmpty(logPass.value)){
         document.getElementById("logwarning").innerHTML = "One of the Values is empty!";
         return false;
     }
+    else if(!exists || users[md5(logUser.value).password != logPass.value]){
+        return false;
+    }
+    return true;
 }
 
 /**
  * This function checks if the sign-in info is valid or not after looking at the pouch DB stuff
  */
-function isValidSignUp(){
+async function isValidSignUp(){
+    let exists = await check.createProf(signNam.value, signPass.value)
     if(isEmpty(signNam.value)||isEmpty(signPass.value)){
         document.getElementById("warning").innerHTML = "One of the Values is empty!";
         return false;
     }
-    if(false){
-
+    else if(!exists){
+        document.getElementById("warning").innerHTML = "User already exists!";
+        return false;
     }
     //check if we already have it in the database
     return true;
