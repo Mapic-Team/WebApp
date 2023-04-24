@@ -22,6 +22,7 @@
   "homepage": "https://github.com/umass-cs-326-s23/326-project-repo-team-1-1#readme",
   "dependencies": {
     "blueimp-md5": "^2.19.0",
+    "md5": "^2.3.0",
     "pouchdb": "^8.0.1"
   }
 }
