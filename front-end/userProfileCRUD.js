@@ -66,7 +66,7 @@ async function readUser(response, name) {
     reload();
     console.log(users);
     response.writeHead(200, headerFields);
-    response.write(`<h1>User ${name} and ${users[md5(name)]}</h1>`);
+    response.write(`<h1>User ${name} and ${users[md5(name)][profileDescription]}</h1>`);
     response.end();
   } else {
     // 404 - Not Found
