@@ -56,7 +56,7 @@ async function createUser(response, name, password) {
   
     await db.post(users);
     response.writeHead(200, headerFields);
-    response.write(`<h1>User ${name} and ${md5(name)}Created</h1>`);
+    response.write(`${name}${md5(name)}`);
     response.end();
   }
 }
@@ -66,7 +66,7 @@ async function readUser(response, name) {
     reload();
     console.log(users);
     response.writeHead(200, headerFields);
-    response.write(`<h1>User ${name} and ${users[md5(name)]}</h1>`);
+    response.write(`${users[md5(name)].password}`);
     response.end();
   } else {
     // 404 - Not Found
@@ -121,12 +121,7 @@ async function deleteUser(response, name) {
 
 function dumpUsers(response) {
   response.writeHead(200, headerFields);
-  response.write("<h1>Users</h1>");
-  response.write("<ul>");
-  for (const [key, value] of Object.entries(users)) {
-    response.write(`<li>${key} = ${value}</li>`);
-  }
-  response.write("</ul>");
+  response.write(`${users}`);
   response.end();
 }
 
