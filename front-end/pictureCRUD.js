@@ -2,7 +2,10 @@ import PouchDB from "pouchdb";
 import * as http from "http";
 import * as url from "url";
 import md5 from "md5";
-let users = {};
+
+import users from userProfile;
+
+let pcitures ={}
 
 const headerFields = { "Content-Type": "text/html" };
 
@@ -22,22 +25,39 @@ let res = await db.allDocs({
   attachments: true,
 });
 
-const userProfile={
-  _id:"",
-  userName:"", 
-  password: "",
-  profileDescription: "I am new to MaPic!",
-  setting: {isVisible:true}
-
+const pictureProfile={
+    like: 0,
+    tags: [""],
+    description: "",
+    location: {latitude,longitude},
+    exif: {
+        time: "",
+        location: [0,0],
+        aperture: 0,
+        shutterSpeed: 0,
+        ISO:0
+    },
+    comment: [
+        {
+            commentString: "",
+            commentTime:"",
+            commentBy: ""
+        }
+    ]
+    
 }
 
 async function reload() {
-  users = res !== null ? res : {};
+  pictures = res !== null ? res : {};
 }
 
 function userExists(name) {
   return md5(name) in users;
 }
+
+function pictureExists(name) {
+    return md5(name) in pictures;
+  }
 
 async function createUser(response, name, password) {
   if (name === undefined || userExists(name)) {
