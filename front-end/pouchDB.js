@@ -2,9 +2,15 @@
 // It should export functions that all three pages (mapic, profile, and secondary_view, and read)
 // The functions need not be async for now
 
-const PouchDB = require("pouchdb");
-const md5 = require("md5");
-const ReverseMd5 = require("reverse-md5");
+// const PouchDB = require("pouchdb");
+// const md5 = require("md5");
+// const ReverseMd5 = require("reverse-md5");
+
+import PouchDB from "PouchDB";
+import md5 from "md5";
+import ReverseMd5 from "reverse-md5";
+// const md5 = require("md5");
+// const ReverseMd5 = require("reverse-md5");
 const rev = ReverseMd5({
   lettersUpper: true,
   lettersLower: true,
