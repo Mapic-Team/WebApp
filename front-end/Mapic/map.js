@@ -74,9 +74,19 @@ if (navigator.geolocation) {
 
 document.getElementById("close-btn").addEventListener("click", () => {
     document.getElementById("upload-window").style.display = "none";
+    document.getElementById("upload-title").style.display = "block";
+    document.getElementById("upload").value = "";
 });
+
 document.getElementById("upload-btn").addEventListener("click", () => {
-    document.getElementById("upload-window").style.display = "flex";
+    if (document.getElementById("upload-window").style.display == "" 
+        || document.getElementById("upload-window").style.display == "none") {
+        document.getElementById("upload-window").style.display = "flex";
+    } else {
+        document.getElementById("upload-window").style.display = "none";
+        document.getElementById("upload-title").style.display = "block";
+        document.getElementById("upload").value = "";
+    }
 });
 
 
@@ -89,11 +99,11 @@ document.getElementById("upload").onchange = function(e) {
         var reader = new FileReader();
         reader.onload = function(e) {
             var base64 = e.target.result;
-            console.log(base64);
+            // console.log(base64);
             // createPicture(userName, base64, description);
         };
         reader.readAsDataURL(file);
-
+        // $(this).val("");
 
 
 
