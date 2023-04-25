@@ -5,11 +5,11 @@ import md5 from "md5";
 
 import users from userProfile;
 
-let pcitures ={}
+let pictures ={}
 
 const headerFields = { "Content-Type": "text/html" };
 
-const db = new PouchDB("users");
+const db = new PouchDB("pictures");
 
 db.allDocs({
   include_docs: true,
@@ -29,7 +29,7 @@ const pictureProfile={
     like: 0,
     tags: [""],
     description: "",
-    location: {latitude,longitude},
+    location: {latitude:0,longitude:0},
     exif: {
         time: "",
         location: [0,0],
@@ -51,38 +51,39 @@ async function reload() {
   pictures = res !== null ? res : {};
 }
 
-function userExists(name) {
-  return md5(name) in users;
+function userExists(user) {
+  return md5(user) in users;
 }
 
-function pictureExists(name) {
-    return md5(name) in pictures;
+function pictureExists(user, pic) {
+    return md5(pic) in pictures[md5(user)];
   }
 
-async function createUser(response, name, password) {
-  if (name === undefined || userExists(name)) {
+async function createPicture(response, user, pic) {
+  if (((user === undefined || !userExists(md5(user)))) && (pic!== undefined && !pictureExists(user,pic))){
     // 400 - Bad Request
     response.writeHead(400, headerFields);
     response.write("<h1>User Name Required</h1>");
     response.end();
   } else {
     reload();
-    const id = md5(name).toString();
-    let new_user = userProfile;
-    new_user["_id"] = id;
-    new_user["userName"] = name;
-    new_user["password"] = password;
-    users[id] = new_user;
-  
+    const user_id = md5(user);
+    const pic_id = md5(pic);
+    let new_picture = pictureProfile;
+    
+    //need to work with Google Map API
+    //new_picture[location]={}
+    pictureProfile[user_id][pic_id] =pictureProfile;
+    
     await db.post(users);
     response.writeHead(200, headerFields);
-    response.write(`<h1>User ${name} and ${md5(name)}Created</h1>`);
+    response.write(`<h1>User ${user}'s pic Created</h1><br \><img src=${pic}>`);
     response.end();
   }
 }
 
-async function readUser(response, name) {
-  if (userExists(name)) {
+async function readPicture(response, user, pic) {
+  if (userExists(user) && pictureExists(pic)) {
     reload();
     console.log(users);
     response.writeHead(200, headerFields);
