@@ -18,7 +18,7 @@ function createUser(userName, password) {
         userName: userName,
         password: password
     }
-    db.put(user, function(err, res) {
+    userDB.put(user, function(err, res) {
         if(err) {
             console.log(err);
         } else {
@@ -42,18 +42,73 @@ function deleteUser() {
 
 // functions for secondary_view
 
-function increaseLike(userName) {
+/**
+ * This function increase the likes of a specific picture in the database by one.
+ * @param {Int} picId 
+ * @returns {void}
+ */
+function increaseLike(picId) {
+    return null;
+    // read picture
+    // increase the like field
+    // update picture
+}
+
+/**
+ * This function decrease the likes of a specific picture in the database by one.
+ * @param {Int} picId 
+ * @returns {void}
+ */
+function decreaseLike(picId) {
+    return null
+}
+
+/**
+ * Get the time field from exif of a specific picture, return the time as a string
+ * In the format "yyyy/mm/dd 00:00"
+ * @param {*} picId 
+ * @returns {String} 
+ */
+function getPicTime(picId) {
+    return null
+}
+
+/**
+ * Get all comments of a picture, return an array of comment objects in the form
+ * {commentString: “”, string
+	commentTime: "yyyy/mm/dd 00:00" string,
+	commentBy: int (userId)}
+ * @param {*} picId 
+ * @return {Array} returns an array of comment objects
+ */
+function getComments(picId) {
+    return null
+}
+/**
+ * This function add a new comment by a user to a picture
+ * @param {Int} picId
+ * @param {String} comment the new comment that is being added
+ * @param {Int} userId
+ * @returns {void}
+ */
+function addComment(picId, comment, userId) {
     return null;
 }
 
-function addComment(picId) {
+/**
+ * Get the description field of a specific picture
+ * @param {*} picId 
+ * @returns 
+ */
+function getDescription(picId) {
     return null;
 }
 
-function readDescription(picId) {
-    return null;
-}
-
+/**
+ * Get the the user id of the owner of a picture
+ * @param {*} picId 
+ * @returns {Int}
+ */
 function getUser(picId) {
     return null
 }
@@ -64,5 +119,5 @@ function getUser(picId) {
 
 exports.increaseLike = increaseLike;
 exports.addComment = addComment;
-exports.readDescription = readDescription;
+exports.getDescription = getDescription;
 exports.getUser = getUser;
