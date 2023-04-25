@@ -14,7 +14,6 @@ import ReverseMd5 from "reverse-md5";
 const pictureDB = new PouchDB("pictureDB");
 const userDB = new PouchDB("userDB");
 
-/***************************** utility functions *************************/
 const rev = ReverseMd5({
   lettersUpper: true,
   lettersLower: true,
@@ -24,7 +23,7 @@ const rev = ReverseMd5({
   maxLen: 20,
 });
 
-
+/***************************** utility functions *************************/
 
 function getImgBase64(path) {
   const file = path;
@@ -39,6 +38,45 @@ function getImgBase64(path) {
   reader.readAsDataURL(file);
 }
 
+
+/**
+ * Given a picId and the user that created it,
+ * append the picId to the end of the pictures array of that specific user
+ * in the user database
+ * @param {*} picId 
+ * @param {*} userName 
+ * @return {void}
+ */
+function addImg(picId, userName) {
+  userDB.get(md5(userName)).then(function (doc) {
+    doc.pictures = doc.pictures.append(picId);
+    userDB.put(doc);
+  });
+}
+
+/**
+ * Return the date and time when the function is called
+ * In the format 
+ * @return {String}
+ */
+function constructTimeString() {
+  let y = today.getFullYear().toString();
+  let m = (today.getMonth() + 1).toString().padStart(2, '0');
+  let d = today.getDate().toString().padStart(2, '0');
+  let hour = today.getHours().toString().padStart(2, '0');
+  let min = today.getMinutes().toString().padStart(2, '0');
+  let sec = today.getSeconds().toString().padStart(2, '0');
+  return `${y}:${m}:${d} ${hour}:${min}:${sec}`;
+}
+
+/**
+ * Generate a random unique id string of length 16-17
+ * should be used for generating picId
+ * @returns {String}
+ */
+function randId() {
+  return Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9*Math.pow(10, 12)).toString(36);
+}
 
 /***************************** CRUD functions *************************/
 
@@ -95,7 +133,7 @@ export function updateUser(
   userSetting,
   pictures
 ) {
-  db.get(md5(userName)).then(function (doc) {
+  userDB.get(md5(userName)).then(function (doc) {
     // Update the document
     doc.password = password;
     doc.profileDescription = profileDescription;
@@ -121,12 +159,6 @@ export function deleteUser(userName) {
 //functions for pictureDB
 
 // helper function
-function addImg(picId, userName) {
-  db.get(md5(userName)).then(function (doc) {
-    doc.pictures = doc.pictures.append(picId);
-    userDB.put(doc);
-  });
-}
 
 /**
  * create a picture
@@ -147,7 +179,7 @@ export function createPicture(
 ) {
   const today = new Date();
   // very unique generation, length 16-17
-  const randId = Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9*Math.pow(10, 12)).toString(36)
+  const randId = randId();
   const pic = {
     _id: randId,
     ownerName: ownerName,
@@ -155,7 +187,7 @@ export function createPicture(
     tags: tags,
     picBase64: imgBase,
     description: description,
-    createdTime: `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()} ${today.getHours()}:${today.getMinutes()}`,
+    createdTime: constructTimeString(),
     exif: EXIF,
     comments: [],
   };
@@ -226,7 +258,7 @@ export function decreaseLike(picId) {
 
 /**
  * Get the time field from exif of a specific picture, return the time as a string
- * In the format "yyyy/mm/dd 00:00"
+ * In the format "yyyy:mm:dd hh:mm:ss"
  * @param {*} picId
  * @returns {String}
  */
@@ -239,7 +271,7 @@ export function getPicTime(picId) {
 /**
  * Get all comments of a picture, return an array of comment objects in the form
  * {commentString: “”, string
-	commentTime: "yyyy/mm/dd 00:00" string,
+	commentTime: "yyyy:mm:dd hh:mm:ss" string,
 	commentBy: int (userId)}
  * @param {*} picId 
  * @return {Array} returns an array of comment objects
@@ -261,9 +293,7 @@ export function addComment(picId, comment, userName) {
   let today = new Date();
   const comment_profile = {
     commentString: comment,
-    commentTime: `${today.getFullYear()}/${
-      today.getMonth() + 1
-    }/${today.getDate()} ${today.getHours()}:${today.getMinutes()}`,
+    commentTime: constructTimeString(),
     commentBy: userName,
   };
   pictureDB.get(picId).then(function (doc) {
