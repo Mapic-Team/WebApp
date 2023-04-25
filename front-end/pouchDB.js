@@ -93,7 +93,7 @@ function randId() {
   return Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9*Math.pow(10, 12)).toString(36);
 }
 
-/***************************** CRUD functions *************************/
+/***************************** userDB CRUD functions *************************/
 
 /**
  * Creates a user given userName and password
@@ -171,9 +171,7 @@ export function deleteUser(userName) {
   });
 }
 
-//functions for pictureDB
-
-// helper function
+/***************************** pictureDB CRUD functions *************************/
 
 /**
  * create a picture
@@ -263,7 +261,7 @@ export function deletePicture(picId) {
   removePic(picId, userName);
 }
 
-// functions for secondary_view
+/***************************** r/w functions for secondary_view *************************/
 
 /**
  * This export function increase the likes of a specific picture in the database by one.
@@ -357,7 +355,7 @@ export function getUser(picId) {
   });
 }
 
-// functions for mapic homepage
+/***************************** r/w functions for Mapic (homepage) *****************************/
 
 /**
  * Get the location field of a picture object
