@@ -1,5 +1,7 @@
-{
+{"type":"module",
   "dependencies": {
-    "pouchdb": "^8.0.1"
+    "md5": "^2.3.0",
+    "pouchdb": "^8.0.1",
+    "reverse-md5": "^0.0.5"
   }
 }
