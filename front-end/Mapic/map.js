@@ -120,6 +120,7 @@ function clickPhoto(image) {
     // console.log(image.getContent());
     let imageName = image.getContent().split(" ")[2].split("/")[3].split('"')[0];
     // console.log(imageName);
+    // if (toolTip == undefined) {
     let photoDiv = document.createElement("div");
     photoDiv.setAttribute("id", "photo-div");
     let closeButton = document.createElement("button");
@@ -129,10 +130,10 @@ function clickPhoto(image) {
     // img.setAttribute("id", "imageName");
     // console.log(imageName);
     img.setAttribute("src", "../Mapic/images/"+imageName);
-    EXIF.getData(img, function() {
-        var allMetaData = EXIF.getAllTags(this);
-        console.log(allMetaData);
-    });
+    // EXIF.getData(img, function() {
+    //     var allMetaData = EXIF.getAllTags(this);
+    //     console.log(allMetaData);
+    // });
     img.setAttribute("style", "width:inherit");
     let descriptionPara = document.createElement("div");
     descriptionPara.setAttribute("id", "description");
@@ -154,7 +155,8 @@ function clickPhoto(image) {
     photoDiv.appendChild(img);
     photoDiv.appendChild(descriptionPara);
     photoDiv.appendChild(commentDiv);
-
+    // }
+    // console.log(toolTip);
     if(toolTip == undefined) {
     toolTip = L.tooltip([latlng.lat, latlng.lng],{direction: 'top', opacity:1, interactive: true, permanent: true})
     .setContent(photoDiv)
@@ -165,7 +167,8 @@ function clickPhoto(image) {
     // let descriptionPara = document.getElementById("description");
     // descriptionPara.textContent = description;
     } else {
-        toolTip.openOn(map);
+        // console.log("else");
+        // toolTip.openOn(map);    
         // let descriptionPara = document.getElementById("description");
         // descriptionPara.textContent = description;
     }
@@ -173,9 +176,10 @@ function clickPhoto(image) {
     closeBtn.addEventListener("click", closeTooltip);
 
     function closeTooltip() {
-        toolTip.close();
-        toolTip = undefined;
-        // alert("close");
+        if (toolTip != undefined) {
+            map.closeTooltip(toolTip);
+            toolTip = undefined;
+        }
     }
 }
 
