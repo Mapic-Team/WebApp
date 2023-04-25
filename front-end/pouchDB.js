@@ -43,13 +43,28 @@ function getImgBase64(path) {
  * Given a picId and the user that created it,
  * append the picId to the end of the pictures array of that specific user
  * in the user database
- * @param {*} picId 
- * @param {*} userName 
+ * @param {String} picId 
+ * @param {String} userName 
  * @return {void}
  */
-function addImg(picId, userName) {
+function addPic(picId, userName) {
   userDB.get(md5(userName)).then(function (doc) {
     doc.pictures = doc.pictures.append(picId);
+    userDB.put(doc);
+  });
+}
+
+/**
+ * Given a picId and the user that created it,
+ * remove the picId from pictures array of that specific user
+ * in the user database
+ * @param {String} picId 
+ * @param {String} userName 
+ * @return {void}
+ */
+function removePic(picId, userName) {
+  userDB.get(md5(userName)).then(function (doc) {
+    doc.pictures = doc.pictures.remove(picId);
     userDB.put(doc);
   });
 }
@@ -199,24 +214,33 @@ export function createPicture(
     }
   });
   // add the picture under the user
-  addImg(Id, userName);
+  addPic(Id, userName);
 }
 
+/**
+ * Get all information pertaining to the picture
+ * @param {String} pidId 
+ * @returns {Object}
+ */
 export function readPicture(pidId) {
   return pictureDB.get(picId);
 }
 
-
+/**
+ * Update a picture's tags and description and exif fields
+ * @param {*} picId 
+ * @param {*} tags 
+ * @param {*} description 
+ * @param {*} EXIF 
+ */
 export function updatePicture(
   picId,
-  ownerName,
   tags,
   description,
   EXIF
 ) {
   pictureDB.get(picId).then(function (doc) {
     // Only allow to update the description and tags of the picture
-    doc.ownerName = ownerName;
     doc.tags = tags;
     doc.description = description;
     doc.exif = EXIF;
@@ -224,10 +248,19 @@ export function updatePicture(
   });
 }
 
-export function deletePicture(pidId) {
-  pictureDB.get(pidId).then(function (doc) {
+/**
+ * Delete a picture from the pictureDB,
+ * also delete it from its owner's pictures array
+ * @param {String} picId 
+ * @returns {void}
+ */
+export function deletePicture(picId) {
+  let userName = '';
+  pictureDB.get(picId).then(function (doc) {
+    userName = doc.ownerName;
     return pictureDB.remove(doc);
   });
+  removePic(picId, userName);
 }
 
 // functions for secondary_view
@@ -286,7 +319,7 @@ export function getComments(picId) {
  * This export function add a new comment by a user to a picture
  * @param {String} picId
  * @param {String} comment the new comment that is being added
- * @param {Int} userId
+ * @param {String} userName
  * @returns {void}
  */
 export function addComment(picId, comment, userName) {
@@ -304,7 +337,7 @@ export function addComment(picId, comment, userName) {
 
 /**
  * Get the description field of a specific picture
- * @param {*} picId
+ * @param {String} picId
  * @returns
  */
 export function getDescription(picId) {
@@ -315,7 +348,7 @@ export function getDescription(picId) {
 
 /**
  * Get the the userName of the owner of a picture
- * @param {*} picId
+ * @param {String} picId
  * @returns {String}
  */
 export function getUser(picId) {
