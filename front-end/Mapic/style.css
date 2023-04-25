@@ -9,7 +9,6 @@
 ul {
   padding-inline-start: 0;
 }
-
   
 .nav ul {
   overflow: hidden;
@@ -18,13 +17,11 @@ ul {
 }
 .nav ul li {
   float: left;
-  /* align-items: center; */
   padding: 10px 25px 10px 25px;
 }
 .nav ul li a {
   position: relative;
   display: block;
-  /* padding: 4px 0; */
   font-family: Lato, sans-serif;
   color: #ecf0f1;
   text-decoration: none;
@@ -70,7 +67,6 @@ ul {
 }
 
 .leaflet-popup-content-wrapper:hover {
-  /* background-color: rgba(255,255,255,0.5); */
   box-shadow: 0 0.7px 1px rgba(0, 0, 0, 0.157),
     0 2px 3px rgba(0, 0, 0, 0.2), 0 4px 5px rgba(0, 0, 0, 0.25),
     0 7px 11px rgba(0, 0, 0, 0.3), 0 15px 20px rgba(0, 0, 0, 0.5);
@@ -79,19 +75,15 @@ ul {
 
 #photo-div {
   width: 40vw;
-  /* background:red; */
 }
 
 #close-button {
   position: absolute;
   top: 6px;
   right: 6px;
-  /* padding: 10px; */
-  /* font-size: 20px; */
   color: black;
   background: rgba(255,255,255,0.6);
   cursor: pointer;
-  /* transition: 0.3s; */
   border-radius: 50%;
 }
 
@@ -113,11 +105,8 @@ ul {
 
 #description {
   white-space: normal;
-  /* background-color: aqua; */
   width: 40vw;
-  /* height: 10vh; */
   padding-bottom: 5px;
-  /* word-break: break-all; */
   word-wrap: break-word;
 }
 
@@ -134,6 +123,33 @@ ul {
   height: 98vh;
 }
 
+#upload-btn {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translate(-50%);
+  width: 65px;
+  height: 45px;
+  padding: 6px;
+  background: rgba(255,255,255,0.9);
+  cursor: pointer;
+  border-radius: 999em;
+  border:2px solid rgba(0,0,0,0.2);
+  z-index: 8000;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+#upload-btn:hover {
+  background: rgba(242,242,242, 0.9);
+}
+
+#upload-img {
+  width: 40%;
+  overflow: hidden;
+}
+
 #upload-window {
   position: absolute;
   top: 20vh;
@@ -141,7 +157,7 @@ ul {
   width: 30vw;
   height: 60vh;
   background: rgba(255,255,255,0.9);
-  display: flex;
+  display: none;
   padding: 20px;
   justify-content: center;
   align-items: center;
@@ -152,7 +168,6 @@ ul {
 
 #upload-title {
   font-size: 20px;
-  /* font-weight: bold; */
   margin-bottom: 20px;
 }
 

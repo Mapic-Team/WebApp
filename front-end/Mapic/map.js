@@ -72,16 +72,27 @@ if (navigator.geolocation) {
 //     alert("Please login first");
 // }
 
+document.getElementById("close-btn").addEventListener("click", () => {
+    document.getElementById("upload-window").style.display = "none";
+});
+document.getElementById("upload-btn").addEventListener("click", () => {
+    document.getElementById("upload-window").style.display = "flex";
+});
 
-// document.getElementById("upload").onchange = function(e) {
-//     var file = e.target.files[0]
-//     if (file && file.name) {
-//         var reader = new FileReader();
-//         reader.onload = function(e) {
-//             var base64 = e.target.result;
-//             createPicture(userName, base64, description);
-//         };
-//         reader.readAsDataURL(file);
+
+document.getElementById("upload").onchange = function(e) {
+    // console.log(e.target.files[0]);
+    // console.log("upload")
+    document.getElementById("upload-title").style.display = "none";
+    var file = e.target.files[0]
+    if (file && file.name) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var base64 = e.target.result;
+            console.log(base64);
+            // createPicture(userName, base64, description);
+        };
+        reader.readAsDataURL(file);
 
 
 
@@ -94,9 +105,9 @@ if (navigator.geolocation) {
 //         //     } else {
 //         //         alert("No EXIF data found in image '" + file.name + "'.");
 //         //     }
-//         // });
-//     }
-// }
+        // });
+    }
+}
 
 
 
