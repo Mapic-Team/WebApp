@@ -1,6 +1,4 @@
 import * as check from "profCrud.js";
-const {users} = require("front-end/userProfileCRUD.js");
-var md5 = require('md5');
 const logUser =  document.getElementById("logUser");
 const logPass = document.getElementById("logPass");
 const signNam = document.getElementById("signNam");
