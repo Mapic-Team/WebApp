@@ -6,11 +6,15 @@
 // const md5 = require("md5");
 // const ReverseMd5 = require("reverse-md5");
 
-import PouchDB from "PouchDB";
+import PouchDB from "pouchdb";
 import md5 from "md5";
 import ReverseMd5 from "reverse-md5";
-// const md5 = require("md5");
-// const ReverseMd5 = require("reverse-md5");
+
+// Creates twp databases
+const pictureDB = new PouchDB("pictureDB");
+const userDB = new PouchDB("userDB");
+
+/***************************** utility functions *************************/
 const rev = ReverseMd5({
   lettersUpper: true,
   lettersLower: true,
@@ -20,8 +24,7 @@ const rev = ReverseMd5({
   maxLen: 20,
 });
 
-const pictureDB = new PouchDB("pictureDB");
-const userDB = new PouchDB("userDB");
+
 
 function getImgBase64(path) {
   const file = path;
@@ -36,8 +39,12 @@ function getImgBase64(path) {
   reader.readAsDataURL(file);
 }
 
+
+/***************************** CRUD functions *************************/
+
 /**
- *
+ * Creates a user given userName and password
+ * Sets other parameters to default: profilePicture, profileDescription, settings
  * @param {String} userName
  * @param {String} password
  * @returns {void}
@@ -47,9 +54,10 @@ export function createUser(userName, password) {
     _id: md5(userName),
     userName: userName,
     password: password,
-    userPicture: getImgBase64("front-end/resources/default_user_picture.png"),
-    userDescription: "I am new to Mapic!",
-    userSetting: { isVisible: true, isDarkMode: false },
+    profilePicture: getImgBase64("front-end/resources/default_user_picture.png"),
+    profileDescription: "I am new to Mapic!",
+    settings: { isVisible: true, isDarkMode: false },
+    pictures: []
   };
   userDB.put(user, function (err, res) {
     if (err) {
@@ -59,32 +67,51 @@ export function createUser(userName, password) {
     }
   });
 }
+
+/**
+ * Read all user information given a userName
+ * @param {String} userName 
+ * @returns {Object}
+ */
 export function readUser(userName) {
   return userDB.get(md5(userName));
 }
 
+/**
+ * Update all fields of a user
+ * @param {String} userName
+ * @param {String} password 
+ * @param {String} profileDescription 
+ * @param {String} profilePicture
+ * @param {Object} userSetting 
+ * @param {Array} pictures an array of picture ids
+ * @returns {void}
+ */
 export function updateUser(
-  oldUserName,
-  newUserName,
+  userName,
   password,
-  path,
-  description,
-  userSetting
+  profileDescription,
+  profilePicturePath,
+  userSetting,
+  pictures
 ) {
-  db.get(md5(oldUserName)).then(function (doc) {
+  db.get(md5(userName)).then(function (doc) {
     // Update the document
-    doc._id = md5(newUserName);
-    doc.userName = newUserName;
     doc.password = password;
-    doc.userPicture = getImgBase64(path);
-    doc.userDescription = description;
-    doc.userSetting = userSetting;
-
+    doc.profileDescription = profileDescription;
+    doc.profilePicture = getImgBase64(profilePicturePath);
+    doc.settings = userSetting;
+    doc.pictures = pictures;
     // Save the updated document
     userDB.put(doc);
   });
 }
 
+/**
+ * Remove a user from the database and remove all pertaining information
+ * @param {*} userName 
+ * @returns {void}
+ */
 export function deleteUser(userName) {
   userDB.get(md5(userName)).then(function (doc) {
     userDB.remove(doc);
@@ -92,37 +119,45 @@ export function deleteUser(userName) {
 }
 
 //functions for pictureDB
+
+// helper function
+function addImg(picId, userName) {
+  db.get(md5(userName)).then(function (doc) {
+    doc.pictures = doc.pictures.append(picId);
+    userDB.put(doc);
+  });
+}
+
 /**
- *
- * @param {String} userName
+ * create a picture
+ * must be created with all fields present
+ * @param {String} ownerName
  * @param {String} imgBase
+ * @param {Array} tags
  * @param {String} description
- * @param {String} longitude
- * @param {String} latitude
  * @param {Object} EXIF
  * @returns {void}
  */
 export function createPicture(
-  userName,
+  ownerName,
   imgBase,
+  tags,
   description,
-  longitude,
-  latitude,
   EXIF
 ) {
-  let today = new Date();
-  let pic = {
-    _id: md5(imgBase) + md5(userName),
+  const today = new Date();
+  // very unique generation, length 16-17
+  const randId = Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9*Math.pow(10, 12)).toString(36)
+  const pic = {
+    _id: randId,
+    ownerName: ownerName,
+    like: 0,
+    tags: tags,
     picBase64: imgBase,
-    picDescription: description,
-    picLike: 0,
-    picComment: [],
-    picDate: `${today.getFullYear()}/${
-      today.getMonth() + 1
-    }/${today.getDate()} ${today.getHours()}:${today.getMinutes()}`,
-    picTags: [],
-    picLocation: { longitude: longitude, latitude: latitude },
-    picEXIF: EXIF,
+    description: description,
+    createdTime: `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()} ${today.getHours()}:${today.getMinutes()}`,
+    exif: EXIF,
+    comments: [],
   };
   pictureDB.put(pic, function (err, res) {
     if (err) {
@@ -131,34 +166,34 @@ export function createPicture(
       console.log("Picture Created");
     }
   });
+  // add the picture under the user
+  addImg(randId, userName);
 }
 
-export function readPicture(userName, imgBase) {
-  return pictureDB.get(md5(imgBase) + md5(userName));
+export function readPicture(pidId) {
+  return pictureDB.get(picId);
 }
+
 
 export function updatePicture(
-  userName,
-  imgBase,
-  description,
+  picId,
+  ownerName,
   tags,
-  longitude,
-  latitude,
+  description,
   EXIF
 ) {
-  pictureDB.get(md5(imgBase) + md5(userName)).then(function (doc) {
+  pictureDB.get(picId).then(function (doc) {
     // Only allow to update the description and tags of the picture
-    doc.picDescription = description;
-    doc.picTag = tags;
-    doc.picLocation.longitude = longitude;
-    doc.picLocation.latitude - latitude;
-    doc.EXIF = EXIF;
+    doc.ownerName = ownerName;
+    doc.tags = tags;
+    doc.description = description;
+    doc.exif = EXIF;
     pictureDB.put(doc);
   });
 }
 
-export function deletePicture(userName, imgBase) {
-  pictureDB.get(md5(imgBase) + md5(userName)).then(function (doc) {
+export function deletePicture(pidId) {
+  pictureDB.get(pidId).then(function (doc) {
     return pictureDB.remove(doc);
   });
 }
@@ -172,7 +207,7 @@ export function deletePicture(userName, imgBase) {
  */
 export function increaseLike(picId) {
   pictureDB.get(picId).then(function (doc) {
-    doc.picLike += 1;
+    doc.like += 1;
     pictureDB.put(doc);
   });
 }
@@ -184,7 +219,7 @@ export function increaseLike(picId) {
  */
 export function decreaseLike(picId) {
   pictureDB.get(picId).then(function (doc) {
-    doc.picLike -= 1;
+    doc.like -= 1;
     pictureDB.put(doc);
   });
 }
@@ -197,7 +232,7 @@ export function decreaseLike(picId) {
  */
 export function getPicTime(picId) {
   pictureDB.get(picId).then(function (doc) {
-    return doc.picDate;
+    return doc.createdTime;
   });
 }
 
@@ -211,7 +246,7 @@ export function getPicTime(picId) {
  */
 export function getComments(picId) {
   pictureDB.get(picId).then(function (doc) {
-    return doc.picComment;
+    return doc.comments;
   });
 }
 
@@ -222,14 +257,14 @@ export function getComments(picId) {
  * @param {Int} userId
  * @returns {void}
  */
-export function addComment(picId, comment, userId) {
+export function addComment(picId, comment, userName) {
   let today = new Date();
   const comment_profile = {
     commentString: comment,
     commentTime: `${today.getFullYear()}/${
       today.getMonth() + 1
     }/${today.getDate()} ${today.getHours()}:${today.getMinutes()}`,
-    commentBy: userId,
+    commentBy: userName,
   };
   pictureDB.get(picId).then(function (doc) {
     doc.comment.append(comment_profile);
@@ -244,17 +279,19 @@ export function addComment(picId, comment, userId) {
  */
 export function getDescription(picId) {
   pictureDB.get(picId).then(function (doc) {
-    return doc.picDescription;
+    return doc.description;
   });
 }
 
 /**
- * Get the the user id of the owner of a picture
+ * Get the the userName of the owner of a picture
  * @param {*} picId
  * @returns {String}
  */
 export function getUser(picId) {
-  return rev(picId.slice(picId / 2)).str;
+  pictureDB.get(picId).then(function (doc) {
+    return ownerName;
+  });
 }
 
 // functions for mapic homepage
@@ -301,10 +338,3 @@ export function getEXIF(picId) {
   });
 }
 
-// Some functions needs to be exported,
-// others like readUser and updateUser which act as helper functions remain private.
-
-// exports.increaseLike = increaseLike;
-// exports.addComment = addComment;
-// exports.readDescription = readDescription;
-// exports.getUser = getUser;
