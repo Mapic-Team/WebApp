@@ -36,7 +36,7 @@ function getImgBase64(path) {
  * @param {String} password
  * @returns {void}
  */
-function createUser(userName, password) {
+export function createUser(userName, password) {
   let user = {
     _id: md5(userName),
     userName: userName,
@@ -53,11 +53,11 @@ function createUser(userName, password) {
     }
   });
 }
-function readUser(userName) {
+export function readUser(userName) {
   return userDB.get(md5(userName));
 }
 
-function updateUser(
+export function updateUser(
   oldUserName,
   newUserName,
   password,
@@ -79,7 +79,7 @@ function updateUser(
   });
 }
 
-function deleteUser(userName) {
+export function deleteUser(userName) {
   userDB.get(md5(userName)).then(function (doc) {
     userDB.remove(doc);
   });
@@ -96,7 +96,7 @@ function deleteUser(userName) {
  * @param {Object} EXIF
  * @returns {void}
  */
-function createPicture(
+export function createPicture(
   userName,
   imgBase,
   description,
@@ -127,11 +127,11 @@ function createPicture(
   });
 }
 
-function readPicture(userName, imgBase) {
+export function readPicture(userName, imgBase) {
   return pictureDB.get(md5(imgBase) + md5(userName));
 }
 
-function updatePicture(
+export function updatePicture(
   userName,
   imgBase,
   description,
@@ -151,7 +151,7 @@ function updatePicture(
   });
 }
 
-function deletePicture(userName, imgBase) {
+export function deletePicture(userName, imgBase) {
   pictureDB.get(md5(imgBase) + md5(userName)).then(function (doc) {
     return pictureDB.remove(doc);
   });
@@ -160,11 +160,11 @@ function deletePicture(userName, imgBase) {
 // functions for secondary_view
 
 /**
- * This function increase the likes of a specific picture in the database by one.
+ * This export function increase the likes of a specific picture in the database by one.
  * @param {Int} picId
  * @returns {void}
  */
-function increaseLike(picId) {
+export function increaseLike(picId) {
   pictureDB.get(picId).then(function (doc) {
     doc.picLike += 1;
     pictureDB.put(doc);
@@ -172,11 +172,11 @@ function increaseLike(picId) {
 }
 
 /**
- * This function decrease the likes of a specific picture in the database by one.
+ * This export function decrease the likes of a specific picture in the database by one.
  * @param {Int} picId
  * @returns {void}
  */
-function decreaseLike(picId) {
+export function decreaseLike(picId) {
   pictureDB.get(picId).then(function (doc) {
     doc.picLike -= 1;
     pictureDB.put(doc);
@@ -189,7 +189,7 @@ function decreaseLike(picId) {
  * @param {*} picId
  * @returns {String}
  */
-function getPicTime(picId) {
+export function getPicTime(picId) {
   pictureDB.get(picId).then(function (doc) {
     return doc.picDate;
   });
@@ -203,20 +203,20 @@ function getPicTime(picId) {
  * @param {*} picId 
  * @return {Array} returns an array of comment objects
  */
-function getComments(picId) {
+export function getComments(picId) {
   pictureDB.get(picId).then(function (doc) {
     return doc.picComment;
   });
 }
 
 /**
- * This function add a new comment by a user to a picture
+ * This export function add a new comment by a user to a picture
  * @param {String} picId
  * @param {String} comment the new comment that is being added
  * @param {Int} userId
  * @returns {void}
  */
-function addComment(picId, comment, userId) {
+export function addComment(picId, comment, userId) {
   let today = new Date();
   const comment_profile = {
     commentString: comment,
@@ -236,7 +236,7 @@ function addComment(picId, comment, userId) {
  * @param {*} picId
  * @returns
  */
-function getDescription(picId) {
+export function getDescription(picId) {
   pictureDB.get(picId).then(function (doc) {
     return doc.picDescription;
   });
@@ -247,7 +247,7 @@ function getDescription(picId) {
  * @param {*} picId
  * @returns {String}
  */
-function getUser(picId) {
+export function getUser(picId) {
   return rev(picId.slice(picId / 2)).str;
 }
 
@@ -261,7 +261,7 @@ function getUser(picId) {
  * location = {latitude,longitude}
  * @returns {Object} {latitude,longitude}
  */
-function getLocation(picId) {
+export function getLocation(picId) {
   pictureDB.get(picId).then(function (doc) {
     return doc.picLocation;
   });
@@ -275,7 +275,7 @@ function getLocation(picId) {
  * tags = ["cat", "dog"]
  * @returns {Array} ["cat", "dog"]
  */
-function getAllTags(picId) {
+export function getAllTags(picId) {
   pictureDB.get(picId).then(function (doc) {
     return doc.picTags;
   });
@@ -289,7 +289,7 @@ function getAllTags(picId) {
  * EXIF = {time, location, exposure_time, aperture, iso}
  * @returns {Object} {time, location, exposure_time, aperture, iso}
  */
-function getEXIF(picId) {
+export function getEXIF(picId) {
   pictureDB.get(picId).then(function (doc) {
     return doc.picEXIF;
   });
@@ -298,7 +298,7 @@ function getEXIF(picId) {
 // Some functions needs to be exported,
 // others like readUser and updateUser which act as helper functions remain private.
 
-exports.increaseLike = increaseLike;
-exports.addComment = addComment;
-exports.readDescription = readDescription;
-exports.getUser = getUser;
+// exports.increaseLike = increaseLike;
+// exports.addComment = addComment;
+// exports.readDescription = readDescription;
+// exports.getUser = getUser;
