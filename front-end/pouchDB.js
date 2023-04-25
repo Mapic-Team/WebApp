@@ -222,7 +222,7 @@ function getDescription(picId) {
  * @returns {String}
  */
 function getUser(picId) {
-  return rev(picId.slice(picId / 2));
+  return rev(picId.slice(picId / 2)).str;
 }
 
 // Some functions needs to be exported,
