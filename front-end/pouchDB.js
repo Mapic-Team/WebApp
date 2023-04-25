@@ -6,22 +6,11 @@
 // const md5 = require("md5");
 // const ReverseMd5 = require("reverse-md5");
 
-import PouchDB from "pouchdb";
 import md5 from "md5";
-import ReverseMd5 from "reverse-md5";
 
 // Creates twp databases
 const pictureDB = new PouchDB("pictureDB");
 const userDB = new PouchDB("userDB");
-
-const rev = ReverseMd5({
-  lettersUpper: true,
-  lettersLower: true,
-  numbers: true,
-  special: false,
-  whitespace: true,
-  maxLen: 20,
-});
 
 /***************************** utility functions *************************/
 
@@ -259,6 +248,22 @@ export function deletePicture(picId) {
     return pictureDB.remove(doc);
   });
   removePic(picId, userName);
+}
+
+/**
+ * Get all pictures from the database
+ * This function will defintely NOT SCALE
+ * @returns {Array} returns an array of picture json objects
+ */
+export function dumpPictures() {
+  picture.allDocs({
+    include_docs: true,
+    attachments: true
+  }).then(function (result) {
+    return result;
+  }).catch(function (err) {
+    console.log(err);
+  });
 }
 
 /***************************** r/w functions for secondary_view *************************/
