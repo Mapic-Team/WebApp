@@ -58,6 +58,103 @@ function getUser(picId) {
     return null
 }
 
+// functions for mapic homepage
+
+/**
+ * Add a new picture to the user's picture list
+ * @param {Int} picId
+ * @param {Int} userId
+ * @returns {void}
+ */
+function uploadPicture(userId, picId) {
+    return null;
+}
+
+/**
+ * Delete an exist picture from a user's picture list
+ * @param {Int} picId
+ * @param {Int} userId
+ * @returns {void}
+ */
+function deletePicture(userId, picId) {
+    return null;
+}
+
+/**
+ * Set the location field of a picture object
+ * @param {Int} picId
+ * @param {Object} location
+ * @example
+ * location = {latitude,longitude}
+ * @returns {void}
+ */
+function setLocation(picId, location) {
+    return null;
+}
+
+/**
+ * Get the location field of a picture object
+ * @param {Int} picId
+ * @returns {Object}
+ * @example
+ * location = {latitude,longitude}
+ * @returns {void}
+ */
+function getLocation(picId) {
+    return null;
+}
+
+/**
+ * Add a tag string to the tags field of a picture object
+ * @param {Int} picId
+ * @param {String} tag
+ * @returns {void}
+ * @example
+ * tag = "cat"
+ */
+function setTag(picId, tag) {
+    return null;
+}
+
+/**
+ * Get the tags field of a picture object
+ * @param {Int} picId
+ * @returns {Array}
+ * @example
+ * tags = ["cat", "dog"]
+ * @returns {Array} ["cat", "dog"]
+ */
+function getAllTags(picId) {
+    return null;
+}
+
+/**
+ * Set the EXIF field of a picture object
+ * @param {Int} picId
+ * @param {Object} EXIF
+ * @example
+ * EXIF = {time, location, exposure_time, aperture, iso}
+ * time: "yyyy/mm/dd 00:00" String
+ * location: {latitude, longitude} Object
+ * exposure_time: "1/1000" String
+ * aperture: "f/1.8" String
+ * iso: 100 Int
+ * @returns {void}
+ */
+function setEXIF(picId, EXIF) {
+    return null;
+}
+
+/**
+ * Get the EXIF field of a picture object
+ * @param {Int} picId
+ * @returns {Object}
+ * @example
+ * EXIF = {time, location, exposure_time, aperture, iso}
+ */
+function getEXIF(picId) {
+    return null;
+}
 
 // Some functions needs to be exported, 
 // others like readUser and updateUser which act as helper functions remain private.
