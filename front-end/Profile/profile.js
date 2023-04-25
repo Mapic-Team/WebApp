@@ -11,23 +11,24 @@ const image = document.getElementById("circle");
 let reader = new FileReader();
 const logout = document.getElementById("logout");
 let user = "";
+let curUser = {};
+let settings = {};
+//import { readUser, updateUser } from "../pouchDB.js";
 
-import * as update from "profCrud.js"
-import { users } from "front-end/userProfileCRUD.js";
-import md5 from 'md5';
-
-
+//initiate the profile page
+/*
 if(localStorage.getItem('user') != null){
     user = localStorage.getItem('user');
-    console.log(user)
-    document.getElementById('userid').innerHTML = user;
-}
-
-if (update.check_profile(user)){
-    let curUser = users[md5(user)];
-    document.getElementById('userid').innerHTML = `${user}#${md5(user)}`;
+    let curUser = readUser(user);
+    document.getElementById('userid').innerHTML = `${user}#${curUser.password}`;
+    settings = curUser.settings;
+    if(Object.keys(settings).contains("theme")){
+        updateTheme(curUser.settings[theme]);
+    }
     desc.value = curUser.profileDescription;
+    image.src = curUser.profilePicture;
 }
+*/
 //initilize it to false, but we'll update it according to the db later
 var privateCheck = false;
 
@@ -35,24 +36,31 @@ dark.addEventListener("click", (event) => {
     //TODO LINK IT TO THE POUCHDB
     //remove the previous lists 
     updateTheme('darkTheme');
-    localStorage.setItem("theme","black");
+    //localStorage.setItem("theme","black");
+    settings["theme"] = 'darkTheme';
+    updateDB()
 });
 
 light.addEventListener("click", (event)=>{
     //TODO LINK IT TO THE POUCHDB
     updateTheme('whiteTheme');
-    localStorage.setItem("theme","white");
+    //localStorage.setItem("theme","white");
+    settings["theme"] = 'whiteTheme';
+    updateDB()
 });
 
 privatemode.addEventListener("click", (event) =>{
     privateCheck = privateCheck?false:true;
     //console.log(privateCheck);
     //TODO LINK IT TO DB
+    settings["private"] = true;
+    updateDB()
 });
 
 updateDesc.addEventListener("click", (event)=>{
     //console.log("ok!");
     desc.innerHTML = newDesc.value;
+    console.log(desc.innerHTML);
     newDesc.value = "Your new description!";
     //TODO LINK IT TO DB
     
@@ -70,7 +78,7 @@ function handleFiles(){
         //sessionStorage.setItem("pic",content);
         //probably add db to this?
     }
-    
+    updateDB()
 }
 
 logout.addEventListener("click", (event) => {
@@ -80,7 +88,9 @@ logout.addEventListener("click", (event) => {
 });
 //TODO RETRIEVE DB PART.
 
-function updateDB(update,x){}
+function updateDB(){
+    //updateUser(user,curUser.password, desc.value, settings, curUser.pictures);
+}
 
 function updateTheme(theme){
     for(let elem in themElems){
