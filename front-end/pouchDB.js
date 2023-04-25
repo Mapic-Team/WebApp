@@ -89,11 +89,21 @@ function deleteUser(userName) {
 /**
  *
  * @param {String} userName
- * @param {String} path
+ * @param {String} imgBase
  * @param {String} description
+ * @param {String} longitude
+ * @param {String} latitude
+ * @param {Object} EXIF
  * @returns {void}
  */
-function createPicture(userName, imgBase, description) {
+function createPicture(
+  userName,
+  imgBase,
+  description,
+  longitude,
+  latitude,
+  EXIF
+) {
   let today = new Date();
   let pic = {
     _id: md5(imgBase) + md5(userName),
@@ -104,6 +114,9 @@ function createPicture(userName, imgBase, description) {
     picDate: `${today.getFullYear()}/${
       today.getMonth() + 1
     }/${today.getDate()} ${today.getHours()}:${today.getMinutes()}`,
+    picTags: [],
+    picLocation: { longitude: longitude, latitude: latitude },
+    picEXIF: EXIF,
   };
   pictureDB.put(pic, function (err, res) {
     if (err) {
@@ -118,10 +131,22 @@ function readPicture(userName, imgBase) {
   return pictureDB.get(md5(imgBase) + md5(userName));
 }
 
-function updatePicture(userName, imgBase, description) {
+function updatePicture(
+  userName,
+  imgBase,
+  description,
+  tags,
+  longitude,
+  latitude,
+  EXIF
+) {
   pictureDB.get(md5(imgBase) + md5(userName)).then(function (doc) {
-    // Only allow to update the description of the picture
+    // Only allow to update the description and tags of the picture
     doc.picDescription = description;
+    doc.picTag = tags;
+    doc.picLocation.longitude = longitude;
+    doc.picLocation.latitude - latitude;
+    doc.EXIF = EXIF;
     pictureDB.put(doc);
   });
 }
@@ -183,6 +208,7 @@ function getComments(picId) {
     return doc.picComment;
   });
 }
+
 /**
  * This function add a new comment by a user to a picture
  * @param {String} picId
@@ -223,6 +249,50 @@ function getDescription(picId) {
  */
 function getUser(picId) {
   return rev(picId.slice(picId / 2)).str;
+}
+
+// functions for mapic homepage
+
+/**
+ * Get the location field of a picture object
+ * @param {String} picId
+ * @returns {Object}
+ * @example
+ * location = {latitude,longitude}
+ * @returns {Object} {latitude,longitude}
+ */
+function getLocation(picId) {
+  pictureDB.get(picId).then(function (doc) {
+    return doc.picLocation;
+  });
+}
+
+/**
+ * Get the tags field of a picture object
+ * @param {String} picId
+ * @returns {Array}
+ * @example
+ * tags = ["cat", "dog"]
+ * @returns {Array} ["cat", "dog"]
+ */
+function getAllTags(picId) {
+  pictureDB.get(picId).then(function (doc) {
+    return doc.picTags;
+  });
+}
+
+/**
+ * Get the EXIF field of a picture object
+ * @param {String} picId
+ * @returns {Object}
+ * @example
+ * EXIF = {time, location, exposure_time, aperture, iso}
+ * @returns {Object} {time, location, exposure_time, aperture, iso}
+ */
+function getEXIF(picId) {
+  pictureDB.get(picId).then(function (doc) {
+    return doc.picEXIF;
+  });
 }
 
 // Some functions needs to be exported,
