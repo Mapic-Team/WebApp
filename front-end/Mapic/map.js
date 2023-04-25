@@ -65,6 +65,41 @@ if (navigator.geolocation) {
     console.log("Your browser is not support location feature")
 }
 
+// var userName = "";
+// if (localStorage.getItem("user") !== null) {
+//     userName = localStorage.getItem("user");
+// } else {
+//     alert("Please login first");
+// }
+
+
+// document.getElementById("upload").onchange = function(e) {
+//     var file = e.target.files[0]
+//     if (file && file.name) {
+//         var reader = new FileReader();
+//         reader.onload = function(e) {
+//             var base64 = e.target.result;
+//             createPicture(userName, base64, description);
+//         };
+//         reader.readAsDataURL(file);
+
+
+
+
+
+//         // EXIF.getData(file, function() {
+//         //     var exifData = EXIF.pretty(this);
+//         //     if (exifData) {
+//         //         alert(exifData);
+//         //     } else {
+//         //         alert("No EXIF data found in image '" + file.name + "'.");
+//         //     }
+//         // });
+//     }
+// }
+
+
+
 // console.log(image2.getLatLng().lat);
 let photo = document.getElementsByClassName("photo");
 photo[0].addEventListener("click", () => {clickPhoto(image2)});
