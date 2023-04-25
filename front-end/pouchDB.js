@@ -98,7 +98,7 @@ function setLocation(picId, location) {
  * @returns {Object}
  * @example
  * location = {latitude,longitude}
- * @returns {void}
+ * @returns {Object} {latitude,longitude}
  */
 function getLocation(picId) {
     return null;
@@ -111,6 +111,7 @@ function getLocation(picId) {
  * @returns {void}
  * @example
  * tag = "cat"
+ * @returns {void}
  */
 function setTag(picId, tag) {
     return null;
@@ -151,6 +152,7 @@ function setEXIF(picId, EXIF) {
  * @returns {Object}
  * @example
  * EXIF = {time, location, exposure_time, aperture, iso}
+ * @returns {Object} {time, location, exposure_time, aperture, iso}
  */
 function getEXIF(picId) {
     return null;
