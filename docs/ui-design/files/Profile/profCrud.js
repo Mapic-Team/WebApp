@@ -1,6 +1,4 @@
-export async function update_profile(name,password,description){
 
-}
 export async function check_profile(name){
     try{
         const response = await fetch(`/users/get?name=${name}`, {
@@ -26,8 +24,8 @@ export async function createProf(name,password){
     }
 }
 
-export async function update_profile(old,newNam,newpass,newdes){
-    const response = await fetch(`/users/create?old_name=${old}&new_name=${newNam}&new_password=${newpass}&new_profileDescription${newdes}`, {
+export async function update_profile(nam,pass,newdes){
+    const response = await fetch(`/users/create?old_name=${nam}&new_name=${nam}&new_password=${pass}&new_profileDescription${newdes}`, {
         method: 'PUT'
     });
     const data = await response.json();

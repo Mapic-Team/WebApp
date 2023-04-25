@@ -12,8 +12,7 @@ let reader = new FileReader();
 const logout = document.getElementById("logout");
 let user = "";
 
-
-import { users } from "front-end/userProfileCRUD.js";
+import {deleteUser} from "front-end\pouchDB.js";
 import md5 from 'md5';
 
 
@@ -23,6 +22,11 @@ if(localStorage.getItem('user') != null){
     document.getElementById('userid').innerHTML = user;
 }
 
+if (update.check_profile(user)){
+    let curUser = users[md5(user)];
+    document.getElementById('userid').innerHTML = `${user}#${md5(user)}`;
+    desc.value = curUser.profileDescription;
+}
 //initilize it to false, but we'll update it according to the db later
 var privateCheck = false;
 
@@ -50,6 +54,7 @@ updateDesc.addEventListener("click", (event)=>{
     desc.innerHTML = newDesc.value;
     newDesc.value = "Your new description!";
     //TODO LINK IT TO DB
+    
 });
 
 picChange.addEventListener("change",handleFiles ,false);
@@ -73,7 +78,14 @@ logout.addEventListener("click", (event) => {
     location.href = "../Mapic/index.html"
 });
 //TODO RETRIEVE DB PART.
-function getfromDB(){}
+
+document.getElementById("delete").addEventListener("click",(event)=>{
+    deleteUser(user);
+    localStorage.clear();
+    location.href = "../Mapic/index.html"
+
+})
+
 function updateDB(update,x){}
 
 function updateTheme(theme){

@@ -29,7 +29,6 @@ function updateTheme(theme){
 
 document.getElementById("signup").addEventListener("click" ,async (event)=>{
     if(await isValidSignUp()){
-        localStorage.setItem("login", "True");
         localStorage.setItem("user", signNam.value);
         location.href = "profile.html"
     }
@@ -37,8 +36,7 @@ document.getElementById("signup").addEventListener("click" ,async (event)=>{
 
 document.getElementById("login").addEventListener("click" ,async (event)=>{
     if(await isValidLogin()){
-        localStorage.setItem("login", "True");
-        localStorage.setItem("user", signNam.value);
+        localStorage.setItem("user", logUser.value);
         location.href = "profile.html"
     }
 });
