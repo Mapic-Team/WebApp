@@ -76,6 +76,8 @@ document.getElementById("close-btn").addEventListener("click", () => {
     document.getElementById("upload-window").style.display = "none";
     document.getElementById("upload-title").style.display = "block";
     document.getElementById("upload").value = "";
+    document.getElementById("upload-preview").remove();
+    document.getElementsByClassName("file-button")[0].style.display = "block";
 });
 
 document.getElementById("upload-btn").addEventListener("click", () => {
@@ -86,15 +88,59 @@ document.getElementById("upload-btn").addEventListener("click", () => {
         document.getElementById("upload-window").style.display = "none";
         document.getElementById("upload-title").style.display = "block";
         document.getElementById("upload").value = "";
+        document.getElementById("upload-preview").remove();
+        document.getElementsByClassName("file-button")[0].style.display = "block";
     }
 });
 
-
 document.getElementById("upload").onchange = function(e) {
-    // console.log(e.target.files[0]);
-    // console.log("upload")
     document.getElementById("upload-title").style.display = "none";
+    document.getElementsByClassName("file-button")[0].style.display = "none";
+    let img = document.createElement("img");
+    img.setAttribute("src", URL.createObjectURL(e.target.files[0]));
+    img.setAttribute("id", "upload-preview");
+    document.getElementById("upload-window").appendChild(img);
     var file = e.target.files[0]
+    let exifExtract = 
+    {time: 0,
+    location: {lat: 0, lng: 0},
+    exposure_time: 0, 
+    aperture: 0, 
+    iso: 0}
+    EXIF.getData(file, function() {
+        var exifData = EXIF.pretty(this);
+        var allMetaData = EXIF.getAllTags(this);
+        // console.log(allMetaData);
+        if (exifData) {
+            let exifLat = 0, exifLng = 0;
+            if (allMetaData.GPSLatitude && allMetaData.GPSLongitude) {
+                const latArr = allMetaData.GPSLatitude;
+                const lngArr = allMetaData.GPSLongitude;
+
+                const longLat =
+                latArr[0].numerator / latArr[0].denominator +
+                latArr[1].numerator / latArr[1].denominator / 60 +
+                latArr[2].numerator / latArr[2].denominator / 3600;
+
+                const longLng =
+                lngArr[0].numerator / lngArr[0].denominator +
+                lngArr[1].numerator / lngArr[1].denominator / 60 +
+                lngArr[2].numerator / lngArr[2].denominator / 3600;
+                
+                exifLat = longLat.toFixed(8);
+                exifLng = longLng.toFixed(8);
+            }
+            exifExtract.time = allMetaData.DateTimeOriginal;
+            exifExtract.location.lat = exifLat;
+            exifExtract.location.lng = exifLng;
+            exifExtract.exposure_time = allMetaData.ExposureTime.numerator + "/" + allMetaData.ExposureTime.denominator;
+            exifExtract.aperture = "f/" + allMetaData.FNumber.numerator / allMetaData.FNumber.denominator;
+            exifExtract.iso = allMetaData.ISOSpeedRatings;
+            console.log(exifExtract);
+        } else {
+            alert("No EXIF data found in image '" + file.name + "'.");
+        }
+    });
     if (file && file.name) {
         var reader = new FileReader();
         reader.onload = function(e) {
@@ -103,19 +149,6 @@ document.getElementById("upload").onchange = function(e) {
             // createPicture(userName, base64, description);
         };
         reader.readAsDataURL(file);
-        // $(this).val("");
-
-
-
-
-//         // EXIF.getData(file, function() {
-//         //     var exifData = EXIF.pretty(this);
-//         //     if (exifData) {
-//         //         alert(exifData);
-//         //     } else {
-//         //         alert("No EXIF data found in image '" + file.name + "'.");
-//         //     }
-        // });
     }
 }
 
