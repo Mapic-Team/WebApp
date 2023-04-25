@@ -179,9 +179,9 @@ export function createPicture(
 ) {
   const today = new Date();
   // very unique generation, length 16-17
-  const randId = randId();
+  const Id = randId();
   const pic = {
-    _id: randId,
+    _id: Id,
     ownerName: ownerName,
     like: 0,
     tags: tags,
@@ -199,7 +199,7 @@ export function createPicture(
     }
   });
   // add the picture under the user
-  addImg(randId, userName);
+  addImg(Id, userName);
 }
 
 export function readPicture(pidId) {
