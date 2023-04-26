@@ -310,6 +310,22 @@ export function getUser(picId) {
   });
 }
 
+/**
+ * Get all pictures from the database
+ * This function will defintely NOT SCALE
+ * @returns {Array} returns an array of picture json objects
+ */
+export function dumpPictures() {
+  pictureDB.allDocs({
+    include_docs: true,
+    attachments: true
+  }).then(function (result) {
+    return result;
+  }).catch(function (err) {
+    console.log(err);
+  });
+}
+
 /***************************** r/w functions for Mapic (homepage) *****************************/
 
 /**
