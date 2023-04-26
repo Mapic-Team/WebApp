@@ -2,6 +2,14 @@
 // It should export functions that all three pages (mapic, profile, and secondary_view, and read)
 // The functions need not be async for now
 
+// const PouchDB = require("pouchdb");
+// const md5 = require("md5");
+// const ReverseMd5 = require("reverse-md5");
+
+// import PouchDB from "pouchdb";
+// import md5 from "md5";
+// import ReverseMd5 from "reverse-md5";
+
 // Creates twp databases
 const pictureDB = new PouchDB("pictureDB");
 const userDB = new PouchDB("userDB");
@@ -139,7 +147,8 @@ export function createPicture(
 ) {
   const today = new Date();
   // very unique generation, length 16-17
-  const randId = Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9*Math.pow(10, 12)).toString(36)
+  const randId = Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9*Math.pow(10, 12)).toString(36);
+  console.log(randId);
   const pic = {
     _id: randId,
     ownerName: ownerName,
@@ -159,10 +168,10 @@ export function createPicture(
     }
   });
   // add the picture under the user
-  addImg(randId, userName);
+  // addImg(randId, userName);
 }
 
-export function readPicture(pidId) {
+export function readPicture(picId) {
   return pictureDB.get(picId);
 }
 
