@@ -74,12 +74,25 @@ var image4 = L.popup([42.519944, -72.294846], {autoPan: false, autoClose: false,
 //     alert("Please login first");
 // }
 
-document.getElementById("close-btn").addEventListener("click", () => {
+function resetUpload() {
     document.getElementById("upload-window").style.display = "none";
     document.getElementById("upload-title").style.display = "block";
     document.getElementById("upload").value = "";
-    document.getElementById("upload-preview").remove();
+    if (document.getElementById("upload-preview") !== null) {
+        document.getElementById("upload-preview").remove();
+    }
     document.getElementsByClassName("file-button")[0].style.display = "block";
+    document.getElementsByClassName("put-button")[0].style.display = "none";
+    if (document.getElementById("location-info") !== null) {
+        document.getElementById("location-info").remove();
+    }
+    if (document.getElementById("description-box") !== null) {
+        document.getElementById("description-box").remove();
+    }
+}
+
+document.getElementById("close-btn").addEventListener("click", () => {
+    resetUpload();
 });
 
 document.getElementById("upload-btn").addEventListener("click", () => {
@@ -88,11 +101,7 @@ document.getElementById("upload-btn").addEventListener("click", () => {
         document.getElementById("upload-window").style.display = "flex";
         document.getElementsByClassName("put-button")[0].style.display = "none";
     } else {
-        document.getElementById("upload-window").style.display = "none";
-        document.getElementById("upload-title").style.display = "block";
-        document.getElementById("upload").value = "";
-        document.getElementById("upload-preview").remove();
-        document.getElementsByClassName("file-button")[0].style.display = "block";
+        resetUpload();
     }
 });
 
@@ -114,6 +123,7 @@ document.getElementsByClassName("put-button")[0].addEventListener("click", () =>
     let image = L.popup([lat, -lng], {autoPan: false, autoClose: false, closeButton: false})
     .setContent(div)
     .openOn(map);
+    resetUpload();
 });
     
 
