@@ -36,3 +36,55 @@ Picture info (Object, the key is the unique picture label):
 
 
 [MIT License](https://opensource.org/licenses/MIT)
+
+## Implementation Details
+
+We have two databases, one stores the images and all pertaining information, the other stores all user information. The two databases are connected in the following way: users have a field that stores an array of picture IDs, which can be used to look up pictures in the picture database. All pictures are stored in byte64 formate.
+
+### Example json object for a person:
+```
+{ 
+  Id: int UNIQUE
+  userName: string UNIQUE
+  password: string
+  profileDescription: “I like to take pictures.” string
+  profilePicture: byte64  
+  settings: {
+    Theme : string
+    Privatemode : boolean
+  } object
+  pictures: [
+    picId int
+  ]
+}
+```
+### Example json object for a picture:
+```
+{
+  picId: string UNIQUE,
+  ownerName: “”, string
+  picBase64: byte64
+  like: 0,
+  tags: [“”,... string]
+  description: “” string,
+  createdTime: “yyyy:mm:dd hh:mm:ss” string
+  exif: {
+    time: yyyy:mm:dd hh:mm:ss,
+    location: {latitude,longitude},
+    aperture: f/4,
+    shutterSpeed: 1/125,
+    ISO: 100
+  }
+  comments: [
+    {
+      commentString: “”, string
+      commentTime: "yyyy:mm:dd hh:mm:ss" string,
+      commentBy: userName
+    }
+  ]
+}
+```
+
+### Issue
+
+Encountered problem reading from existing database, that is, secondary_view page doesn't seem to be able to read pictures stored by Mapic.

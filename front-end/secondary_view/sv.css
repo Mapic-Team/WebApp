@@ -1,11 +1,12 @@
 body {
     background-color: #ddd;
+    height: 100vh;
 }
 
-#flex-container {
+#page-container {
     display: flex;
-    align-items: stretch;
-    height: 100vh;
+    align-items: space-between;
+    height: 100%;
 }
 
 .grid-container {
@@ -23,8 +24,8 @@ img {
     border-color: aquamarine;
 }
 
-#left {
-    flex: 0.5 0 0;
+#left-bar {
+    width: 200px;
     background-color: black;
     color: white;
 }
@@ -32,7 +33,7 @@ img {
 #left-bar-container {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 5fr;
+    grid-template-rows: 1fr 15fr;
 }
 
 #search {
@@ -48,8 +49,8 @@ img {
     padding: 10px;
 }
 
-#center {
-    flex: 3 0 auto;
+#center-bar {
+    flex-grow: 1;
 }
 
 #quit {
@@ -155,8 +156,8 @@ img {
     background-color: grey;
 }
 
-#right {
-    flex: 3 0 0;
+#right-bar {
+    width: 200px;
     background-color: black;
     color: white;
 }

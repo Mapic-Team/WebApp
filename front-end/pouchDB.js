@@ -57,71 +57,23 @@ function addPic(picId, userName) {
 }
 
 /**
- * Given a picId and the user that created it,
- * remove the picId from pictures array of that specific user
- * in the user database
- * @param {String} picId 
+ * 
  * @param {String} userName 
- * @return {void}
- */
-function removePic(picId, userName) {
-  userDB.get(md5(userName)).then(function (doc) {
-    doc.pictures = doc.pictures.remove(picId);
-    userDB.put(doc);
-  });
-}
-
-/**
- * Return the date and time when the function is called
- * In the format 
- * @return {String}
- */
-function constructTimeString() {
-  let y = today.getFullYear().toString();
-  let m = (today.getMonth() + 1).toString().padStart(2, '0');
-  let d = today.getDate().toString().padStart(2, '0');
-  let hour = today.getHours().toString().padStart(2, '0');
-  let min = today.getMinutes().toString().padStart(2, '0');
-  let sec = today.getSeconds().toString().padStart(2, '0');
-  return `${y}:${m}:${d} ${hour}:${min}:${sec}`;
-}
-
-/**
- * Generate a random unique id string of length 16-17
- * should be used for generating picId
- * @returns {String}
- */
-function randId() {
-  return Date.now().toString(36) + Math.floor(Math.pow(10, 12) + Math.random() * 9*Math.pow(10, 12)).toString(36);
-}
-
-/***************************** userDB CRUD functions *************************/
-
-/**
- * Creates a user given userName and password
- * Sets other parameters to default: profilePicture, profileDescription, settings
- * @param {String} userName
  * @param {String} password
  * @returns {void}
  */
-export function createUser(userName, password) {
-  let user = {
-    _id: md5(userName),
-    userName: userName,
-    password: password,
-    profilePicture: default_profile,
-    profileDescription: "I am new to Mapic!",
-    settings: { isVisible: true, theme: "whiteTheme" },
-    pictures: []
-  };
-  console.log(user.password);
-  userDB.put(user, function (err, res) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("User Created");
+function createUser(userName, password) {
+    user = {
+        userName: userName,
+        password: password
     }
-  });
+    db.put(user, function(err, res) {
+        if(err) {
+            console.log(err);
+        } else {
+            console.log('User Created')
+        }
+    });
 }
 
 /**
@@ -220,11 +172,13 @@ export function createPicture(
 
 /**
  * Get all information pertaining to the picture
- * @param {String} pidId 
+ * @param {String} picId 
  * @returns {Object}
  */
-export function readPicture(pidId) {
-  return pictureDB.get(picId);
+export function readPicture(picId) {
+  pictureDB.get(picId).then(function (doc) {
+    return doc;
+  });
 }
 
 /**
@@ -355,6 +309,22 @@ export function getDescription(picId) {
 export function getUser(picId) {
   pictureDB.get(picId).then(function (doc) {
     return ownerName;
+  });
+}
+
+/**
+ * Get all pictures from the database
+ * This function will defintely NOT SCALE
+ * @returns {Array} returns an array of picture json objects
+ */
+export function dumpPictures() {
+  pictureDB.allDocs({
+    include_docs: true,
+    attachments: true
+  }).then(function (result) {
+    return result;
+  }).catch(function (err) {
+    console.log(err);
   });
 }
 

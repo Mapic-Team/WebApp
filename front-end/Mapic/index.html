@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Mapic</title>
+    <script src = "https://cdn.jsdelivr.net/npm/pouchdb@8.0.1/dist/pouchdb.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.16.0/js/md5.min.js"></script> 
+    <script type="module" src="../Mapic/map.js"></script>
+    <script type="text/javascript" src="../Mapic/node_modules/exif-js/exif.js"></script>
+    <link rel="stylesheet" href="../Mapic/leaflet.css">
+    <link rel="stylesheet" href="../Mapic/style.css">
+    <script type="module" src="../Mapic/node_modules/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+    <link rel="stylesheet" href="../Mapic/node_modules/leaflet.locatecontrol/dist/L.Control.Locate.min.css">
+</head>
+<body>
+    <div class="nav" id="nav">
+        <ul>
+            <li><a href="#">Mapic</a></li>
+            <li><a href="#p1">Browse</a></li>
+            <li style="float: right;"><a href="#p2">Profile</a></li>
+            <img src="../Mapic/images/1.jpeg" id="avatar">
+        </ul>
+    </div>
+    <div id="map"></div>
+    <div id="upload-btn">
+        <img src="../Mapic/images/upload.png" id="upload-img">
+    </div>
+    <div id="upload-window">
+        <span id="close-btn">+</span>
+        <b id="upload-title">Select a photo to upload</b>
+        <a href="javascript:;" class="file-button">Select File
+            <input type="file" id="upload">
+        </a>
+    </div>
+</body>
+</html>
+
+<script src="leaflet-src.js"></script>
