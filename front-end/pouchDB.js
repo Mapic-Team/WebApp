@@ -172,11 +172,13 @@ export function createPicture(
 
 /**
  * Get all information pertaining to the picture
- * @param {String} pidId 
+ * @param {String} picId 
  * @returns {Object}
  */
-export function readPicture(pidId) {
-  return pictureDB.get(picId);
+export function readPicture(picId) {
+  pictureDB.get(picId).then(function (doc) {
+    return doc;
+  });
 }
 
 /**
