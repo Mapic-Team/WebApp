@@ -13,15 +13,15 @@ const logout = document.getElementById("logout");
 let user = "";
 let curUser = {};
 let settings = {};
+import { deleteUser } from "../pouchDB.js";
 import { readUser, updateUser } from "../pouchDB.js";
 
 //initiate the profile page
 user = localStorage.getItem('user');
 curUser = await readUser(user);
-console.log(curUser)
+console.log(curUser.pictures)
 document.getElementById('userid').innerHTML = `${user}`;
 settings = curUser["settings"];
-console.log(settings);
 if(Object.keys(settings).includes("theme")){
     updateTheme(curUser.settings["theme"]);
 }
@@ -29,6 +29,10 @@ desc.innerHTML = curUser['profileDescription'];
             //sessionStorage.setItem("pic",content);
             //probably add db to this?
 image.src = curUser["profilePicture"];
+if(curUser.pictures.length == 0){
+    console.log(document.getElementById("bestPost").innerHTML)
+    document.getElementById("bestPost").innerHTML = "No pictures yet!";
+}
 
 //initilize it to false, but we'll update it according to the db later
 var privateCheck = false;
@@ -55,7 +59,7 @@ privatemode.addEventListener("click", (event) =>{
     privateCheck = privateCheck?false:true;
     //console.log(privateCheck);
     //TODO LINK IT TO DB
-    settings.private = true;
+    settings.isVisible = privateCheck;
     updateDB();
 });
 
@@ -71,30 +75,40 @@ updateDesc.addEventListener("click", (event)=>{
 picChange.addEventListener("change",handleFiles ,false);
 function handleFiles(){
     const file = this.files[0];
-    console.log(file);
+    //console.log(file);
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = readerEvent =>{
         var content = readerEvent.target.result;
         image.src = content;
         curUser.profilePicture = content;
-        console.log(content);
+        console.log(curUser.profilePicture);
+        updateDB();
+        //console.log(content);
         //sessionStorage.setItem("pic",content);
         //probably add db to this?
     }
-    updateDB();
+    //updateDB();
 }
 
 logout.addEventListener("click", (event) => {
     //we clear the local storage so it knows we logged out
-    localStorage.clear()
-    location.href = "../Mapic/index.html"
+    localStorage.clear();
+    location.href = "../Mapic/index.html";
 });
 //TODO RETRIEVE DB PART.
 
+document.getElementById("delete").addEventListener("click",(event)=>{
+    localStorage.clear();
+    deleteUser(user);
+    location.href = "../Mapic/index.html";
+});
+
 function updateDB(){
-    updateUser(user,curUser.password, desc.innerHTML, settings, curUser.profilePictures);
+    updateUser(user,curUser.password, desc.innerHTML,image.src ,settings, curUser.pictures);
+    console.log(curUser);
 }
+
 
 function updateTheme(theme){
     for(let elem in themElems){
