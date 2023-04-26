@@ -60,12 +60,12 @@ var image4 = L.popup([42.519944, -72.294846], {autoPan: false, autoClose: false,
 
 // map.on('click', onMapClick);
 
-// if (navigator.geolocation) {
-//     var location = navigator.geolocation.getCurrentPosition(getPosition);
+if (navigator.geolocation) {
+    var location = navigator.geolocation.getCurrentPosition(getPosition);
 
-// } else {
-//     console.log("Your browser is not support location feature")
-// }
+} else {
+    console.log("Your browser is not support location feature")
+}
 
 // var userName = "";
 // if (localStorage.getItem("user") !== null) {
@@ -106,12 +106,21 @@ document.getElementById("upload-btn").addEventListener("click", () => {
 });
 
 document.getElementsByClassName("put-button")[0].addEventListener("click", () => {
-    // let des = document.getElementById("description-box").value;
-    // let file = document.getElementById("upload").files[0];
-    let loc = document.getElementById("location-info").innerHTML;
-    let lat = loc.split(",")[0].split(":")[1].split(" ")[1];
-    let lng = loc.split(",")[1].split(" ")[1];
-    console.log("put button clicked");
+    let lat = exifExtract.location.lat;
+    let lng = -exifExtract.location.lng;
+    // console.log("put button clicked");
+    let tags = [];
+    if (document.getElementById("tag-box") !== null) {
+        tags = document.getElementById("tag-box").value.split(",");
+    }
+    let description = "";
+    if (document.getElementById("description-box") !== null) {
+        description = document.getElementById("description-box").value;
+    }
+    let userName = 'guest';
+    if (localStorage.getItem("user") !== null) {
+        userName = localStorage.getItem("user");
+    }
     let src = document.getElementById("upload-preview").src;
     let div = document.createElement("div");
     div.setAttribute("class", "photo");
@@ -120,10 +129,11 @@ document.getElementsByClassName("put-button")[0].addEventListener("click", () =>
     img.setAttribute("id", "2");
     img.setAttribute("style", "width: inherit;");
     div.appendChild(img);
-    let image = L.popup([lat, -lng], {autoPan: false, autoClose: false, closeButton: false})
+    let image = L.popup([lat, lng], {autoPan: false, autoClose: false, closeButton: false})
     .setContent(div)
     .openOn(map);
     resetUpload();
+    db.createPicture(userName, base64, tags, description, exifExtract);
 });
     
 
@@ -144,7 +154,7 @@ document.getElementById("upload").onchange = function(e) {
 
     document.getElementsByClassName("put-button")[0].style.display = "block";
     var file = e.target.files[0]
-    var exifExtract;
+    window.exifExtract = {};
     // {time: 0,
     // location: {lat: 0, lng: 0},
     // exposure_time: 0, 
@@ -174,11 +184,6 @@ document.getElementById("upload").onchange = function(e) {
                 exifLat = longLat.toFixed(8);
                 exifLng = longLng.toFixed(8);
             }
-            // exifExtract.time = allMetaData.DateTimeOriginal;
-            // exifExtract.location = {lat: exifLat, lng: exifLng};
-            // exifExtract.exposure_time = allMetaData.ExposureTime.numerator + "/" + allMetaData.ExposureTime.denominator;
-            // exifExtract.aperture = "f/" + allMetaData.FNumber.numerator / allMetaData.FNumber.denominator;
-            // exifExtract.iso = allMetaData.ISOSpeedRatings;
 
             exifExtract = {
                 time: allMetaData.DateTimeOriginal,
@@ -206,7 +211,7 @@ document.getElementById("upload").onchange = function(e) {
     if (file && file.name) {
         var reader = new FileReader();
         reader.onload = function(e) {
-            var base64 = e.target.result;
+            window.base64 = e.target.result;
             // console.log(base64);
             // db.createPicture(userName, base64, tags, description, exifExtract);
         };
@@ -220,6 +225,10 @@ document.getElementById("upload").onchange = function(e) {
     // console.log(db.readPicture("lgx06aqo284bcff6x"));
     // db.deletePicture("lgwztavp2hv7hi0fn");
     // console.log(db.readPicture("lgwztavp2hv7hi0fn"));
+}
+
+function addPicture () {
+    console.log(exifExtract);
 }
 // console.log(image2.getLatLng().lat);
 let photo = document.getElementsByClassName("photo");
