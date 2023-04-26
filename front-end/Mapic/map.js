@@ -74,26 +74,68 @@ if (navigator.geolocation) {
 //     alert("Please login first");
 // }
 
-document.getElementById("close-btn").addEventListener("click", () => {
+function resetUpload() {
     document.getElementById("upload-window").style.display = "none";
     document.getElementById("upload-title").style.display = "block";
     document.getElementById("upload").value = "";
-    document.getElementById("upload-preview").remove();
+    if (document.getElementById("upload-preview") !== null) {
+        document.getElementById("upload-preview").remove();
+    }
     document.getElementsByClassName("file-button")[0].style.display = "block";
+    document.getElementsByClassName("put-button")[0].style.display = "none";
+    if (document.getElementById("location-info") !== null) {
+        document.getElementById("location-info").remove();
+    }
+    if (document.getElementById("description-box") !== null) {
+        document.getElementById("description-box").remove();
+    }
+}
+
+document.getElementById("close-btn").addEventListener("click", () => {
+    resetUpload();
 });
 
 document.getElementById("upload-btn").addEventListener("click", () => {
     if (document.getElementById("upload-window").style.display == "" 
         || document.getElementById("upload-window").style.display == "none") {
         document.getElementById("upload-window").style.display = "flex";
+        document.getElementsByClassName("put-button")[0].style.display = "none";
     } else {
-        document.getElementById("upload-window").style.display = "none";
-        document.getElementById("upload-title").style.display = "block";
-        document.getElementById("upload").value = "";
-        document.getElementById("upload-preview").remove();
-        document.getElementsByClassName("file-button")[0].style.display = "block";
+        resetUpload();
     }
 });
+
+document.getElementsByClassName("put-button")[0].addEventListener("click", () => {
+    let lat = exifExtract.location.lat;
+    let lng = -exifExtract.location.lng;
+    // console.log("put button clicked");
+    let tags = [];
+    if (document.getElementById("tag-box") !== null) {
+        tags = document.getElementById("tag-box").value.split(",");
+    }
+    let description = "";
+    if (document.getElementById("description-box") !== null) {
+        description = document.getElementById("description-box").value;
+    }
+    let userName = 'guest';
+    if (localStorage.getItem("user") !== null) {
+        userName = localStorage.getItem("user");
+    }
+    let src = document.getElementById("upload-preview").src;
+    let div = document.createElement("div");
+    div.setAttribute("class", "photo");
+    let img = document.createElement("img");
+    img.setAttribute("src", src);
+    img.setAttribute("id", "2");
+    img.setAttribute("style", "width: inherit;");
+    div.appendChild(img);
+    let image = L.popup([lat, lng], {autoPan: false, autoClose: false, closeButton: false})
+    .setContent(div)
+    .openOn(map);
+    resetUpload();
+    db.createPicture(userName, base64, tags, description, exifExtract);
+});
+    
 
 document.getElementById("upload").onchange = function(e) {
     document.getElementById("upload-title").style.display = "none";
@@ -102,8 +144,17 @@ document.getElementById("upload").onchange = function(e) {
     img.setAttribute("src", URL.createObjectURL(e.target.files[0]));
     img.setAttribute("id", "upload-preview");
     document.getElementById("upload-window").appendChild(img);
+
+
+    let description = document.createElement("textarea");
+    description.setAttribute("id", "description-box");
+    description.setAttribute("placeholder", "Write Description Here...");
+    document.getElementById("upload-window").appendChild(description);
+
+
+    document.getElementsByClassName("put-button")[0].style.display = "block";
     var file = e.target.files[0]
-    let exifExtract = {};
+    window.exifExtract = {};
     // {time: 0,
     // location: {lat: 0, lng: 0},
     // exposure_time: 0, 
@@ -133,36 +184,51 @@ document.getElementById("upload").onchange = function(e) {
                 exifLat = longLat.toFixed(8);
                 exifLng = longLng.toFixed(8);
             }
-            exifExtract.time = allMetaData.DateTimeOriginal;
-            exifExtract.location = {lat: exifLat, lng: exifLng};
-            exifExtract.exposure_time = allMetaData.ExposureTime.numerator + "/" + allMetaData.ExposureTime.denominator;
-            exifExtract.aperture = "f/" + allMetaData.FNumber.numerator / allMetaData.FNumber.denominator;
-            exifExtract.iso = allMetaData.ISOSpeedRatings;
+
+            exifExtract = {
+                time: allMetaData.DateTimeOriginal,
+                location: {lat: exifLat, lng: exifLng},
+                exposure_time: allMetaData.ExposureTime.numerator + "/" + allMetaData.ExposureTime.denominator,
+                aperture: "f/" + allMetaData.FNumber.numerator / allMetaData.FNumber.denominator,
+                iso: allMetaData.ISOSpeedRatings
+            }
             // console.log(exifExtract);
+            let location = document.createElement("div");
+            location.setAttribute("id", "location-info");
+            location.textContent = "Location: " + exifExtract.location.lat + ", " + exifExtract.location.lng;
+            document.getElementById("upload-window").appendChild(location);
         } else {
             alert("No EXIF data found in image '" + file.name + "'.");
         }
     });
-    let userName = "testUser";
-    let tags = ["testTag1", "testTag2"];
-    let description = "testDescription";
+    // console.log(exifExtract);
+    
+
+    // let userName = "testUser";
+    // let tags = ["testTag1", "testTag2"];
+    // let description = "testDescription";
     // console.log(exifExtract);
     if (file && file.name) {
         var reader = new FileReader();
         reader.onload = function(e) {
-            var base64 = e.target.result
+            window.base64 = e.target.result;
             // console.log(base64);
             // db.createPicture(userName, base64, tags, description, exifExtract);
         };
         reader.readAsDataURL(file);
     }
+
     // console.log(base64);
     // console.log(exifExtract);
     
     
-    console.log(db.readPicture("lgx06aqo284bcff6x"));
+    // console.log(db.readPicture("lgx06aqo284bcff6x"));
     // db.deletePicture("lgwztavp2hv7hi0fn");
     // console.log(db.readPicture("lgwztavp2hv7hi0fn"));
+}
+
+function addPicture () {
+    console.log(exifExtract);
 }
 // console.log(image2.getLatLng().lat);
 let photo = document.getElementsByClassName("photo");
