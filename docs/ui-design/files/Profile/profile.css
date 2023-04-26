@@ -8,11 +8,32 @@ body{
     min-width: 250px;
     min-height: 250px;
 }
-.content{
+
+#content{
     min-height: 100vh;
     width: 100%;
     
 }
+.whiteTheme{
+    background-color: #eee;
+    color: rgb(1, 1, 17);
+}
+.darkTheme{
+    background-color:rgb(1, 1, 17);
+    color: #eee;
+}
+
+
+.whiteTheme{
+    background-color: #eee;
+    color: rgb(1, 1, 17);
+}
+.darkTheme{
+    background-color:rgb(1, 1, 17);
+    color: #eee;
+}
+
+
 
 hr.h-color{
     background: white;
@@ -65,4 +86,90 @@ hr.h-color{
     background-position:center;
     background-size:cover;
 
+}
+.hidden{
+    display: none;
+}
+
+#themeDark{
+    height:60px;
+    width:60px;
+    background-color: rgb(1, 1, 17);
+    color:#eee;
+    border-color: #eee;
+    border-style: solid;
+    border-width: 2px;
+}
+
+#themeLight{
+    height:60px;
+    width:60px;
+    background-color: #eee;
+    border-color: rgb(1, 1, 17);
+    color: rgb(1, 1, 17);
+    border-style: solid;
+    border-width: 2px;
+}
+
+
+.m-content
+{
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+
+}
+
+
+.m-header
+{
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    -webkit-border-top-left-radius: 6px;
+    -webkit-border-top-right-radius: 6px;
+    -moz-border-radius-topleft: 6px;
+    -moz-border-radius-topright: 6px;
+}
+
+.hidden{
+    display: none;
+}
+
+#themeDark{
+    height:60px;
+    width:60px;
+    background-color: rgb(1, 1, 17);
+    color:#eee;
+    border-color: #eee;
+    border-style: solid;
+    border-width: 2px;
+}
+
+#themeLight{
+    height:60px;
+    width:60px;
+    background-color: #eee;
+    border-color: rgb(1, 1, 17);
+    color: rgb(1, 1, 17);
+    border-style: solid;
+    border-width: 2px;
+}
+
+
+.m-content
+{
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+
+}
+
+.m-header
+{
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    -webkit-border-top-left-radius: 6px;
+    -webkit-border-top-right-radius: 6px;
+    -moz-border-radius-topleft: 6px;
+    -moz-border-radius-topright: 6px;
 }
