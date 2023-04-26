@@ -84,3 +84,7 @@ We have two databases, one stores the images and all pertaining information, the
   ]
 }
 ```
+
+### Issue
+
+Encountered problem reading from existing database, that is, secondary_view page doesn't seem to be able to read pictures stored by Mapic.
