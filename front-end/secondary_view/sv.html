@@ -2,12 +2,9 @@
 <html>
     <head>
         <title>Secondary View</title>
-        <link rel="stylesheet" href="index.css">
-        
         <link rel="stylesheet" href="sv.css">
         <script src="//cdn.jsdelivr.net/npm/pouchdb@8.0.1/dist/pouchdb.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.16.0/js/md5.min.js"></script>
-        <script type="module" src="./pouchDB.js"></script>
     </head>
     <body>
         <div class="topnav">
@@ -20,9 +17,9 @@
                     <input id="search-input" value="Search for tags here">
                     <div id="search-results">
                         <h2>Results</h2>
-                        <template tag-template>
+                        <template data-tag-template>
                             <div class="tag">
-                              <div class="body" tag-body></div>
+                              <div class="body" data-tag-body></div>
                             </div>
                           </template>
                     </div>

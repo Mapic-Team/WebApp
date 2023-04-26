@@ -1,9 +1,32 @@
+import * as pdb from '../pouchDB.js';
+
+console.log(pdb.readPicture("lgx06aqo284bcff6x"));
+let pictures = pdb.dumpPictures();
+
 const searchInput = document.getElementById('search-input');
 const searchResults = document.getElementById('search-results');
 
-pictures = dump
-function search() {
+console.log(pictures);
 
+searchInput.addEventListener("input", search());
+
+function search() {
+    const tagTemplate = document.querySelector("[data-tag-template]")
+    const v = searchInput.value;
+    let counter = 0;
+    pictures.forEach(doc => {
+        doc.tags.forEach(t => {
+            if(counter > 10) {
+                return;
+            }
+            if(t.includes(v)) {
+                const tag = tagTemplate.content.cloneNode(true).children[0]
+                const tagBody = card.querySelector("[data-tag-body]")
+                tagBody.textContent = t;
+                searchResults.append(tag);
+            }
+        })
+    })
 }
 
 for(let i = 0; i < lines.length; i++) {
