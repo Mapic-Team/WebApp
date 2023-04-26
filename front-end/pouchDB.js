@@ -6,25 +6,11 @@
 // const md5 = require("md5");
 // const ReverseMd5 = require("reverse-md5");
 
-// import PouchDB from "pouchdb";
-// import md5 from "md5";
-// import ReverseMd5 from "reverse-md5";
-
-// Creates twp databases
+// Creates two databases
 const pictureDB = new PouchDB("pictureDB");
 const userDB = new PouchDB("userDB");
 
 /***************************** utility functions *************************/
-// const rev = ReverseMd5({
-//   lettersUpper: true,
-//   lettersLower: true,
-//   numbers: true,
-//   special: false,
-//   whitespace: true,
-//   maxLen: 20,
-// });
-
-
 
 function getImgBase64(path) {
   const file = path;
@@ -120,14 +106,6 @@ export function deleteUser(userName) {
 
 //functions for pictureDB
 
-// helper function
-function addImg(picId, userName) {
-  db.get(md5(userName)).then(function (doc) {
-    doc.pictures = doc.pictures.append(picId);
-    userDB.put(doc);
-  });
-}
-
 /**
  * create a picture
  * must be created with all fields present
@@ -168,7 +146,7 @@ export function createPicture(
     }
   });
   // add the picture under the user
-  // addImg(randId, userName);
+  //addImg(randId, userName);
 }
 
 export function readPicture(picId) {

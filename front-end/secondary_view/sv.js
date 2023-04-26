@@ -1,6 +1,11 @@
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
 
-const resultsLoad = document.getElementById('results-load');
-const lines = ['National Parker', 'National Barker', 'National Parade'];
+pictures = dump
+function search() {
+
+}
+
 for(let i = 0; i < lines.length; i++) {
     const r = document.createElement('p');
     r.textContent = lines[i];
