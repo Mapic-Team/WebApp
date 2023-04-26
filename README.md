@@ -42,6 +42,7 @@ Picture info (Object, the key is the unique picture label):
 We have two databases, one stores the images and all pertaining information, the other stores all user information. The two databases are connected in the following way: users have a field that stores an array of picture IDs, which can be used to look up pictures in the picture database. All pictures are stored in byte64 formate.
 
 ### Example json object for a person:
+```
 { 
   Id: int UNIQUE
   userName: string UNIQUE
@@ -56,8 +57,9 @@ We have two databases, one stores the images and all pertaining information, the
     picId int
   ]
 }
-
+```
 ### Example json object for a picture:
+```
 {
   picId: string UNIQUE,
   ownerName: “”, string
@@ -76,8 +78,9 @@ We have two databases, one stores the images and all pertaining information, the
   comments: [
     {
       commentString: “”, string
-      commentTime: yyyy/mm/dd 00:00,
+      commentTime: "yyyy:mm:dd hh:mm:ss" string,
       commentBy: userName
     }
   ]
 }
+```
