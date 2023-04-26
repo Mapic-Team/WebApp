@@ -2,27 +2,19 @@
 // It should export functions that all three pages (mapic, profile, and secondary_view, and read)
 // The functions need not be async for now
 
-// const PouchDB = require("pouchdb");
-// const md5 = require("md5");
-// const ReverseMd5 = require("reverse-md5");
-
-import PouchDB from "pouchdb";
-import md5 from "md5";
-import ReverseMd5 from "reverse-md5";
-
 // Creates twp databases
 const pictureDB = new PouchDB("pictureDB");
 const userDB = new PouchDB("userDB");
 
 /***************************** utility functions *************************/
-const rev = ReverseMd5({
-  lettersUpper: true,
-  lettersLower: true,
-  numbers: true,
-  special: false,
-  whitespace: true,
-  maxLen: 20,
-});
+// const rev = ReverseMd5({
+//   lettersUpper: true,
+//   lettersLower: true,
+//   numbers: true,
+//   special: false,
+//   whitespace: true,
+//   maxLen: 20,
+// });
 
 
 
@@ -308,132 +300,4 @@ export function getLocation(picId) {
   pictureDB.get(picId).then(function (doc) {
     return doc.picLocation;
   });
-}
-
-/**
- * Get the tags field of a picture object
- * @param {String} picId
- * @returns {Array}
- * @example
- * tags = ["cat", "dog"]
- * @returns {Array} ["cat", "dog"]
- */
-export function getAllTags(picId) {
-  pictureDB.get(picId).then(function (doc) {
-    return doc.picTags;
-  });
-}
-
-/**
- * Get the EXIF field of a picture object
- * @param {String} picId
- * @returns {Object}
- * @example
- * EXIF = {time, location, exposure_time, aperture, iso}
- * @returns {Object} {time, location, exposure_time, aperture, iso}
- */
-export function getEXIF(picId) {
-  pictureDB.get(picId).then(function (doc) {
-    return doc.picEXIF;
-  });
-}
-
-// functions for mapic homepage
-
-/**
- * Add a new picture to the user's picture list
- * @param {Int} picId
- * @param {Int} userId
- * @returns {void}
- */
-function uploadPicture(userId, picId) {
-    return null;
-}
-
-/**
- * Delete an exist picture from a user's picture list
- * @param {Int} picId
- * @param {Int} userId
- * @returns {void}
- */
-function deletePicture(userId, picId) {
-    return null;
-}
-
-/**
- * Set the location field of a picture object
- * @param {Int} picId
- * @param {Object} location
- * @example
- * location = {latitude,longitude}
- * @returns {void}
- */
-function setLocation(picId, location) {
-    return null;
-}
-
-/**
- * Get the location field of a picture object
- * @param {Int} picId
- * @returns {Object}
- * @example
- * location = {latitude,longitude}
- * @returns {Object} {latitude,longitude}
- */
-function getLocation(picId) {
-    return null;
-}
-
-/**
- * Add a tag string to the tags field of a picture object
- * @param {Int} picId
- * @param {String} tag
- * @returns {void}
- * @example
- * tag = "cat"
- * @returns {void}
- */
-function setTag(picId, tag) {
-    return null;
-}
-
-/**
- * Get the tags field of a picture object
- * @param {Int} picId
- * @returns {Array}
- * @example
- * tags = ["cat", "dog"]
- * @returns {Array} ["cat", "dog"]
- */
-function getAllTags(picId) {
-    return null;
-}
-
-/**
- * Set the EXIF field of a picture object
- * @param {Int} picId
- * @param {Object} EXIF
- * @example
- * EXIF = {time, location, exposure_time, aperture, iso}
- * time: "yyyy/mm/dd 00:00" String
- * location: {latitude, longitude} Object
- * exposure_time: "1/1000" String
- * aperture: "f/1.8" String
- * iso: 100 Int
- * @returns {void}
- */
-function setEXIF(picId, EXIF) {
-    return null;
-}
-
-/**
- * Get the EXIF field of a picture object
- * @param {Int} picId
- * @returns {Object}
- * @example
- * EXIF = {time, location, exposure_time, aperture, iso}
- * @returns {Object} {time, location, exposure_time, aperture, iso}
- */
-function getEXIF(picId) {
-    return null;
 }

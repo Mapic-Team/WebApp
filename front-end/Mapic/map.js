@@ -4,6 +4,9 @@
 //     zoom: 13,
 //     zoomControl: false
 // });
+
+import * as db from "../pouchDB.js";
+
 var map = L.map('map', {
     zoom: 13,
     zoomControl: false,
@@ -17,7 +20,6 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
-
 var latlng = [42.3635899, -72.5362909];
 
 // L.control.zoom({animate: true}).addTo(map);
@@ -151,9 +153,6 @@ document.getElementById("upload").onchange = function(e) {
         reader.readAsDataURL(file);
     }
 }
-
-
-
 // console.log(image2.getLatLng().lat);
 let photo = document.getElementsByClassName("photo");
 photo[0].addEventListener("click", () => {clickPhoto(image2)});
