@@ -13,14 +13,14 @@ const logout = document.getElementById("logout");
 let user = "";
 let curUser = {};
 let settings = {};
-//import { readUser, updateUser } from "../pouchDB.js";
+import { readUser, updateUser } from "../pouchDB.js";
 
 //initiate the profile page
-/*
 if(localStorage.getItem('user') != null){
     user = localStorage.getItem('user');
-    let curUser = readUser(user);
-    document.getElementById('userid').innerHTML = `${user}#${curUser.password}`;
+    curUser = await readUser(user);
+    console.log(curUser['_id'])
+    document.getElementById('userid').innerHTML = `${user}`;
     settings = curUser.settings;
     if(Object.keys(settings).contains("theme")){
         updateTheme(curUser.settings[theme]);
@@ -28,7 +28,7 @@ if(localStorage.getItem('user') != null){
     desc.value = curUser.profileDescription;
     image.src = curUser.profilePicture;
 }
-*/
+
 //initilize it to false, but we'll update it according to the db later
 var privateCheck = false;
 
@@ -38,7 +38,7 @@ dark.addEventListener("click", (event) => {
     updateTheme('darkTheme');
     //localStorage.setItem("theme","black");
     settings["theme"] = 'darkTheme';
-    updateDB()
+    updateDB();
 });
 
 light.addEventListener("click", (event)=>{
@@ -46,7 +46,7 @@ light.addEventListener("click", (event)=>{
     updateTheme('whiteTheme');
     //localStorage.setItem("theme","white");
     settings["theme"] = 'whiteTheme';
-    updateDB()
+    updateDB();
 });
 
 privatemode.addEventListener("click", (event) =>{
@@ -54,7 +54,7 @@ privatemode.addEventListener("click", (event) =>{
     //console.log(privateCheck);
     //TODO LINK IT TO DB
     settings["private"] = true;
-    updateDB()
+    updateDB();
 });
 
 updateDesc.addEventListener("click", (event)=>{
@@ -63,7 +63,7 @@ updateDesc.addEventListener("click", (event)=>{
     console.log(desc.innerHTML);
     newDesc.value = "Your new description!";
     //TODO LINK IT TO DB
-    
+    updateDB();
 });
 
 picChange.addEventListener("change",handleFiles ,false);
@@ -78,7 +78,7 @@ function handleFiles(){
         //sessionStorage.setItem("pic",content);
         //probably add db to this?
     }
-    updateDB()
+    updateDB();
 }
 
 logout.addEventListener("click", (event) => {
@@ -89,7 +89,7 @@ logout.addEventListener("click", (event) => {
 //TODO RETRIEVE DB PART.
 
 function updateDB(){
-    //updateUser(user,curUser.password, desc.value, settings, curUser.pictures);
+    updateUser(user,curUser.password, desc.value, settings, curUser.pictures);
 }
 
 function updateTheme(theme){

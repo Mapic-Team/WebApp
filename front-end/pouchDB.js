@@ -6,15 +6,15 @@
 // const md5 = require("md5");
 // const ReverseMd5 = require("reverse-md5");
 
-import PouchDB from "pouchdb";
-import md5 from "md5";
-import ReverseMd5 from "reverse-md5";
+//import PouchDB from "pouchdb";
+//import md5 from "md5";
+//import ReverseMd5 from "reverse-md5";
 
 // Creates twp databases
 const pictureDB = new PouchDB("pictureDB");
 const userDB = new PouchDB("userDB");
-
-const rev = ReverseMd5({
+/*
+const rev = reverseMd5({
   lettersUpper: true,
   lettersLower: true,
   numbers: true,
@@ -22,7 +22,7 @@ const rev = ReverseMd5({
   whitespace: true,
   maxLen: 20,
 });
-
+*/
 /***************************** utility functions *************************/
 
 function getImgBase64(path) {
@@ -35,7 +35,7 @@ function getImgBase64(path) {
     return base64Image;
   };
 
-  reader.readAsDataURL(file);
+  //reader.readAsDataURL(file);
 }
 
 
@@ -107,7 +107,7 @@ export function createUser(userName, password) {
     _id: md5(userName),
     userName: userName,
     password: password,
-    profilePicture: getImgBase64("front-end/resources/default_user_picture.png"),
+    profilePicture: getImgBase64("/resources/default_user_picture.png"),
     profileDescription: "I am new to Mapic!",
     settings: { isVisible: true, isDarkMode: false },
     pictures: []
