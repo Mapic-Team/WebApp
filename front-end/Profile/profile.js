@@ -16,18 +16,19 @@ let settings = {};
 import { readUser, updateUser } from "../pouchDB.js";
 
 //initiate the profile page
-if(localStorage.getItem('user') != null){
-    user = localStorage.getItem('user');
-    curUser = await readUser(user);
-    console.log(curUser['_id'])
-    document.getElementById('userid').innerHTML = `${user}`;
-    settings = curUser.settings;
-    if(Object.keys(settings).contains("theme")){
-        updateTheme(curUser.settings[theme]);
-    }
-    desc.value = curUser.profileDescription;
-    image.src = curUser.profilePicture;
+user = localStorage.getItem('user');
+curUser = await readUser(user);
+console.log(curUser)
+document.getElementById('userid').innerHTML = `${user}`;
+settings = curUser["settings"];
+console.log(settings);
+if(Object.keys(settings).includes("theme")){
+    updateTheme(curUser.settings["theme"]);
 }
+desc.innerHTML = curUser['profileDescription'];
+            //sessionStorage.setItem("pic",content);
+            //probably add db to this?
+image.src = curUser["profilePicture"];
 
 //initilize it to false, but we'll update it according to the db later
 var privateCheck = false;
@@ -37,7 +38,7 @@ dark.addEventListener("click", (event) => {
     //remove the previous lists 
     updateTheme('darkTheme');
     //localStorage.setItem("theme","black");
-    settings["theme"] = 'darkTheme';
+    settings.theme = 'darkTheme';
     updateDB();
 });
 
@@ -45,7 +46,8 @@ light.addEventListener("click", (event)=>{
     //TODO LINK IT TO THE POUCHDB
     updateTheme('whiteTheme');
     //localStorage.setItem("theme","white");
-    settings["theme"] = 'whiteTheme';
+    settings.theme = 'whiteTheme';
+    console.log (settings)
     updateDB();
 });
 
@@ -53,7 +55,7 @@ privatemode.addEventListener("click", (event) =>{
     privateCheck = privateCheck?false:true;
     //console.log(privateCheck);
     //TODO LINK IT TO DB
-    settings["private"] = true;
+    settings.private = true;
     updateDB();
 });
 
@@ -69,11 +71,13 @@ updateDesc.addEventListener("click", (event)=>{
 picChange.addEventListener("change",handleFiles ,false);
 function handleFiles(){
     const file = this.files[0];
+    console.log(file);
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = readerEvent =>{
         var content = readerEvent.target.result;
         image.src = content;
+        curUser.profilePicture = content;
         console.log(content);
         //sessionStorage.setItem("pic",content);
         //probably add db to this?
@@ -89,7 +93,7 @@ logout.addEventListener("click", (event) => {
 //TODO RETRIEVE DB PART.
 
 function updateDB(){
-    updateUser(user,curUser.password, desc.value, settings, curUser.pictures);
+    updateUser(user,curUser.password, desc.innerHTML, settings, curUser.profilePictures);
 }
 
 function updateTheme(theme){
