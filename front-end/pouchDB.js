@@ -1,12 +1,13 @@
 // This file should handle all reading and writing realted to the database
 // It should export functions that all three pages (mapic, profile, and secondary_view, and read)
 // The functions need not be async for now
-
+import PouchDB from 'pouchdb'
+import md5 from "md5"
 
 class Database {
   constructor() {
-    const pictureDB = new PouchDB("pictureDB");
-    const userDB = new PouchDB("userDB"); 
+    this.pictureDB = new PouchDB("pictureDB");
+    this.userDB = new PouchDB("userDB");
   }
   /***************************** utility functions *************************/
 
@@ -21,31 +22,36 @@ class Database {
    * @return {void}
    */
   #addPic(picId, userName) {
-    userDB.get(md5(userName)).then(function (doc) {
+    this.userDB.get(md5(userName)).then(function (doc) {
       doc.pictures = doc.pictures.append(picId);
-      userDB.put(doc);
+      this.userDB.put(doc);
     });
   }
 
-  /***************************** CRUD functions *************************/
+  /***************************** userDB CRUD functions *************************/
 
   /**
    * Creates a user with userName and password
    * @param {String} userName 
    * @param {String} password
-   * @returns {void}
+   * @returns {boolean}
    */
   createUser(userName, password) {
-      user = {
+      const user = {
+          _id: md5(userName),
           userName: userName,
           password: password
-      }
-      db.put(user, function(err, res) {
-          if(err) {
-              console.log(err);
-          } else {
-              console.log('User Created')
-          }
+      };
+      this.userDB.put(user).then(doc => {
+        console.log(`Created User ${userName}`);
+        return true;
+      }).catch(err => {
+        if(err.name === 'conflict') {
+          console.log('User Already Exists');
+          return false;
+        } else {
+          throw err;
+        }
       });
   }
 
@@ -55,7 +61,17 @@ class Database {
    * @returns {Object}
    */
   readUser(userName) {
-    return userDB.get(md5(userName));
+    this.userDB.get(md5(userName)).then(doc => {
+      return doc;
+    }).catch(err => {
+      console.log(err)
+      if(err.name === 'not_found') {
+        console.log('User Does Not Exist');
+        return {};
+      } else {
+        throw err;
+      }
+    });
   }
 
   /**
@@ -66,39 +82,74 @@ class Database {
    * @param {String} profilePicture
    * @param {Object} userSetting 
    * @param {Array} pictures an array of picture ids
-   * @returns {void}
+   * @returns {boolean}
    */
   updateUser(
     userName,
     password,
     profileDescription,
-    profilePicturePath,
+    profilePicture,
     userSetting,
     pictures
   ) {
-    userDB.get(md5(userName)).then(function (doc) {
+    this.userDB.get(md5(userName)).then(doc => {
       // Update the document
       doc.password = password;
       doc.profileDescription = profileDescription;
-      doc.profilePicture = profilePicturePath;
+      doc.profilePicture = profilePicture;
       doc.settings = userSetting;
       doc.pictures = pictures;
       // Save the updated document
-      userDB.put(doc);
+      this.userDB.put(doc);
+      return true;
+    }).catch(err => {
+      if(err.name === 'not_found') {
+        console.log('User Does Not Exist');
+        return false;
+      } else if(err.name === 'conflict') {
+        console.log('Update Failed Due To Conflict');
+        return false;
+      } else {
+        throw err;
+      }
     });
   }
 
   /**
    * Remove a user from the database and remove all pertaining information
    * @param {*} userName 
-   * @returns {void}
+   * @returns {boolean}
    */
   deleteUser(userName) {
-    userDB.get(md5(userName)).then(function (doc) {
-      userDB.remove(doc);
+    this.userDB.get(md5(userName)).then(doc => {
+      this.userDB.remove(doc);
+      console.log(`Deleted ${userName}`);
+      return true;
+    }).catch(err => {
+      if(err.name === 'not_found') {
+        console.log('User Does Not Exist');
+        return false;
+      } else {
+        throw err;
+      }
     });
   }
 
+  /**
+   * Read all users from the database
+   * @returns {Object}
+   */
+  readAllUsers() {
+    this.userDB.allDocs({
+      include_docs: true,
+      attachments: true
+    }).then(function (result) {
+      return result;
+    }).catch(function (err) {
+      console.log(err);
+    });
+  }
+ 
   /***************************** pictureDB CRUD functions *************************/
 
   /**
@@ -132,7 +183,7 @@ class Database {
       exif: EXIF,
       comments: [],
     };
-    pictureDB.put(pic, function (err, res) {
+    this.pictureDB.put(pic, function (err, res) {
       if (err) {
         console.log(err);
       } else {
@@ -149,7 +200,7 @@ class Database {
    * @returns {Object}
    */
   readPicture(picId) {
-    pictureDB.get(picId).then(function (doc) {
+    this.pictureDB.get(picId).then(function (doc) {
       return doc;
     });
   }
@@ -167,12 +218,12 @@ class Database {
     description,
     EXIF
   ) {
-    pictureDB.get(picId).then(function (doc) {
+    this.pictureDB.get(picId).then(function (doc) {
       // Only allow to update the description and tags of the picture
       doc.tags = tags;
       doc.description = description;
       doc.exif = EXIF;
-      pictureDB.put(doc);
+      this.pictureDB.put(doc);
     });
   }
 
@@ -184,9 +235,9 @@ class Database {
    */
   deletePicture(picId) {
     let userName = '';
-    pictureDB.get(picId).then(function (doc) {
+    this.pictureDB.get(picId).then(function (doc) {
       userName = doc.ownerName;
-      return pictureDB.remove(doc);
+      return this.pictureDB.remove(doc);
     });
     removePic(picId, userName);
   }
@@ -199,9 +250,9 @@ class Database {
    * @returns {void}
    */
   increaseLike(picId) {
-    pictureDB.get(picId).then(function (doc) {
+    this.pictureDB.get(picId).then(function (doc) {
       doc.like += 1;
-      pictureDB.put(doc);
+      this.pictureDB.put(doc);
     });
   }
 
@@ -211,9 +262,9 @@ class Database {
    * @returns {void}
    */
   decreaseLike(picId) {
-    pictureDB.get(picId).then(function (doc) {
+    this.pictureDB.get(picId).then(function (doc) {
       doc.like -= 1;
-      pictureDB.put(doc);
+      this.pictureDB.put(doc);
     });
   }
 
@@ -224,7 +275,7 @@ class Database {
    * @returns {String}
    */
   getPicTime(picId) {
-    pictureDB.get(picId).then(function (doc) {
+    this.pictureDB.get(picId).then(function (doc) {
       return doc.createdTime;
     });
   }
@@ -238,7 +289,7 @@ class Database {
   * @return {Array} returns an array of comment objects
   */
   getComments(picId) {
-    pictureDB.get(picId).then(function (doc) {
+    this.pictureDB.get(picId).then(function (doc) {
       return doc.comments;
     });
   }
@@ -257,9 +308,9 @@ class Database {
       commentTime: constructTimeString(),
       commentBy: userName,
     };
-    pictureDB.get(picId).then(function (doc) {
+    this.pictureDB.get(picId).then(function (doc) {
       doc.comment.append(comment_profile);
-      pictureDB.put(doc);
+      this.pictureDB.put(doc);
     });
   }
 
@@ -280,7 +331,7 @@ class Database {
    * @returns {String}
    */
   getUser(picId) {
-    pictureDB.get(picId).then(function (doc) {
+    this.pictureDB.get(picId).then(function (doc) {
       return ownerName;
     });
   }
@@ -291,7 +342,7 @@ class Database {
    * @returns {Array} returns an array of picture json objects
    */
   dumpPictures() {
-    pictureDB.allDocs({
+    this.pictureDB.allDocs({
       include_docs: true,
       attachments: true
     }).then(function (result) {
@@ -312,7 +363,7 @@ class Database {
    * @returns {Object} {latitude,longitude}
    */
   getLocation(picId) {
-    pictureDB.get(picId).then(function (doc) {
+    this.pictureDB.get(picId).then(function (doc) {
       return doc.picLocation;
     });
   }
@@ -326,7 +377,7 @@ class Database {
    * @returns {Array} ["cat", "dog"]
    */
   getAllTags(picId) {
-    pictureDB.get(picId).then(function (doc) {
+    this.pictureDB.get(picId).then(function (doc) {
       return doc.picTags;
     });
   }
@@ -340,7 +391,7 @@ class Database {
    * @returns {Object} {time, location, exposure_time, aperture, iso}
    */
   getEXIF(picId) {
-    pictureDB.get(picId).then(function (doc) {
+    this.pictureDB.get(picId).then(function (doc) {
       return doc.picEXIF;
     });
   }
