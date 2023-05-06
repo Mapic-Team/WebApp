@@ -1,5 +1,0 @@
-![HTML & CSS Mockup 1](/docs/ui-design/screenshots/mockup-home-1.png)
-![HTML & CSS Mockup 1](/docs/ui-design/screenshots/mockup-home-2.png)
-![HTML & CSS Mockup 1](/docs/ui-design/screenshots/mockup-home-3.png)
-![HTML & CSS Mockup 2](/docs/ui-design/screenshots/mockup-profile.png)
-![HTML & CSS Mockup 3](/docs/ui-design/screenshots/mockup-secondaryview.png)
