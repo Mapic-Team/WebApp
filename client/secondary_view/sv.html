@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Secondary View</title>
+        <link rel="stylesheet" href="sv.css">
+        <script src="//cdn.jsdelivr.net/npm/pouchdb@8.0.1/dist/pouchdb.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.16.0/js/md5.min.js"></script>
+    </head>
+    <body>
+        <div class="topnav">
+            <a href="../Mapic/index.html" id="mapic">Mapic</a>
+            <a href="../Profile/profile.html" id="profile">Profile</a>
+          </div>
+        <div id="page-container">
+            <div id="left-bar" class="flex-item">
+                <div id="search-container" class="grid-container">
+                    <input id="search-input" value="Search for tags here">
+                    <div id="search-results">
+                        <h2>Results</h2>
+                        <template data-tag-template>
+                            <div class="tag">
+                              <div class="body" data-tag-body></div>
+                            </div>
+                          </template>
+                    </div>
+                </div>   
+            </div>
+            <div id="center-bar" class="flex-item">
+                <div id="image-scroll-bar" style="overflow-y: scroll">
+                    <template data-img-template>
+                        <img src="" alt="" data-img-pic>
+                        <p class="description" data-img-description></p>
+                        <button class="like" data-img-like></button>
+                        <button class="comment" data-img-comment></button>
+                    </template>
+                </div>
+            </div>
+            <div id="right-bar" class="flex-item">
+                <div class="grid-container" id="right-bar-container">
+                    <div id="trends">
+                        <h2>Trending</h2>
+                        <template data-trend-template>
+                            <div class="trending-img">
+                                <img src="" alt="">
+                            </div>
+                        </template>
+                    <div id="trending-images">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script type="module" src="sv.js"></script>
+</html>
