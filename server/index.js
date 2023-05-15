@@ -38,6 +38,24 @@ app.delete('/deletePicture', async(req,res)=>{
     res.status(200).send({'status':'success'});
 })
 
+app.delete('/deleteUser',async(req,res)=>{
+    const user = req.body;
+    await database.deleteUser(user.userName);
+    res.status(200).send({'status':'successs'});
+})
+
+app.get('/getMostLikedPic', async(req,res)=>{
+    const user = req.body;
+    const pic = await database.getMostLikedPic(user.username);
+    res.status(200).send(pic);
+})
+
+app.post('/addComment', async(req,res) =>{
+    const comment = req.body;
+    await database.addComment(comment.picid,comment.comment,comment.username);
+    res.status(200).send({'status':'success'});
+})
+
 /*app.get('/allPictures', async(req,res)=>{
     const user = req.body;
     const pics = await database.getAllPicturesFromUser(user.username);
@@ -48,4 +66,12 @@ app.all('*', async (request, response) => {
     response.status(404).send(`Not found: ${request.path}`);
   });
 
+  app.listen(port, () => {
+    // This is totally just for fun!
+    const msg = `Server started on http://localhost:${port}`;
+  
+    // Have the rainbow stop so we can log stuff to the console.
+    setTimeout(() => {
+    }, 2000);
+  });
   
