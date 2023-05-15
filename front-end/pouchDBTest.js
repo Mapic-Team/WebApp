@@ -12,14 +12,13 @@ function test1() {
     console.log(database.readUser("testPerson1"));
 }
 
-function test2() {
-    database.createUser("testPerson2", "23456789");
-    console.log(database.readUser("testPerson2"));
-    database.deleteUser("testPerson2");
-    console.log(database.readUser("testPerson2"));
+async function test2() {
+    await database.createUser("testPerson2", "23456789");
+    await console.log(database.readUser("testPerson2"));
+    await database.deleteUser("testPerson2");
+    await console.log(database.readUser("testPerson2"));
     console.log(database.readAllUsers());
 }
 
-test1();
 test2();
 

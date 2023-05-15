@@ -36,23 +36,35 @@ class Database {
    * @param {String} password
    * @returns {boolean}
    */
-  createUser(userName, password) {
+  async createUser(userName, password) {
       const user = {
           _id: md5(userName),
           userName: userName,
           password: password
       };
-      this.userDB.put(user).then(doc => {
-        console.log(`Created User ${userName}`);
+      try {
+        const temp = await this.userDB.put(user);
+        console.log(`Created User ${user.userName}`);
         return true;
-      }).catch(err => {
+      } catch(err) {
         if(err.name === 'conflict') {
           console.log('User Already Exists');
           return false;
         } else {
           throw err;
         }
-      });
+      }
+      // await this.userDB.put(user).then(doc => {
+      //   console.log(`Created User ${userName}`);
+      //   return true;
+      // }).catch(err => {
+      //   if(err.name === 'conflict') {
+      //     console.log('User Already Exists');
+      //     return false;
+      //   } else {
+      //     throw err;
+      //   }
+      // });
   }
 
   /**
@@ -60,8 +72,8 @@ class Database {
    * @param {String} userName 
    * @returns {Object}
    */
-  readUser(userName) {
-    this.userDB.get(md5(userName)).then(doc => {
+  async readUser(userName) {
+    await this.userDB.get(md5(userName)).then(doc => {
       return doc;
     }).catch(err => {
       console.log(err)
