@@ -68,10 +68,8 @@ app.all('*', async (request, response) => {
 
   app.listen(port, () => {
     // This is totally just for fun!
-    const msg = `Server started on http://localhost:${port}`;
   
-    // Have the rainbow stop so we can log stuff to the console.
-    setTimeout(() => {
-    }, 2000);
+    const msg = `Server started on http://localhost:${port}`;
+    console.log(msg);
   });
   
