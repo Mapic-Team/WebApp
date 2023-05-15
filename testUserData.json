@@ -1,0 +1,93 @@
+[{ 
+    "id": "6u7y8i9o0p1a2s3d",
+    "userName": "Iris",
+    "password": "iris01",
+    "profileDescription": "I like to take pictures.",
+    "profilePicture": "", 
+    "settings": {
+      "Theme" : "Dark",
+      "Privatemode" : false
+    },
+    "pictures": [
+      "3w0jgnbk5sdghu0l3"
+    ]
+  },{ 
+    "id": "2w3e4r5t6y7u8i9o",
+    "userName": "John",
+    "password": "john01",
+    "profileDescription": "I like to take pictures.",
+    "profilePicture": "", 
+    "settings": {
+      "Theme" : "Light",
+      "Privatemode" : false
+    },
+    "pictures": [
+      "9u2kgnbk5sdghu4c6","1a2b3c4d5e6f7g8h9"
+    ]
+  },{ 
+    "id": "0p1q2w3e4r5t6y7u8",
+    "userName": "Alice",
+    "password": "alice01",
+    "profileDescription": "I like to take pictures,toooooooo.",
+    "profilePicture": "", 
+    "settings": {
+      "Theme" : "Light",
+      "Privatemode" : false
+    },
+    "pictures": [
+        "8d6bfnw6jso37n30d"
+    ]
+  },{ 
+    "id": "5t4r3e2w1q0o9i8u7",
+    "userName": "Emma",
+    "password": "emma01",
+    "profileDescription": "My name is Emma.",
+    "profilePicture": "", 
+    "settings": {
+      "Theme" : "Light",
+      "Privatemode" : false
+    },
+    "pictures": [
+        "8d6bfnw6jso37n30d"
+    ]
+  },{ 
+    "id": "3r5t7y9u1i2o4p6a",
+    "userName": "Samantha",
+    "password": "samantha01",
+    "profileDescription": "Hello, this is Samantha.",
+    "profilePicture": "", 
+    "settings": {
+      "Theme" : "Dark",
+      "Privatemode" : true
+    },
+    "pictures": [
+        
+    ]
+  },{ 
+    "id": "9m8n7b6v5c4x3z2a1",
+    "userName": "Jason",
+    "password": "jason01",
+    "profileDescription": "Hello, this is Jason. Let's share Pics!",
+    "profilePicture": "", 
+    "settings": {
+      "Theme" : "Dark",
+      "Privatemode" : true
+    },
+    "pictures": [
+        
+    ]
+  },{ 
+    "id": "5e4r6t7y8u9i0o1p",
+    "userName": "Emily",
+    "password": "emily01",
+    "profileDescription": "Hello, this is Emily. I like puppy pictures!",
+    "profilePicture": "", 
+    "settings": {
+      "Theme" : "Light",
+      "Privatemode" : true
+    },
+    "pictures": [
+        
+    ]
+  }
+  ]
