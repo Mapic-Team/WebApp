@@ -2,18 +2,33 @@
 // It should export functions that all three pages (mapic, profile, and secondary_view, and read)
 // The functions need not be async for now
 
-// const PouchDB = require("pouchdb");
-// const md5 = require("md5");
-// const ReverseMd5 = require("reverse-md5");
+ //const PouchDB = require("pouchdb");
+ // const md5 = require("md5");
+//const ReverseMd5 = require("reverse-md5");
 
 import PouchDB from "pouchdb"
 import md5 from "md5"
 import * as http from "http"
-import * as url from "url"
-
-// Creates twp databases
+import * as url1 from "url"
+import mongo from "mongodb";
 const pictureDB = new PouchDB("pictureDB");
 const userDB = new PouchDB("userDB");
+const pass = "mNSO8N93vBIRO2V8"
+// Replace the following with your Atlas connection string                                                                                                                                        
+const url = "mongodb+srv://mstian:mNSO8N93vBIRO2V8@cluster0.gnxuuu6.mongodb.net/";
+var MongoClient = mongo.MongoClient;    
+MongoClient.connect(url,function(err, db){  
+      if(err) 
+        console.log(err);
+      else
+      {
+        console.log("serverSetUP")
+        console.log('Mongo Conn....');
+
+      }
+    });
+// Creates twp databases
+
 //the default profile image
 const defaultProfile = "../resources/default_user_picture"
 /*
@@ -373,14 +388,3 @@ export function getEXIF(picId) {
   });
 }
 
-const express = require('express')
-const app = express()
-const port = 3000
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})

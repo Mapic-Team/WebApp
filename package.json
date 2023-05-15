@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "lts": "^1.2.0",
+    "md5": "^2.3.0",
+    "mongodb": "^5.4.0",
+    "pouchdb": "^8.0.1"
+  },
+  "type": "module"
+}
