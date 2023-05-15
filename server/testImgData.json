@@ -1,0 +1,25 @@
+[
+    {
+        "picId": "3w0jgnbk5sdghu0l3",
+        "ownerName": "Iris",
+        "picBase64": "",
+        "likes": 0,
+        "tags": ["National Park", "selfie"],
+        "description": "A very beautiful picture",
+        "createdTime": "2023:05:06 13:37:29",
+        "exif": {
+            "aperture": "f/4",
+            "exposure_time": "1/30",
+            "ISO": 1000,
+            "location": {"lat": "42.3635899", "lng": "-72.5362909"},
+            "time": "2020:04:26 16:24:11"
+        },
+        "comments": [
+            {
+                "commentString": "Very good Picture!",
+	            "commentTime": "2023:01:05 23:56:12",
+	            "commentBy": "Iris"
+            }
+        ]
+    }
+]
