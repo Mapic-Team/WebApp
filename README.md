@@ -44,47 +44,47 @@ We have two databases, one stores the images and all pertaining information, the
 ### Example json object for a person:
 ```
 { 
-  Id: int UNIQUE
-  userName: string UNIQUE
-  password: string
-  profileDescription: “I like to take pictures.” string
-  profilePicture: byte64  
-  settings: {
-    Theme : string
-    Privatemode : boolean
-  } object
-  pictures: [
-    picId int
+  "_id": "d25c7286a46dbb6eeecc5cfddacd5818",
+  "userName": "Iris",
+  "password": "Iris01",
+  "profileDescription": “I like to take pictures.”,
+  "profilePicture": "",  
+  "settings": {
+    "Theme" : "black"
+    "Privatemode" : false
+  },
+  "pictures": [
+    "lhqhn62j2we4vu0wb",
+    "lhqj47oz2ywxe59g4"
   ]
 }
 ```
 ### Example json object for a picture:
 ```
 {
-  picId: string UNIQUE,
-  ownerName: “”, string
-  picBase64: byte64
-  like: 0,
-  tags: [“”,... string]
-  description: “” string,
-  createdTime: “yyyy:mm:dd hh:mm:ss” string
-  exif: {
-    time: yyyy:mm:dd hh:mm:ss,
-    location: {latitude,longitude},
-    aperture: f/4,
-    shutterSpeed: 1/125,
-    ISO: 100
+  "_id": "lhqfx1ugmt620dvh",
+  "ownerName": "Iris",
+  "picBase64": ""
+  "like": 0,
+  "tags": [“National Park”, "Beautiful Day"]
+  "description": "A very beautiful picture",
+  "createdTime": 2023-05-16T13:18:10.922+00:00
+  "exif": {
+    "time": 2021:04:11 13:24:05,
+    "location": {
+      "lat": "42.403741",
+      "lng": "-72.509133"
+    }
+    "aperture": "f/3.5",
+    "exposure_time": "1/1000",
+    "ISO": 100
   }
   comments: [
     {
-      commentString: “”, string
-      commentTime: "yyyy:mm:dd hh:mm:ss" string,
-      commentBy: userName
+      "commentString": "This is a good picture",
+      "commentTime": "2023-05-16T16:40:03.400Z",
+      "commentBy": "Elvira"
     }
   ]
 }
 ```
-
-### Issue
-
-Encountered problem reading from existing database, that is, secondary_view page doesn't seem to be able to read pictures stored by Mapic.
