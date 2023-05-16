@@ -1,7 +1,7 @@
 //import {readUser, createUser} from "../pouchDBCrud";
 
-import { createUser, readUser} from "../pouchDB.js";
-
+//import { createUser, readUser} from "../pouchDB.js";
+import { pcrud } from "./profCrud.js";
 //const check = require('profile.js')
 const logUser =  document.getElementById("logUser");
 const logPass = document.getElementById("logPass");
