@@ -125,16 +125,27 @@ class Database {
     return obj;
   }
 
-  /**
-   * Remove a user from the database and remove all pertaining information
-   * @param {*} userName
-   * @returns {void}
-   */
-  async deleteUser(userName) {
-    const result = await this.userDB
-      .deleteOne({ _id: md5(userName) })
-      .then(console.log(`Deleted user ${userName}`));
+/**
+ * Remove a user from the database and remove all pertaining information
+ * @param {*} userName
+ * @returns {Object} { success: boolean, message: string }
+ */
+async deleteUser(userName) {
+  const obj = { success: false, message: "" };
+  try {
+    const result = await this.userDB.deleteOne({ _id: md5(userName) });
+    if (result.deletedCount === 1) {
+      obj.success = true;
+      obj.message = `Deleted user ${userName}.`;
+    } else {
+      obj.message = `User ${userName} not found.`;
+    }
+  } catch (error) {
+    obj.message = `Error occurred while deleting user: ${error}`;
   }
+  console.log(obj.message);
+  return obj;
+}
 
   /***************************** pictureDB CRUD functions *************************/
 
