@@ -105,11 +105,24 @@ class Database {
   /**
    * Read all user information given a userName
    * @param {String} userName
-   * @returns {Object}
+   * @returns {Object} {success: boolean, message: string, data: obj}
    */
   async readUser(userName) {
-    const result = await this.userDB.findOne({ _id: md5(userName) });
-    return result;
+    const obj = { success: false, message: "", data: null };
+    try {
+      const result = await this.userDB.findOne({ _id: md5(userName) });
+      if (result) {
+        obj.success = true;
+        obj.message = "User found.";
+        obj.data = result;
+      } else {
+        obj.message = `User ${userName} not found.`;
+      }
+    } catch (error) {
+      obj.message = `Error occurred while reading user: ${error}`;
+    }
+    console.log(obj.message);
+    return obj;
   }
 
   /**

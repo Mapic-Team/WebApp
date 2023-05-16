@@ -9,17 +9,6 @@ app.use(express.urlencoded({extended: false}));
 app.use(logger('dev'));
 app.use('/', express.static('client'));
 
-app.get('/getPicture', async(req,res)=>{
-    const picid = req.body;
-    try{
-        const picture = await database.readPicture(picid.picid)
-        res.status(200).send(picture);
-    }
-    catch(err){
-        res.status(400);
-    }
-});
-
 app.post('/createPicture', async(req,res) =>{
     const picture = req.body;
     const result = await database.createPicture(picture.ownerName,picture.imgBase,picture.tags,picture.description,picture.exif);
@@ -31,16 +20,27 @@ app.post('/createPicture', async(req,res) =>{
     res.end();
 })
 
-app.post('/createUser', async(req,res) =>{
-    const user = req.body;
-    const result = await database.createUser(user.userName,user.password);
-    if(result.success) {
-        res.status(200).send(result);
+app.get('/getPicture', async(req,res) => {
+    const picid = req.body;
+    try{
+        const picture = await database.readPicture(picid.picid)
+        res.status(200).send(picture);
+    }
+    catch(err){
+        res.status(400);
+    }
+});
+
+app.get('/readUser', async (req, res) => {
+    const userName = req.query.userName; // Retrieve the userName from the query parameter
+    const result = await database.readUser(userName);
+    if (result.success) {
+      res.status(200).send(result);
     } else {
-        res.status(400).send(result);
+      res.status(400).send(result);
     }
     res.end();
-})
+});
 
 app.delete('/deletePicture', async(req,res)=>{
     const pic = req.body;
