@@ -129,7 +129,8 @@ class Database {
       userName: userName,
       password: password,
       pictures: [],
-      profilePicture: default_pic
+      profilePicture: default_pic,
+      settings:{}
     };
     try {
       const result = await this.userDB.insertOne(user);
