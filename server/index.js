@@ -1,6 +1,7 @@
 import { database } from "./database.js";
 import express from 'express';
 import logger from 'morgan'
+import cors from 'cors';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -9,7 +10,13 @@ app.use(express.urlencoded({extended: false}));
 app.use(logger('dev'));
 app.use('/', express.static('client'));
   
+const corsOptions ={
+   origin:'*', 
+   credentials:true,            //access-control-allow-credentials:true
+   optionSuccessStatus:200,
+}
 
+app.use(cors(corsOptions));
 /***************************** user CRD routes *************************/
 
 app.post('/createUser', async (req, res) => {
