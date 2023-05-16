@@ -12,6 +12,18 @@ app.use('/', express.static('client'));
 
 /***************************** user CRD routes *************************/
 
+app.post('/createUser', async (req, res) => {
+    const { userName, password } = req.body;
+    const result = await database.createUser(userName, password);
+    if (result.success) {
+    res.status(200).send(result);
+    } else {
+    res.status(400).send(result);
+    }
+    res.end();
+});
+  
+
 app.get('/readUser', async (req, res) => {
     const userName = req.query.userName; // Retrieve the userName from the query parameter
     const result = await database.readUser(userName);
