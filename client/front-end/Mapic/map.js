@@ -4,43 +4,152 @@
 //     zoom: 13,
 //     zoomControl: false
 // });
-
-import * as db from "../pouchDB.js";
+// import { database } from "../../server/database";
+var amherst = [42.373034, -72.519632];
 
 var map = L.map('map', {
-    zoom: 13,
     zoomControl: false,
     closePopupOnClick: false
-}).setView([42.3635899, -72.5362909], 13);
-
-// map.panTo([51.505, -0.09], 1);
-
+}).setView(amherst, 15);
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
+    minZoom: 3,
+    worldCopyJump: true,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
-var latlng = [42.3635899, -72.5362909];
+
+console.log(navigator.geolocation);
+
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(getPosition);
+} else {
+    // alert("Your browser is not support location feature");
+    console.log("Your browser is not support location feature")
+}
+// var latlng = [42.3635899, -72.5362909];
 
 // L.control.zoom({animate: true}).addTo(map);
 
-var image2 = L.popup([42.3635899, -72.5362909], {autoPan: false, autoClose: false, closeButton: false})
-// .setLatLng()
-// .setContent('<img src="/images/1.jpeg" style="width: 300px height: 100%"/>')
-.setContent('<div class="photo"><img src="../Mapic/images/2.jpeg" id="2" style="width: inherit;"/></div>')
-.openOn(map);
 
-var image3 = L.popup([42.388361, -72.531052], {autoPan: false, autoClose: false, closeButton: false})
-// .setLatLng()
-// .setContent('<img src="/images/1.jpeg" style="width: 300px height: 100%"/>')
-.setContent('<div class="photo"><img src="../Mapic/images/3.jpeg" id="3" style="width: inherit;"/></div>')
-.openOn(map);
+// var inCopyWorld = false;
 
-var image4 = L.popup([42.519944, -72.294846], {autoPan: false, autoClose: false, closeButton: false})
-// .setLatLng()
-// .setContent('<img src="/images/1.jpeg" style="width: 300px height: 100%"/>')
-.setContent('<div class="photo"><img src="../Mapic/images/4.jpeg" id="4" style="width: inherit;"/></div>')
-.openOn(map);
+// map.on('moveend', function() {
+//     var center = map.getCenter();
+//     var wrappedCenter = map.wrapLatLng(center);
+//     var nowInCopyWorld = !center.equals(wrappedCenter);
+
+//     if (nowInCopyWorld !== inCopyWorld) {
+//         inCopyWorld = nowInCopyWorld;
+
+//         if (inCopyWorld) {
+//             console.log("Moved to 'copy' world");
+//         } else {
+//             console.log("Moved back to 'original' world");
+//         }
+//     }
+// });
+// let totalDeltaLng = 0;
+// let worldCounter = 0;
+
+// map.on('move', function(e) {
+//     const newCenter = map.getCenter();
+//     const deltaLng = newCenter.lng - oldCenter.lng;
+
+//     // Detect crossing the antimeridian
+//     if (deltaLng > 180) {
+//         totalDeltaLng -= 360 - deltaLng;
+//     } else if (deltaLng < -180) {
+//         totalDeltaLng += 360 + deltaLng;
+//     } else {
+//         totalDeltaLng += deltaLng;
+//     }
+
+//     const newWorldCounter = Math.floor((totalDeltaLng + 180) / 360);
+    
+//     if (newWorldCounter !== worldCounter) {
+//         worldCounter = newWorldCounter;
+//         if (worldCounter === 0) {
+//             console.log('Moved back to "original" world');
+//         } else {
+//             console.log(`Moved to "copy" world ${worldCounter}`);
+//         }
+//     }
+
+//     oldCenter = newCenter;
+// });
+
+// let oldCenter = map.getCenter();
+
+
+// function updatePicturesInView() {
+
+// }
+
+function closeAllPictures() {
+    map.eachLayer(function (layer) {
+        if (layer instanceof L.Popup) {
+            map.closePopup(layer);
+        }
+    });
+}
+
+// function currBounds() {
+//     var bounds = map.getBounds();
+//     var southWest = bounds.getSouthWest();
+//     var northEast = bounds.getNorthEast();
+
+//     console.log("Southwest corner: ", southWest);
+// console.log("Northeast corner: ", northEast);
+//     // return {southWest: southWest, northEast: northEast};
+// }
+
+// map.on('moveend', function() {
+//     currBounds();
+//     console.log("--------------------")
+// });
+
+
+// var bounds = map.getBounds();
+// var southWest = bounds.getSouthWest();
+// var northEast = bounds.getNorthEast();
+
+// console.log("Southwest corner: ", southWest);
+// console.log("Northeast corner: ", northEast);
+
+
+var currentZoomLevel = map.getZoom();
+
+map.on('zoomend', function() {
+    var newZoomLevel = map.getZoom();
+    if (newZoomLevel > currentZoomLevel) {
+        // The map has been zoomed in
+        console.log('Map has been zoomed in to level ' + newZoomLevel);
+    } else if (newZoomLevel < currentZoomLevel) {
+        // The map has been zoomed out
+        console.log('Map has been zoomed out to level ' + newZoomLevel);
+    }
+    currentZoomLevel = newZoomLevel;
+});
+
+
+// var image2 = L.popup([42.3635899, -72.5362909], {autoPan: false, autoClose: false, closeButton: false})
+// // .setLatLng()
+// // .setContent('<img src="/images/1.jpeg" style="width: 300px height: 100%"/>')
+// .setContent('<div class="photo"><img src="../Mapic/images/2.jpeg" id="2" style="width: inherit;"/></div>')
+// .openOn(map);
+
+// var image3 = L.popup([42.388361, -72.531052], {autoPan: false, autoClose: false, closeButton: false})
+// // .setLatLng()
+// // .setContent('<img src="/images/1.jpeg" style="width: 300px height: 100%"/>')
+// .setContent('<div class="photo"><img src="../Mapic/images/3.jpeg" id="3" style="width: inherit;"/></div>')
+// .openOn(map);
+
+// var image4 = L.popup([42.519944, -72.294846], {autoPan: false, autoClose: false, closeButton: false})
+// // .setLatLng()
+// // .setContent('<img src="/images/1.jpeg" style="width: 300px height: 100%"/>')
+// .setContent('<div class="photo"><img src="../Mapic/images/4.jpeg" id="4" style="width: inherit;"/></div>')
+// .openOn(map);
 
 // var tooltip = L.tooltip()
 // .setLatLng([51.513, -0.09])
@@ -48,24 +157,19 @@ var image4 = L.popup([42.519944, -72.294846], {autoPan: false, autoClose: false,
 // .addTo(map);
 
 
-// var popup = L.popup();
+var popup = L.popup();
 
-// function onMapClick(e) {
-//     // tooltip
-//     popup
-//         .setLatLng(e.latlng)
-//         .setContent("You clicked the map at " + e.latlng.toString())
-//         .openOn(map);
-// }
-
-// map.on('click', onMapClick);
-
-if (navigator.geolocation) {
-    var location = navigator.geolocation.getCurrentPosition(getPosition);
-
-} else {
-    console.log("Your browser is not support location feature")
+function onMapClick(e) {
+    // tooltip
+    popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked the map at " + e.latlng.toString())
+        .openOn(map);
+// closeAllPictures();
 }
+
+map.on('click', onMapClick);
+
 
 // var userName = "";
 // if (localStorage.getItem("user") !== null) {
@@ -129,11 +233,11 @@ document.getElementsByClassName("put-button")[0].addEventListener("click", () =>
     img.setAttribute("id", "2");
     img.setAttribute("style", "width: inherit;");
     div.appendChild(img);
+
     let image = L.popup([lat, lng], {autoPan: false, autoClose: false, closeButton: false})
     .setContent(div)
     .openOn(map);
     resetUpload();
-    db.createPicture(userName, base64, tags, description, exifExtract);
 });
     
 
@@ -221,10 +325,7 @@ document.getElementById("upload").onchange = function(e) {
     // console.log(base64);
     // console.log(exifExtract);
     
-    
-    // console.log(db.readPicture("lgx06aqo284bcff6x"));
-    // db.deletePicture("lgwztavp2hv7hi0fn");
-    // console.log(db.readPicture("lgwztavp2hv7hi0fn"));
+
 }
 
 function addPicture () {
@@ -327,16 +428,18 @@ function getPosition(position) {
     let lat = position.coords.latitude;
     let long = position.coords.longitude; 
     let accuracy = position.coords.accuracy;
+// console.log("Your position is: Lat: " + lat + " Long : " + long + " Accuracy: " + accuracy + ".");
 
-    let marker = L.marker([lat, long])
-    let circle = L.circle([lat, long],accuracy);
+    // let marker = L.marker([lat, long])
+    // let circle = L.circle([lat, long],accuracy);
     // L.map('map').setView([lat, long], 1)
+
     L.control.locate({
-        position: "bottomleft",
-        // strings: {
-        //   title: "Show me where I am, yo!"
-        // }
+        position: "bottomright",
+        // keepCurrentZoomLevel: true,
+        initialZoomLevel: 17,
     }).addTo(map);
+
     // map.panTo([lat, long]);
-    // console.log("Your position is: Lat: " + lat + " Long : " + long + " Accuracy: " + accuracy + ".");
+    console.log("Your position is: Lat: " + lat + " Long : " + long + " Accuracy: " + accuracy + ".");
 }
