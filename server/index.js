@@ -56,6 +56,16 @@ app.post('/addComment', async(req,res) =>{
     res.status(200).send({'status':'success'});
 })
 
+app.post('/changeLikeBy', async(req,res) => {
+    const pic = req.body;
+    await database.cahngeLikeBy(pic.picid,pic.change);
+    res.status(200).send({'status':'success'});
+});
+
+app.get('/getTenMostCommonTags', async(req,res) =>{
+    const tags = await database.getTenMostCommonTags();
+    res.status(200).send(tags);
+})
 /*app.get('/allPictures', async(req,res)=>{
     const user = req.body;
     const pics = await database.getAllPicturesFromUser(user.username);
@@ -67,8 +77,6 @@ app.all('*', async (request, response) => {
   });
 
   app.listen(port, () => {
-    // This is totally just for fun!
-  
     const msg = `Server started on http://localhost:${port}`;
     console.log(msg);
   });
