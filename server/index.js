@@ -104,8 +104,13 @@ app.post('/changeLikeBy', async(req,res) => {
 
 app.post('/addComment', async(req,res) =>{
     const comment = req.body;
-    await database.addComment(comment.picid,comment.comment,comment.userName);
-    res.status(200).send({'status':'success'});
+    const result = await database.addComment(comment.picId,comment.comment,comment.userName);
+    if(result.success) {
+        res.status(200).send(result);
+    } else {
+        res.status(400).send(result);
+    }
+    res.end();
 })
 
 app.post('/updateSettings',async(req,res) =>{

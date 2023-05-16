@@ -344,31 +344,64 @@ class Database {
   }
 
 
-  /**
-   * Add a new comment by a user to a picture
-   * @param {String} picId
-   * @param {String} comment the new comment that is being added
-   * @param {String} userName
-   * @returns {void}
-   */
-  async addComment(picId, comment, userName) {
+/**
+ * Add a new comment by a user to a picture
+ * will not add if either the user or the picture is not found
+ * @param {String} picId
+ * @param {String} comment the new comment that is being added
+ * @param {String} userName
+ * @returns {Object} { success: boolean, message: string }
+ */
+async addComment(picId, comment, userName) {
+  const obj = { success: false, message: "" };
+
+  try {
+    // Check if the picture exists
+    const picture = await this.pictureDB.findOne({ _id: picId });
+    if (!picture) {
+      obj.message = `Picture ${picId} not found.`;
+      return obj;
+    }
+
+    // Check if the user exists
+    const user = await this.userDB.findOne({ _id: md5(userName) });
+    if (!user) {
+      obj.message = `User ${userName} not found.`;
+      return obj;
+    }
+
     const comment_profile = {
       commentString: comment,
-      commentTime: constructTimeString(),
+      commentTime: new Date(),
       commentBy: userName,
     };
-    const commentArray = await this.pictureDB.findOne({ _id: md5(picId) })
-      .comments;
+
+    const commentArray = picture.comments;
     commentArray.push(comment_profile);
+
     const result = await this.pictureDB.updateOne(
-      { _id: md5(picId) },
+      { _id: picId },
       {
         $set: {
           comments: commentArray,
         },
       }
     );
+
+    if (result.modifiedCount === 1) {
+      obj.success = true;
+      obj.message = `Comment added successfully to picture ${picId}.`;
+    } else {
+      obj.message = `Failed to add comment to picture ${picId}.`;
+    }
+  } catch (error) {
+    obj.message = `Error occurred while adding comment to picture ${picId}: ${error}`;
   }
+
+  console.log(obj.message);
+  return obj;
+}
+
 
   /**
    * Get the three most liked photos created within three days
