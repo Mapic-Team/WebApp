@@ -1,5 +1,4 @@
-import { database } from "./database";
-import md5 from "md5"
+import { database } from "./database.js";
 import express from 'express';
 import logger from 'morgan'
 
