@@ -3,7 +3,6 @@
   "dependencies": {
     "md5": "^2.3.0",
     "mongodb": "^5.4.0",
-    "pouchdb": "^8.0.1",
-    "reverse-md5": "^0.0.5"
+    "pouchdb": "^8.0.1"
   }
 }
