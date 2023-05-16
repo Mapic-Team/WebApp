@@ -120,6 +120,30 @@ http://localhost:3000
 - Query Parameter:
   - `userName` (string): User name
 
+### Update Settings
+
+- URL: `/updateSettings`
+- Method: `POST`
+- Request Body:
+  - `userName` (string): User name
+  - `setting` (object): User settings
+
+### Update Description
+
+- URL: `/updateDescription`
+- Method: `POST`
+- Request Body:
+  - `userName` (string): User name
+  - `description` (string): User description
+
+### Update Profile Picture
+
+- URL: `/updateProfilePicture`
+- Method: `POST`
+- Request Body:
+  - `userName` (string): User name
+  - `profilePic` (string): Base64-encoded profile picture data
+
 ## Picture Endpoints
 
 ### Create Picture
@@ -147,8 +171,6 @@ http://localhost:3000
 - Query Parameter:
   - `picId` (string): Picture ID
 
-## Update Endpoints
-
 ### Change Like By
 
 - URL: `/changeLikeBy`
@@ -165,4 +187,37 @@ http://localhost:3000
   - `picId` (string): Picture ID
   - `comment` (string): Comment text
   - `userName` (string): User name
+
+## Query Endpoints
+
+### Get Trending
+
+- URL: `/getTrending`
+- Method: `GET`
+- Response:
+  - Success (status code 200):
+    - Response Body: Result data
+  - Failure (status code 400):
+    - Response Body: Error message
+
+### Get Most Liked Picture
+
+- URL: `/getMostLikedPic`
+- Method: `GET`
+- Query Parameter:
+  - `userName` (string): User name
+- Response:
+  - Success (status code 200):
+    - Response Body: Result data
+  - Failure (status code 400):
+    - Response Body: Error message
+
+### Get Ten Most Common Tags
+
+- URL: `/getTenMostCommonTags`
+- Method: `GET`
+- Response:
+  - Success (status code 200):
+    - Response Body: Array of tags
+
 
