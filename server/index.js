@@ -169,8 +169,13 @@ app.get('/getMostLikedPic', async(req,res)=>{
 })
 
 app.get('/getTenMostCommonTags', async(req,res) =>{
-    const tags = await database.getTenMostCommonTags();
-    res.status(200).send(tags);
+    const result = await database.getTenMostCommonTags();
+    if(result.success) {
+        res.status(200).send(result);
+    } else {
+        res.status(400).send(result);
+    }
+    res.end();
 });
 
 // app.post('/test',async (req,res)=>{

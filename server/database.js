@@ -472,8 +472,8 @@ class Database {
 
 
   /**
-   * Get ten most common tags
-   * @return {Array<String>}
+   * Get ten most common tags among all pictures
+   * @return {Object} { success: boolean, message: string, data: Array<String> }
    */
   async getTenMostCommonTags() {
     const pipeline = [
