@@ -311,12 +311,13 @@ class Database {
 
   /**
    * Update the settings of a user
+   * @param {String} userName
    * @param {Object} newSetting
    * @return {void}
    */
-  async updateSetting(newSetting) {}
+  async updateSetting(userName,newSetting) {}
 }
-
+//TODO updateDescription(userName,newDescription) and updateProfilePicture(userName,newProfilePicture)
 const database = new Database();
 
 export { database };

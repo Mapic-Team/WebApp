@@ -13,12 +13,17 @@ const logout = document.getElementById("logout");
 let user = "";
 let curUser = {};
 let settings = {};
-import { deleteUser } from "../pouchDB.js";
-import { readUser, updateUser } from "../pouchDB.js";
+
+
+
+await fetch('/test',{
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'}
+});
 
 //initiate the profile page
 user = localStorage.getItem('user');
-curUser = await readUser(user);
+/*curUser = await readUser(user);
 console.log(curUser.pictures)
 document.getElementById('userid').innerHTML = `${user}`;
 settings = curUser["settings"];
@@ -33,7 +38,7 @@ if(curUser.pictures.length == 0){
     console.log(document.getElementById("bestPost").innerHTML)
     document.getElementById("bestPost").innerHTML = "No pictures yet!";
 }
-
+*/
 //initilize it to false, but we'll update it according to the db later
 var privateCheck = false;
 
@@ -104,11 +109,11 @@ document.getElementById("delete").addEventListener("click",(event)=>{
     location.href = "../Mapic/index.html";
 });
 
-function updateDB(){
+/*function updateDB(){
     updateUser(user,curUser.password, desc.innerHTML,image.src ,settings, curUser.pictures);
     console.log(curUser);
 }
-
+*/
 
 function updateTheme(theme){
     for(let elem in themElems){

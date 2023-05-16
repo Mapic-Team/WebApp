@@ -60,11 +60,31 @@ app.post('/changeLikeBy', async(req,res) => {
     await database.cahngeLikeBy(pic.picid,pic.change);
     res.status(200).send({'status':'success'});
 });
-
+app.post('/test',async (req,res)=>{
+    console.log('TEST FOR ROUTE WORKED')
+})
 app.get('/getTenMostCommonTags', async(req,res) =>{
     const tags = await database.getTenMostCommonTags();
     res.status(200).send(tags);
     })
+app.post('/updateSettings',async(req,res) =>{
+    const user = req.body;
+    await database.updateSetting(user.username,user.setting);
+    res.status(200).send({'status':'success'});
+})
+
+app.post('/updateDescription',async(req,res) =>{
+    const user = req.body;
+    await database.updateDescription(user.username,user.description);
+    res.status(200).send({'status':'success'});
+})
+
+app.post('/updateProfilePicture',async(req,res) =>{
+    const user = req.body;
+    await database.updateProfilePicture(user.username, user.profilePic);
+    res.status(200).send({'status':'success'});
+})
+
 app.all('*', async (request, response) => {
     response.status(404).send(`Not found: ${request.path}`);
   });
