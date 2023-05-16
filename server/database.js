@@ -496,28 +496,50 @@ class Database {
 
   /***************************** r/w functions for profile page *****************************/
 
-  /**
-   * Get the most popular pic of a user
-   * return null if the user has no pictures
-   * @param {*} userName
-   * @return {Object} return the whole picture object
-   */
-  async getMostLikedPic(userName) {
-    console.log('entered function')
-    const picArray = await this.userDB.findOne({ _id: md5(userName) }).pictures;
-    const mostLikedPic = null;
-    console.log("picArray");
-    console.log(picArray);
-    picArray.reduce(async (acc, e) => {
-      const pic = await this.pictureDB.findOne({ _id: md5(e) });
-      if (pic.like > acc) {
+/**
+ * Get the most popular pic of a user
+ * Return null if the user has no pictures
+ * @param {String} userName
+ * @return {Object} { success: boolean, message: string, data: Object }
+ */
+async getMostLikedPic(userName) {
+  const obj = { success: false, message: "", data: null };
+
+  try {
+    const user = await this.userDB.findOne({ _id: md5(userName) });
+    const picArray = user.pictures;
+    if (!picArray || picArray.length === 0) {
+      obj.message = `User ${userName} has no pictures.`;
+      console.log(obj.message);
+      return obj;
+    }
+
+    let mostLikedPic = null;
+    let maxLikes = -1;
+
+    for (const picId of picArray) {
+      const pic = await this.pictureDB.findOne({ _id: picId });
+      if (pic && pic.like > maxLikes) {
         mostLikedPic = pic;
-        return pic.like;
+        maxLikes = pic.like;
       }
-      return acc;
-    }, 0);
-    return mostLikedPic;
+    }
+
+    if (mostLikedPic) {
+      obj.success = true;
+      obj.message = `Most liked picture of user ${userName} retrieved successfully.`;
+      obj.data = mostLikedPic;
+    } else {
+      obj.message = `User ${userName} has no pictures with likes.`;
+    }
+  } catch (error) {
+    obj.message = `Error occurred while retrieving most liked picture of user ${userName}: ${error}`;
   }
+
+  console.log(obj.message);
+  return obj;
+}
+
 
   /**
    * Update the settings of a user

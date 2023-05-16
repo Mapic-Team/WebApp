@@ -144,9 +144,13 @@ app.post('/updateProfilePicture',async(req,res) =>{
 /***************************** query routes *************************/
 
 app.get('/getMostLikedPic', async(req,res)=>{
-    const user = req.body;
-    const pic = await database.getMostLikedPic(user.userName);
-    res.status(200).send(pic);
+    const result = await database.getMostLikedPic(req.query.userName);
+    if(result.success) {
+        res.status(200).send(result);
+    } else {
+        res.status(400).send(result);
+    }
+    res.end();
 })
 
 app.get('/getTenMostCommonTags', async(req,res) =>{
