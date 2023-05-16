@@ -22,14 +22,24 @@ app.get('/getPicture', async(req,res)=>{
 
 app.post('/createPicture', async(req,res) =>{
     const picture = req.body;
-    await database.createPicture(picture.ownerName,picture.imgBase,picture.tags,picture.description,picture.exif);
-    res.status(200).send({"status" : "success"});
+    const result = await database.createPicture(picture.ownerName,picture.imgBase,picture.tags,picture.description,picture.exif);
+    if(result.success) {
+        res.status(200).send(result);
+    } else {
+        res.status(400).send(result);
+    }
+    res.end();
 })
 
 app.post('/createUser', async(req,res) =>{
     const user = req.body;
-    await database.createUser(user.userName,user.password);
-    res.status(200).send({'status':'success'});
+    const result = await database.createUser(user.userName,user.password);
+    if(result.success) {
+        res.status(200).send(result);
+    } else {
+        res.status(400).send(result);
+    }
+    res.end();
 })
 
 app.delete('/deletePicture', async(req,res)=>{

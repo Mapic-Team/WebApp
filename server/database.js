@@ -74,17 +74,32 @@ class Database {
    * Creates a user with userName and password
    * @param {String} userName
    * @param {String} password
-   * @returns {void}
+   * @returns {Object} {success: boolean, message: string}
    */
   async createUser(userName, password) {
+    const obj = {success: false, message: ""};
     const user = {
       _id: md5(userName),
       userName: userName,
       password: password,
       pictures: [],
     };
-    const result = await this.userDB.insertOne(user);
-    console.log(`Added user ${user}`);
+    try {
+      const result = await this.userDB.insertOne(user);
+      obj.message = `Added user ${userName} with ID ${result.insertedId}.`;
+      obj.success = true;
+    } catch (error) {
+      //duplicate key
+      if (error.code === 11000) {
+        obj.message = `User ${userName} already exists.`;
+        obj.success = false;
+      } else {
+        obj.message = `Error occured while inserting: ${error}, user ${userName} not added.`;
+        obj.success = false;
+      }
+    }
+    console.log(obj.message);
+    return obj;
   }
 
   /**
@@ -297,6 +312,7 @@ class Database {
    * @return {Object} return the whole picture object
    */
   async getMostLikedPic(userName) {
+    console.log('entered function')
     const picArray = await this.userDB.findOne({ _id: md5(userName) }).pictures;
     const mostLikedPic = null;
     console.log("picArray");
