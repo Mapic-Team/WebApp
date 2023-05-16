@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import testUserData from './front-end/testUserData.json' assert { type: 'json' };
+import md5 from 'md5';
 
 const connectionString = 'mongodb+srv://Barricature:wTz63sS8Nv7uECS0@cluster0.pmk22hf.mongodb.net/?retryWrites=true&w=majority';
 
@@ -67,7 +67,8 @@ class Database {
         const user = {
             _id: md5(userName),
             userName: userName,
-            password: password
+            password: password,
+            pictures: []
         };
         const result = await this.userDB.insertOne(user);
         console.log(`Added user ${user}`)
@@ -89,8 +90,8 @@ class Database {
      * @returns {void}
      */
     async deleteUser(userName) {
-        const result = await this.userDB.deleteOne({_id: md5(userName)});
-        console.log(`Deleted user ${userName}`);
+        const result = await this.userDB.deleteOne({_id: md5(userName)})
+        .then(console.log(`Deleted user ${userName}`));
     }
    
     /***************************** pictureDB CRUD functions *************************/
@@ -113,7 +114,7 @@ class Database {
       EXIF
     ) {
       // very unique generation, length 16-17
-      const Id = randId();
+      const Id = this.randId();
       const pic = {
         _id: Id,
         ownerName: ownerName,
@@ -126,7 +127,7 @@ class Database {
         comments: [],
       };
       // add the picture under the user
-      await addPic(Id, userName);
+      await this.#addPic(Id, ownerName);
       const result = await this.pictureDB.insertOne(pic);
       console.log(`Added picture ${Id}`);
     }
@@ -292,8 +293,20 @@ class Database {
         return acc;
       }, 0)
     }
-  
+
+    /**
+     * Update the settings of a user
+     * @param {Object} newSetting
+     * @return {void}
+     */
+    async updateSetting(newSetting) {
+      
+    }
   }
+
+  //TODO: settings, description, profilePicture
+  //TODO: 
+
   
   const database = new Database();
   
