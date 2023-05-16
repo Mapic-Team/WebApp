@@ -4,7 +4,9 @@
 //     zoom: 13,
 //     zoomControl: false
 // });
-// import { database } from "../../server/database";
+// import * as db from '/server/database.js';
+
+
 var amherst = [42.373034, -72.519632];
 
 var map = L.map('map', {
@@ -19,7 +21,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
-console.log(navigator.geolocation);
+// console.log(navigator.geolocation);
 
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(getPosition);
@@ -118,19 +120,19 @@ function closeAllPictures() {
 // console.log("Northeast corner: ", northEast);
 
 
-var currentZoomLevel = map.getZoom();
+// var currentZoomLevel = map.getZoom();
 
-map.on('zoomend', function() {
-    var newZoomLevel = map.getZoom();
-    if (newZoomLevel > currentZoomLevel) {
-        // The map has been zoomed in
-        console.log('Map has been zoomed in to level ' + newZoomLevel);
-    } else if (newZoomLevel < currentZoomLevel) {
-        // The map has been zoomed out
-        console.log('Map has been zoomed out to level ' + newZoomLevel);
-    }
-    currentZoomLevel = newZoomLevel;
-});
+// map.on('zoomend', function() {
+//     var newZoomLevel = map.getZoom();
+//     if (newZoomLevel > currentZoomLevel) {
+//         // The map has been zoomed in
+//         console.log('Map has been zoomed in to level ' + newZoomLevel);
+//     } else if (newZoomLevel < currentZoomLevel) {
+//         // The map has been zoomed out
+//         console.log('Map has been zoomed out to level ' + newZoomLevel);
+//     }
+//     currentZoomLevel = newZoomLevel;
+// });
 
 
 // var image2 = L.popup([42.3635899, -72.5362909], {autoPan: false, autoClose: false, closeButton: false})
@@ -171,12 +173,14 @@ function onMapClick(e) {
 map.on('click', onMapClick);
 
 
-// var userName = "";
-// if (localStorage.getItem("user") !== null) {
-//     userName = localStorage.getItem("user");
-// } else {
-//     alert("Please login first");
-// }
+if (localStorage.getItem("user") !== null) {
+    userName = localStorage.getItem("user");
+    document.getElementById("login").style.display = "none";
+    document.getElementById("profile").style.display = "block";
+} else {
+    // alert("Please login first");
+    document.getElementById("login").style.display = "block";
+}
 
 function resetUpload() {
     document.getElementById("upload-window").style.display = "none";
@@ -221,10 +225,11 @@ document.getElementsByClassName("put-button")[0].addEventListener("click", () =>
     if (document.getElementById("description-box") !== null) {
         description = document.getElementById("description-box").value;
     }
-    let userName = 'guest';
+    let userName = "Iris";
     if (localStorage.getItem("user") !== null) {
         userName = localStorage.getItem("user");
     }
+
     let src = document.getElementById("upload-preview").src;
     let div = document.createElement("div");
     div.setAttribute("class", "photo");
@@ -238,6 +243,72 @@ document.getElementsByClassName("put-button")[0].addEventListener("click", () =>
     .setContent(div)
     .openOn(map);
     resetUpload();
+    // console.log(window.base64);
+
+    // fetch('http://localhost:3000/createPicture', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         'Accept': 'application/json'
+    //         },
+    //     body: JSON.stringify({
+    //             ownerName: userName,
+    //             picBase64: src,
+    //             tags: tags,
+    //             description: description,
+    //             exif: exifExtract
+    //             })
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         console.log(data);
+    //     }
+    // );
+    fetch('http://localhost:3000/readPicture?picId=lhqhn62j2we4vu0wb', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+            }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            }
+            );
+
+    // fetch(`http://localhost:3000/createPicture?userName=${userName}&picBase64=${src}&tag=${tags}&description=${description}&exif=${exifExtract}`, {
+    //     method: 'POST',
+    //     headers: { 
+    //         'Content-Type': 'application/json',
+    //         'Accept': 'application/json'
+    //     },
+        // body: JSON.stringify({
+        //     userName: userName,
+        //     picBase64: window.base64,
+        //     tags: tags,
+        //     description: description,
+        //     exif: exifExtract
+        // })
+    // })
+    // .then(response => response.json())
+    // .then(data => {
+    //     console.log(data);
+    // }
+    // );
+    // fetch('http://localhost:3000/readUser?userName=Iris', {
+    //     method: 'GET',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         'Accept': 'application/json'
+    //         }
+    //         })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             console.log(data);
+    //         }
+    //         );
+
 });
     
 
@@ -332,10 +403,10 @@ function addPicture () {
     console.log(exifExtract);
 }
 // console.log(image2.getLatLng().lat);
-let photo = document.getElementsByClassName("photo");
-photo[0].addEventListener("click", () => {clickPhoto(image2)});
-photo[1].addEventListener("click", () => {clickPhoto(image3)});
-photo[2].addEventListener("click", () => {clickPhoto(image4)});
+// let photo = document.getElementsByClassName("photo");
+// photo[0].addEventListener("click", () => {clickPhoto(image2)});
+// photo[1].addEventListener("click", () => {clickPhoto(image3)});
+// photo[2].addEventListener("click", () => {clickPhoto(image4)});
 
 
 
@@ -441,5 +512,5 @@ function getPosition(position) {
     }).addTo(map);
 
     // map.panTo([lat, long]);
-    console.log("Your position is: Lat: " + lat + " Long : " + long + " Accuracy: " + accuracy + ".");
+    // console.log("Your position is: Lat: " + lat + " Long : " + long + " Accuracy: " + accuracy + ".");
 }
