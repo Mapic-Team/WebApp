@@ -541,15 +541,87 @@ async getMostLikedPic(userName) {
 }
 
 
-  /**
-   * Update the settings of a user
-   * @param {String} userName
-   * @param {Object} newSetting
-   * @return {void}
-   */
-  async updateSetting(userName,newSetting) {}
+/**
+ * Update the settings field of a user
+ * @param {String} userName
+ * @param {Object} newSetting {Theme : string, Privatemode : boolean}
+ * @return {Object} { success: boolean, message: string }
+ */
+async updateSetting(userName, newSetting) {
+  const obj = { success: false, message: "" };
+  try {
+    const result = await this.userDB.updateOne(
+      { userName: userName },
+      { $set: { settings: newSetting } }
+    );
+    if (result.modifiedCount === 1) {
+      obj.success = true;
+      obj.message = `Settings updated for user ${userName}.`;
+    } else {
+      obj.message = `User ${userName} not found.`;
+    }
+  } catch (error) {
+    obj.message = `Error occurred while updating settings for user ${userName}: ${error}`;
+  }
+  console.log(obj.message);
+  return obj;
 }
-//TODO updateDescription(userName,newDescription) and updateProfilePicture(userName,newProfilePicture)
+
+/**
+ * Update the profile description of a user
+ * @param {String} userName
+ * @param {String} newDescription
+ * @return {Object} { success: boolean, message: string }
+ */
+async updateDescription(userName, newDescription) {
+  const obj = { success: false, message: "" };
+  try {
+    const result = await this.userDB.updateOne(
+      { userName: userName },
+      { $set: { profileDescription: newDescription } }
+    );
+    if (result.modifiedCount === 1) {
+      obj.success = true;
+      obj.message = `Profile description updated for user ${userName}.`;
+    } else {
+      obj.message = `User ${userName} not found.`;
+    }
+  } catch (error) {
+    obj.message = `Error occurred while updating profile description for user ${userName}: ${error}`;
+  }
+  console.log(obj.message);
+  return obj;
+}
+
+/**
+ * Update the profile picture of a user
+ * @param {String} userName
+ * @param {byte64} newProfilePicture
+ * @return {Object} { success: boolean, message: string }
+ */
+async updateProfilePicture(userName, newProfilePicture) {
+  const obj = { success: false, message: "" };
+  try {
+    const result = await this.userDB.updateOne(
+      { userName: userName },
+      { $set: { profilePicture: newProfilePicture } }
+    );
+    if (result.modifiedCount === 1) {
+      obj.success = true;
+      obj.message = `Profile picture updated for user ${userName}.`;
+    } else {
+      obj.message = `User ${userName} not found.`;
+    }
+  } catch (error) {
+    obj.message = `Error occurred while updating profile picture for user ${userName}: ${error}`;
+  }
+  console.log(obj.message);
+  return obj;
+}
+
+
+}
+
 const database = new Database();
 
 export { database };

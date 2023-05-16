@@ -125,20 +125,35 @@ app.get('/getTrending', async(req,res) => {
 
 app.post('/updateSettings',async(req,res) =>{
     const user = req.body;
-    await database.updateSetting(user.userName,user.setting);
-    res.status(200).send({'status':'success'});
+    const result = await database.updateSetting(user.userName,user.setting);
+    if(result.success) {
+        res.status(200).send(result);
+    } else {
+        res.status(400).send(result);
+    }
+    res.end();
 })
 
 app.post('/updateDescription',async(req,res) =>{
     const user = req.body;
-    await database.updateDescription(user.userName,user.description);
-    res.status(200).send({'status':'success'});
+    const result = await database.updateDescription(user.userName,user.description);
+    if(result.success) {
+        res.status(200).send(result);
+    } else {
+        res.status(400).send(result);
+    }
+    res.end();
 })
 
 app.post('/updateProfilePicture',async(req,res) =>{
     const user = req.body;
-    await database.updateProfilePicture(user.userName, user.profilePic);
-    res.status(200).send({'status':'success'});
+    const result = await database.updateProfilePicture(user.userName, user.profilePic);
+    if(result.success) {
+        res.status(200).send(result);
+    } else {
+        res.status(400).send(result);
+    }
+    res.end();
 })
 
 /***************************** query routes *************************/
