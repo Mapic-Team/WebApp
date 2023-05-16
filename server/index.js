@@ -8,6 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(logger('dev'));
 app.use('/', express.static('client'));
+
 app.get('/getPicture', async(req,res)=>{
     const picid = req.body;
     try{
@@ -27,7 +28,7 @@ app.post('/createPicture', async(req,res) =>{
 
 app.post('/createUser', async(req,res) =>{
     const user = req.body;
-    await database.createUser(user.username,user.password);
+    await database.createUser(user.userName,user.password);
     res.status(200).send({'status':'success'});
 })
 
@@ -45,13 +46,13 @@ app.delete('/deleteUser',async(req,res)=>{
 
 app.get('/getMostLikedPic', async(req,res)=>{
     const user = req.body;
-    const pic = await database.getMostLikedPic(user.username);
+    const pic = await database.getMostLikedPic(user.userName);
     res.status(200).send(pic);
 })
 
 app.post('/addComment', async(req,res) =>{
     const comment = req.body;
-    await database.addComment(comment.picid,comment.comment,comment.username);
+    await database.addComment(comment.picid,comment.comment,comment.userName);
     res.status(200).send({'status':'success'});
 })
 
@@ -60,30 +61,32 @@ app.post('/changeLikeBy', async(req,res) => {
     await database.cahngeLikeBy(pic.picid,pic.change);
     res.status(200).send({'status':'success'});
 });
-app.post('/test',async (req,res)=>{
-    console.log('TEST FOR ROUTE WORKED')
-})
+
 app.get('/getTenMostCommonTags', async(req,res) =>{
     const tags = await database.getTenMostCommonTags();
     res.status(200).send(tags);
     })
 app.post('/updateSettings',async(req,res) =>{
     const user = req.body;
-    await database.updateSetting(user.username,user.setting);
+    await database.updateSetting(user.userName,user.setting);
     res.status(200).send({'status':'success'});
 })
 
 app.post('/updateDescription',async(req,res) =>{
     const user = req.body;
-    await database.updateDescription(user.username,user.description);
+    await database.updateDescription(user.userName,user.description);
     res.status(200).send({'status':'success'});
 })
 
 app.post('/updateProfilePicture',async(req,res) =>{
     const user = req.body;
-    await database.updateProfilePicture(user.username, user.profilePic);
+    await database.updateProfilePicture(user.userName, user.profilePic);
     res.status(200).send({'status':'success'});
 })
+
+// app.post('/test',async (req,res)=>{
+//     console.log('TEST FOR ROUTE WORKED')
+// })
 
 app.all('*', async (request, response) => {
     response.status(404).send(`Not found: ${request.path}`);

@@ -296,10 +296,12 @@ class Database {
    * @param {*} userName
    * @return {Object} return the whole picture object
    */
-  async getMostLikePic(userName) {
+  async getMostLikedPic(userName) {
     const picArray = await this.userDB.findOne({ _id: md5(userName) }).pictures;
     const mostLikedPic = null;
-    pictures.reduce(async (acc, e) => {
+    console.log("picArray");
+    console.log(picArray);
+    picArray.reduce(async (acc, e) => {
       const pic = await this.pictureDB.findOne({ _id: md5(e) });
       if (pic.like > acc) {
         mostLikedPic = pic;
@@ -307,6 +309,7 @@ class Database {
       }
       return acc;
     }, 0);
+    return mostLikedPic;
   }
 
   /**
