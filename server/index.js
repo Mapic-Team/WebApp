@@ -69,7 +69,7 @@ app.get('/readPicture', async (req, res) => {
     res.status(400).send(picture);
     }
     res.end();
-  });
+});
 
 app.delete('/deletePicture', async (req, res) => {
     const picId = req.query.picId;
@@ -80,21 +80,26 @@ app.delete('/deletePicture', async (req, res) => {
         res.status(400).send(result);
     }
     res.end();
-  });
+});
 
 /***************************** update routes *************************/
+
+app.post('/changeLikeBy', async(req,res) => {
+    const pic = req.body;
+    const result = await database.changeLikeBy(pic.picId,pic.change);
+    if(result.success) {
+        res.status(200).send(result);
+    } else {
+        res.status(400).send(result);
+    }
+    res.end();
+});
 
 app.post('/addComment', async(req,res) =>{
     const comment = req.body;
     await database.addComment(comment.picid,comment.comment,comment.userName);
     res.status(200).send({'status':'success'});
 })
-
-app.post('/changeLikeBy', async(req,res) => {
-    const pic = req.body;
-    await database.cahngeLikeBy(pic.picid,pic.change);
-    res.status(200).send({'status':'success'});
-});
 
 app.post('/updateSettings',async(req,res) =>{
     const user = req.body;

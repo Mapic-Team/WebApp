@@ -309,18 +309,40 @@ class Database {
    * Increase the likes of a specific picture in the database by one.
    * @param {String} picId
    * @param {Int} change a positive or negative number that the like will change by
-   * @returns {void}
+   * @returns {Object} { success: boolean, message: string }
    */
   async changeLikeBy(picId, change) {
-    const result = await this.pictureDB.updateOne(
-      { _id: md5(picId) },
-      {
-        $inc: {
-          like: change,
-        },
+    const obj = { success: false, message: "" };
+    // Check if 'change' parameter is an integer
+    if (!Number.isInteger(change)) {
+      obj.message = "Change in like must be an integer.";
+      return obj;
+    }
+    try {
+      const result = await this.pictureDB.updateOne(
+        { _id: picId },
+        {
+          $inc: {
+            like: change,
+          },
+        }
+      );
+      // Check if the picture is found and modified
+      if (result.matchedCount === 1 && result.modifiedCount === 1) {
+        const picture = await this.pictureDB.findOne({ _id: picId });
+        const like = picture.like;
+        obj.success = true;
+        obj.message = `Picture ${picId} now has ${like} likes.`;
+      } else {
+        obj.message = `Picture ${picId} not found.`;
       }
-    );
+    } catch (error) {
+      obj.message = `Error occurred while changing like for picture ${picId}: ${error}`;
+    }
+    console.log(obj.message);
+    return obj;
   }
+
 
   /**
    * Add a new comment by a user to a picture
