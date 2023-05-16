@@ -16,29 +16,37 @@ class Database {
   }
   /***************************** utility functions *************************/
 
-  /**
-   * Helper function
-   * Given a picId and the user that created it,
-   * append the picId to the end of the pictures array of that specific user
-   * in the user database
-   * @param {String} picId
-   * @param {String} userName
-   * @return {void}
-   */
-  async #addPic(picId, userName) {
+/**
+ * Helper function
+ * Given a picId and the user that created it,
+ * append the picId to the end of the pictures array of that specific user
+ * in the user database
+ * @param {String} picId
+ * @param {String} userName
+ * @return {boolean} 
+ */
+async #addPic(picId, userName) {
+  try {
     const user = await this.userDB.findOne({ _id: md5(userName) });
-    const picArray = user.pictures;
-    picArray.push(picId);
-    console.log(picArray.length);
-    const result = await this.userDB.updateOne(
-      { _id: md5(userName) },
-      {
-        $set: {
-          pictures: picArray,
-        },
-      }
-    );
+    if (user) {
+      const picArray = user.pictures;
+      picArray.push(picId);
+      await this.userDB.updateOne(
+        { _id: md5(userName) },
+        {
+          $set: {
+            pictures: picArray,
+          },
+        }
+      );
+      return true;
+    }
+  } catch (error) {
+    console.log(`Error occurred while adding picture ${picId} to user ${userName}: ${error}`);
   }
+  return false;
+}
+
 
   async #removePic(picId, userName) {
     const user = await this.userDB.findOne({ _id: md5(userName) });
@@ -67,6 +75,26 @@ class Database {
       ).toString(36)
     );
   }
+
+  /**
+   * Helper function
+   * Remove all pictures that belong to a user and return an array of deleted picture IDs
+   * @param {String} userName
+   * @returns {Promise<Array>} Array of deleted picture IDs
+   */
+  async #deleteAllPic(userName) {
+    try {
+      const deletedPictures = await this.pictureDB.find({ ownerName: userName }).toArray();
+      const deletedPictureIds = deletedPictures.map(picture => picture._id);
+      await this.pictureDB.deleteMany({ ownerName: userName });
+      console.log(`Deleted all pictures for user ${userName}.`);
+      return deletedPictureIds;
+    } catch (error) {
+      console.error(`Error occurred while deleting pictures for user ${userName}: ${error}`);
+      return [];
+    }
+  }
+
 
   /***************************** userDB CRUD functions *************************/
 
@@ -127,6 +155,7 @@ class Database {
 
 /**
  * Remove a user from the database and remove all pertaining information
+ * Will also delete all pictures from the database
  * @param {*} userName
  * @returns {Object} { success: boolean, message: string }
  */
@@ -135,8 +164,16 @@ async deleteUser(userName) {
   try {
     const result = await this.userDB.deleteOne({ _id: md5(userName) });
     if (result.deletedCount === 1) {
-      obj.success = true;
-      obj.message = `Deleted user ${userName}.`;
+      const deletedPictureIds = await this.#deleteAllPic(userName); // delete all pictures from the database
+      if (deletedPictureIds.length > 0) {
+        obj.success = true;
+        obj.message = `Deleted user ${userName}. Removed pictures:`;
+        deletedPictureIds.forEach(pictureId => {
+          obj.message += `${pictureId} `;
+        });
+      } else {
+        obj.message = `Deleted user ${userName}. No pictures found for deletion.`;
+      }
     } else {
       obj.message = `User ${userName} not found.`;
     }
@@ -147,38 +184,52 @@ async deleteUser(userName) {
   return obj;
 }
 
+
   /***************************** pictureDB CRUD functions *************************/
 
-  /**
-   * create a picture
-   * must be created with all fields present
-   * @param {String} ownerName
-   * @param {String} imgBase
-   * @param {Array} tags
-   * @param {String} description
-   * @param {Object} EXIF
-   * @returns {void}
-   */
-  async createPicture(ownerName, imgBase, tags, description, EXIF) {
-    // very unique generation, length 16-17
-    const Id = this.#randId();
-    const pic = {
-      _id: Id,
-      ownerName: ownerName,
-      like: 0,
-      tags: tags,
-      picBase64: imgBase,
-      description: description,
-      createdTime: new Date(),
-      exif: EXIF,
-      comments: [],
-    };
-    // add the picture under the user
-    this.#addPic(Id, ownerName).then(async (res) => {
+/**
+ * Create a picture
+ * Must be created with all fields present
+ * Note that this function could allow for duplicate picture insertion
+ * @param {String} ownerName
+ * @param {String} imgBase
+ * @param {Array} tags
+ * @param {String} description
+ * @param {Object} EXIF
+ * @returns {Object} { success: boolean, message: string }
+ */
+async createPicture(ownerName, imgBase, tags, description, EXIF) {
+  const obj = { success: false, message: "" };
+  const Id = this.#randId(); // very unique generation, length 16-17
+  const pic = {
+    _id: Id,
+    ownerName: ownerName,
+    like: 0,
+    tags: tags,
+    picBase64: imgBase,
+    description: description,
+    createdTime: new Date(),
+    exif: EXIF,
+    comments: [],
+  };
+  try {
+    const addPicResult = await this.#addPic(Id, ownerName);
+    if (addPicResult) {
       const result = await this.pictureDB.insertOne(pic);
-      console.log(`Added picture ${Id}`);
-    });
+      obj.success = true;
+      obj.message = `Added picture ${Id}.`;
+      console.log(obj.message);
+    } else { // Case when add pic failed, usually due to user not exist
+      obj.message = `Failed to add picture ${Id} to user ${ownerName}.`;
+      console.log(obj.message);
+    }
+  } catch (error) {
+    obj.message = `Error occurred while inserting: ${error}, picture ${Id} not added.`;
+    console.log(obj.message);
   }
+  return obj;
+}
+
 
   /**
    * Get all information pertaining to the picture
