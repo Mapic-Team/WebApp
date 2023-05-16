@@ -113,6 +113,16 @@ app.post('/addComment', async(req,res) =>{
     res.end();
 })
 
+app.get('/getTrending', async(req,res) => {
+    const result = await database.getTrending();
+    if(result.success) {
+        res.status(200).send(result);
+    } else {
+        res.status(400).send(result);
+    }
+    res.end();
+})
+
 app.post('/updateSettings',async(req,res) =>{
     const user = req.body;
     await database.updateSetting(user.userName,user.setting);

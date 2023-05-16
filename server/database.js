@@ -344,104 +344,91 @@ class Database {
   }
 
 
-/**
- * Add a new comment by a user to a picture
- * will not add if either the user or the picture is not found
- * @param {String} picId
- * @param {String} comment the new comment that is being added
- * @param {String} userName
- * @returns {Object} { success: boolean, message: string }
- */
-async addComment(picId, comment, userName) {
-  const obj = { success: false, message: "" };
+  /**
+   * Add a new comment by a user to a picture
+   * will not add if either the user or the picture is not found
+   * @param {String} picId
+   * @param {String} comment the new comment that is being added
+   * @param {String} userName
+   * @returns {Object} { success: boolean, message: string }
+   */
+  async addComment(picId, comment, userName) {
+    const obj = { success: false, message: "" };
 
-  try {
-    // Check if the picture exists
-    const picture = await this.pictureDB.findOne({ _id: picId });
-    if (!picture) {
-      obj.message = `Picture ${picId} not found.`;
-      return obj;
-    }
-
-    // Check if the user exists
-    const user = await this.userDB.findOne({ _id: md5(userName) });
-    if (!user) {
-      obj.message = `User ${userName} not found.`;
-      return obj;
-    }
-
-    const comment_profile = {
-      commentString: comment,
-      commentTime: new Date(),
-      commentBy: userName,
-    };
-
-    const commentArray = picture.comments;
-    commentArray.push(comment_profile);
-
-    const result = await this.pictureDB.updateOne(
-      { _id: picId },
-      {
-        $set: {
-          comments: commentArray,
-        },
+    try {
+      // Check if the picture exists
+      const picture = await this.pictureDB.findOne({ _id: picId });
+      if (!picture) {
+        obj.message = `Picture ${picId} not found.`;
+        return obj;
       }
-    );
 
-    if (result.modifiedCount === 1) {
-      obj.success = true;
-      obj.message = `Comment added successfully to picture ${picId}.`;
-    } else {
-      obj.message = `Failed to add comment to picture ${picId}.`;
+      // Check if the user exists
+      const user = await this.userDB.findOne({ _id: md5(userName) });
+      if (!user) {
+        obj.message = `User ${userName} not found.`;
+        return obj;
+      }
+
+      const comment_profile = {
+        commentString: comment,
+        commentTime: new Date(),
+        commentBy: userName,
+      };
+
+      const commentArray = picture.comments;
+      commentArray.push(comment_profile);
+
+      const result = await this.pictureDB.updateOne(
+        { _id: picId },
+        {
+          $set: {
+            comments: commentArray,
+          },
+        }
+      );
+
+      if (result.modifiedCount === 1) {
+        obj.success = true;
+        obj.message = `Comment added successfully to picture ${picId}.`;
+      } else {
+        obj.message = `Failed to add comment to picture ${picId}.`;
+      }
+    } catch (error) {
+      obj.message = `Error occurred while adding comment to picture ${picId}: ${error}`;
     }
-  } catch (error) {
-    obj.message = `Error occurred while adding comment to picture ${picId}: ${error}`;
-  }
 
-  console.log(obj.message);
-  return obj;
-}
+    console.log(obj.message);
+    return obj;
+  }
 
 
   /**
    * Get the three most liked photos created within three days
+   * only returns the picId and imgBase field
    * If there are less than three photos created within three days, get up to three most liked photos from all time
-   * @return {Array<Object>}
+   * @return {Object} { success: boolean, message: string, data: Array<Object> }
    */
   async getTrending() {
-    const currentDate = new Date();
-    const threeDaysAgo = new Date();
-    threeDaysAgo.setDate(currentDate.getDate() - 3);
+    const obj = { success: false, message: "", data: [] };
 
-    //most liked from within three days
-    const pipeline = [
-      {
-        $match: {
-          createdTime: {
-            $gte: threeDaysAgo,
-            $lte: currentDate,
+    try {
+      const currentDate = new Date();
+      const threeDaysAgo = new Date();
+      threeDaysAgo.setDate(currentDate.getDate() - 3);
+
+      // Query pipeline for most liked photos from within three days
+      const pipeline = [
+        {
+          $match: {
+            createdTime: {
+              $gte: threeDaysAgo,
+              $lte: currentDate,
+            },
           },
         },
-      },
-      { $sort: { like: -1 } },
-      { $limit: 3 },
-      {
-        $project: {
-          picBase64: 1,
-        },
-      },
-    ];
-
-    const result = await collection.aggregate(pipeline).toArray();
-    const numResults = result.length;
-
-    // If there aren't enough photos
-    if (numResults < 3) {
-      const remainingCount = 3 - numResults;
-
-      const additionalPipeline = [
         { $sort: { like: -1 } },
-        { $limit: remainingCount },
+        { $limit: 3 },
         {
           $project: {
             picBase64: 1,
@@ -449,14 +436,40 @@ async addComment(picId, comment, userName) {
         },
       ];
 
-      const additionalResult = await collection
-        .aggregate(additionalPipeline)
-        .toArray();
-      result.push(...additionalResult);
+      const result = await this.pictureDB.aggregate(pipeline).toArray();
+      const numResults = result.length;
+
+      // If there aren't enough photos within three days, fetch from all time
+      if (numResults < 3) {
+        const remainingCount = 3 - numResults;
+
+        const additionalPipeline = [
+          { $sort: { like: -1 } },
+          { $limit: remainingCount },
+          {
+            $project: {
+              picBase64: 1,
+            },
+          },
+        ];
+
+        const additionalResult = await this.pictureDB
+          .aggregate(additionalPipeline)
+          .toArray();
+        result.push(...additionalResult);
+      }
+
+      obj.success = true;
+      obj.message = "Trending photos retrieved successfully.";
+      obj.data = result;
+    } catch (error) {
+      obj.message = `Error occurred while retrieving trending photos: ${error}`;
     }
 
-    return result;
+    console.log(obj.message);
+    return obj;
   }
+
 
   /**
    * Get ten most common tags
@@ -474,7 +487,7 @@ async addComment(picId, comment, userName) {
       { $sort: { count: -1 } },
       { $limit: 10 },
     ];
-    const result = await collection.aggregate(pipeline).toArray();
+    const result = await this.pictureDB.aggregate(pipeline).toArray();
     const commonTags = result.map((entry) => entry._id);
     return commonTags;
   }
