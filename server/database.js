@@ -10,6 +10,7 @@ await client.connect();
 class Database {
   constructor() {
     const database = client.db("Mapic_database");
+    this.db = database;
     this.userDB = database.collection("userDB");
     this.pictureDB = database.collection("pictureDB");
   }
@@ -25,8 +26,10 @@ class Database {
    * @return {void}
    */
   async #addPic(picId, userName) {
-    const picArray = await this.userDB.findOne({ _id: md5(userName) }).pictures;
+    const user = await this.userDB.findOne({ _id: md5(userName) });
+    const picArray = user.pictures;
     picArray.push(picId);
+    console.log(picArray.length);
     const result = await this.userDB.updateOne(
       { _id: md5(userName) },
       {
@@ -38,7 +41,8 @@ class Database {
   }
 
   async #removePic(picId, userName) {
-    const picArray = await this.userDB.findOne({ _id: md5(userName) }).pictures;
+    const user = await this.userDB.findOne({ _id: md5(userName) });
+    const picArray = user.pictures;
     picArray.remove(picId);
     const result = await this.userDB.updateOne(
       { _id: md5(userName) },
@@ -131,9 +135,10 @@ class Database {
       comments: [],
     };
     // add the picture under the user
-    await this.#addPic(Id, ownerName);
-    const result = await this.pictureDB.insertOne(pic);
-    console.log(`Added picture ${Id}`);
+    this.#addPic(Id, ownerName).then(async (res) => {
+      const result = await this.pictureDB.insertOne(pic);
+      console.log(`Added picture ${Id}`);
+    });
   }
 
   /**
@@ -142,7 +147,7 @@ class Database {
    * @returns {Object}
    */
   async readPicture(picId) {
-    const result = await this.userDB.findOne({ _id: md5(userName) });
+    const result = await this.pictureDB.findOne({ _id: picId });
     return result;
   }
 
@@ -311,9 +316,6 @@ class Database {
    */
   async updateSetting(newSetting) {}
 }
-
-//TODO: settings, description, profilePicture
-//TODO:
 
 const database = new Database();
 
