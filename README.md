@@ -88,3 +88,81 @@ We have two databases, one stores the images and all pertaining information, the
   ]
 }
 ```
+
+# API Documentation
+
+## Base URL
+
+http://localhost:3000
+
+
+## User Endpoints
+
+### Create User
+
+- URL: `/createUser`
+- Method: `POST`
+- Request Body:
+  - `userName` (string): User name
+  - `password` (string): User password
+
+### Read User
+
+- URL: `/readUser`
+- Method: `GET`
+- Query Parameter:
+  - `userName` (string): User name
+
+### Delete User
+
+- URL: `/deleteUser`
+- Method: `DELETE`
+- Query Parameter:
+  - `userName` (string): User name
+
+## Picture Endpoints
+
+### Create Picture
+
+- URL: `/createPicture`
+- Method: `POST`
+- Request Body:
+  - `ownerName` (string): Owner's user name
+  - `imgBase` (string): Image base64 data
+  - `tags` (array): Array of tags
+  - `description` (string): Picture description
+  - `exif` (object): EXIF data
+
+### Read Picture
+
+- URL: `/readPicture`
+- Method: `GET`
+- Query Parameter:
+  - `picId` (string): Picture ID
+
+### Delete Picture
+
+- URL: `/deletePicture`
+- Method: `DELETE`
+- Query Parameter:
+  - `picId` (string): Picture ID
+
+## Update Endpoints
+
+### Change Like By
+
+- URL: `/changeLikeBy`
+- Method: `POST`
+- Request Body:
+  - `picId` (string): Picture ID
+  - `change` (number): Like count change (positive or negative)
+
+### Add Comment
+
+- URL: `/addComment`
+- Method: `POST`
+- Request Body:
+  - `picId` (string): Picture ID
+  - `comment` (string): Comment text
+  - `userName` (string): User name
+
