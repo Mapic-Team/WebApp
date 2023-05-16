@@ -16,51 +16,68 @@ class Database {
   }
   /***************************** utility functions *************************/
 
-/**
- * Helper function
- * Given a picId and the user that created it,
- * append the picId to the end of the pictures array of that specific user
- * in the user database
- * @param {String} picId
- * @param {String} userName
- * @return {boolean} 
- */
-async #addPic(picId, userName) {
-  try {
-    const user = await this.userDB.findOne({ _id: md5(userName) });
-    if (user) {
-      const picArray = user.pictures;
-      picArray.push(picId);
-      await this.userDB.updateOne(
-        { _id: md5(userName) },
-        {
-          $set: {
-            pictures: picArray,
-          },
-        }
-      );
-      return true;
-    }
-  } catch (error) {
-    console.log(`Error occurred while adding picture ${picId} to user ${userName}: ${error}`);
-  }
-  return false;
-}
-
-
-  async #removePic(picId, userName) {
-    const user = await this.userDB.findOne({ _id: md5(userName) });
-    const picArray = user.pictures;
-    picArray.remove(picId);
-    const result = await this.userDB.updateOne(
-      { _id: md5(userName) },
-      {
-        $set: {
-          pictures: picArray,
-        },
+  /**
+   * Helper function
+   * Given a picId and the user that created it,
+   * append the picId to the end of the pictures array of that specific user
+   * in the user database
+   * @param {String} picId
+   * @param {String} userName
+   * @return {boolean} 
+   */
+  async #addPic(picId, userName) {
+    try {
+      const user = await this.userDB.findOne({ _id: md5(userName) });
+      if (user) {
+        const picArray = user.pictures;
+        picArray.push(picId);
+        await this.userDB.updateOne(
+          { _id: md5(userName) },
+          {
+            $set: {
+              pictures: picArray,
+            },
+          }
+        );
+        return true;
       }
-    );
+    } catch (error) {
+      console.log(`Error occurred while adding picture ${picId} to user ${userName}: ${error}`);
+    }
+    return false;
   }
+
+  /**
+   * 
+   * @param {*} picId 
+   * @param {*} userName 
+   * @returns {Promise<boolean>}
+   */
+  async #removePic(picId, userName) {
+    try {
+      const user = await this.userDB.findOne({ _id: md5(userName) });
+      const picArray = user.pictures;
+      const index = picArray.indexOf(picId);
+      if (index !== -1) {
+        picArray.splice(index, 1);
+        await this.userDB.updateOne(
+          { _id: md5(userName) },
+          {
+            $set: {
+              pictures: picArray,
+            },
+          }
+        );
+        return true;
+      } else {
+        console.log(`Picture ${picId} not found in user ${userName}'s pictures.`);
+      }
+    } catch (error) {
+      console.log(`Error occurred while removing picture ${picId} from user ${userName}: ${error}`);
+    }
+    return false;
+  }
+  
 
   /**
    * Helper function
@@ -153,107 +170,138 @@ async #addPic(picId, userName) {
     return obj;
   }
 
-/**
- * Remove a user from the database and remove all pertaining information
- * Will also delete all pictures from the database
- * @param {*} userName
- * @returns {Object} { success: boolean, message: string }
- */
-async deleteUser(userName) {
-  const obj = { success: false, message: "" };
-  try {
-    const result = await this.userDB.deleteOne({ _id: md5(userName) });
-    if (result.deletedCount === 1) {
-      const deletedPictureIds = await this.#deleteAllPic(userName); // delete all pictures from the database
-      if (deletedPictureIds.length > 0) {
-        obj.success = true;
-        obj.message = `Deleted user ${userName}. Removed pictures:`;
-        deletedPictureIds.forEach(pictureId => {
-          obj.message += `${pictureId} `;
-        });
+  /**
+   * Remove a user from the database and remove all pertaining information
+   * Will also delete all pictures from the database
+   * @param {*} userName
+   * @returns {Object} { success: boolean, message: string }
+   */
+  async deleteUser(userName) {
+    const obj = { success: false, message: "" };
+    try {
+      const result = await this.userDB.deleteOne({ _id: md5(userName) });
+      if (result.deletedCount === 1) {
+        const deletedPictureIds = await this.#deleteAllPic(userName); // delete all pictures from the database
+        if (deletedPictureIds.length > 0) {
+          obj.success = true;
+          obj.message = `Deleted user ${userName}. Removed pictures:`;
+          deletedPictureIds.forEach(pictureId => {
+            obj.message += `${pictureId} `;
+          });
+        } else {
+          obj.message = `Deleted user ${userName}. No pictures found for deletion.`;
+        }
       } else {
-        obj.message = `Deleted user ${userName}. No pictures found for deletion.`;
+        obj.message = `User ${userName} not found.`;
       }
-    } else {
-      obj.message = `User ${userName} not found.`;
+    } catch (error) {
+      obj.message = `Error occurred while deleting user: ${error}`;
     }
-  } catch (error) {
-    obj.message = `Error occurred while deleting user: ${error}`;
+    console.log(obj.message);
+    return obj;
   }
-  console.log(obj.message);
-  return obj;
-}
-
 
   /***************************** pictureDB CRUD functions *************************/
 
-/**
- * Create a picture
- * Must be created with all fields present
- * Note that this function could allow for duplicate picture insertion
- * @param {String} ownerName
- * @param {String} imgBase
- * @param {Array} tags
- * @param {String} description
- * @param {Object} EXIF
- * @returns {Object} { success: boolean, message: string }
- */
-async createPicture(ownerName, imgBase, tags, description, EXIF) {
-  const obj = { success: false, message: "" };
-  const Id = this.#randId(); // very unique generation, length 16-17
-  const pic = {
-    _id: Id,
-    ownerName: ownerName,
-    like: 0,
-    tags: tags,
-    picBase64: imgBase,
-    description: description,
-    createdTime: new Date(),
-    exif: EXIF,
-    comments: [],
-  };
-  try {
-    const addPicResult = await this.#addPic(Id, ownerName);
-    if (addPicResult) {
-      const result = await this.pictureDB.insertOne(pic);
-      obj.success = true;
-      obj.message = `Added picture ${Id}.`;
-      console.log(obj.message);
-    } else { // Case when add pic failed, usually due to user not exist
-      obj.message = `Failed to add picture ${Id} to user ${ownerName}.`;
+  /**
+   * Create a picture
+   * Must be created with all fields present
+   * Note that this function could allow for duplicate picture insertion
+   * @param {String} ownerName
+   * @param {String} imgBase
+   * @param {Array} tags
+   * @param {String} description
+   * @param {Object} EXIF
+   * @returns {Object} { success: boolean, message: string }
+   */
+  async createPicture(ownerName, imgBase, tags, description, EXIF) {
+    const obj = { success: false, message: "" };
+    const Id = this.#randId(); // very unique generation, length 16-17
+    const pic = {
+      _id: Id,
+      ownerName: ownerName,
+      like: 0,
+      tags: tags,
+      picBase64: imgBase,
+      description: description,
+      createdTime: new Date(),
+      exif: EXIF,
+      comments: [],
+    };
+    try {
+      const addPicResult = await this.#addPic(Id, ownerName);
+      if (addPicResult) {
+        const result = await this.pictureDB.insertOne(pic);
+        obj.success = true;
+        obj.message = `Added picture ${Id}.`;
+        console.log(obj.message);
+      } else { // Case when add pic failed, usually due to user not exist
+        obj.message = `Failed to add picture ${Id} to user ${ownerName}.`;
+        console.log(obj.message);
+      }
+    } catch (error) {
+      obj.message = `Error occurred while inserting: ${error}, picture ${Id} not added.`;
       console.log(obj.message);
     }
-  } catch (error) {
-    obj.message = `Error occurred while inserting: ${error}, picture ${Id} not added.`;
-    console.log(obj.message);
+    return obj;
   }
-  return obj;
-}
-
 
   /**
-   * Get all information pertaining to the picture
-   * @param {String} picId
-   * @returns {Object}
+   * 
+   * @param {String} picId 
+   * @returns {Obj} { success: boolean, message: string, data: obj }
    */
   async readPicture(picId) {
-    const result = await this.pictureDB.findOne({ _id: picId });
-    return result;
+    const obj = { success: false, message: "", data: null };
+    try {
+      const result = await this.pictureDB.findOne({ _id: picId });
+      if (result) {
+        obj.success = true;
+        obj.message = "Picture found.";
+        obj.data = result;
+      } else {
+        obj.message = `Picture ${picId} not found.`;
+      }
+    } catch (error) {
+      obj.message = `Error occurred while reading picture: ${error}`;
+    }
+    console.log(obj.message);
+    return obj;
   }
 
   /**
    * Delete a picture from the pictureDB,
    * also delete it from its owner's pictures array
+   * picture will be deleted even if the owner is not found
    * @param {String} picId
-   * @returns {void}
+   * @returns {Object} { success: boolean, message: string }
    */
   async deletePicture(picId) {
-    const userName = await this.pictureDB.findOne({ _id: md5(picId) })
-      .ownerName;
-    await this.#removePic(picId, userName);
-    const result = await this.pictureDB.deleteOne({ _id: md5(picId) });
-    console.log(`Deleted picture ${picId}`);
+    const obj = { success: false, message: "" };
+    try {
+      const picture = await this.pictureDB.findOne({ _id: picId });
+      if (!picture) {
+        obj.message = `Picture ${picId} not found.`;
+        console.log(obj.message);
+        return obj;
+      }
+      const userName = picture.ownerName;
+      const removePicSuccess = await this.#removePic(picId, userName);
+      const result = await this.pictureDB.deleteOne({ _id: md5(picId) });
+      console.log(`Deleted picture ${picId}`);
+      obj.success = true;
+      if (removePicSuccess) {
+        obj.message = `Deleted picture ${picId} from user ${userName}.`;
+      } else {
+        obj.message = `Deleted picture ${picId} successfully. Owner ${userName} not found.`;
+      }
+    } catch (error) {
+      obj.message = `Error occurred while deleting picture ${picId}: ${error}`;
+    }
+    console.log(obj.message);
+    return obj;
   }
+  
 
   /***************************** r/w functions for secondary_view *************************/
 

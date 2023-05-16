@@ -60,16 +60,16 @@ app.post('/createPicture', async(req,res) =>{
     res.end();
 })
 
-app.get('/getPicture', async(req,res) => {
-    const picid = req.body;
-    try{
-        const picture = await database.readPicture(picid.picid)
-        res.status(200).send(picture);
+app.get('/readPicture', async (req, res) => {
+    const picId = req.query.picId; // Retrieve the picid from the query parameter
+    const picture = await database.readPicture(picId);
+    if (picture.success) {
+    res.status(200).send(picture);
+    } else {
+    res.status(400).send(picture);
     }
-    catch(err){
-        res.status(400);
-    }
-});
+    res.end();
+  });
 
 app.delete('/deletePicture', async (req, res) => {
     const picId = req.query.picId;
