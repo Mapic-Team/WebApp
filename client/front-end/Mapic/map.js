@@ -12,7 +12,7 @@ var amherst = [42.373034, -72.519632];
 var map = L.map('map', {
     zoomControl: false,
     closePopupOnClick: false
-}).setView(amherst, 15);
+}).setView(amherst, 13);
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -159,19 +159,64 @@ function closeAllPictures() {
 // .addTo(map);
 
 
-var popup = L.popup();
+// var popup = L.popup();
 
-function onMapClick(e) {
+// function onMapClick(e) {
     // tooltip
-    popup
-        .setLatLng(e.latlng)
-        .setContent("You clicked the map at " + e.latlng.toString())
-        .openOn(map);
+    // popup
+    //     .setLatLng(e.latlng)
+    //     .setContent("You clicked the map at " + e.latlng.toString())
+    //     .openOn(map);
 // closeAllPictures();
+    // fetch('http://localhost:3000/readPicture?picId=lhprjr1813macmaha', {
+    //     method: 'GET',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         'Accept': 'application/json'
+    //         }
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         console.log(data);
+    //         addPictureOnMap(data.data);
+    //     }
+    // );
+
+    // fetch('http://localhost:3000/readAllPictures', {
+    //     method: 'GET',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         'Accept': 'application/json'
+    //         }
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         console.log(data.data);
+    //         for (let i = 0; i < 3; i++) {
+    //             addPictureOnMap(data.data[i]);
+    //         }
+    //         // for (let curr of data.data) {
+    //         //     addPictureOnMap(curr);
+    //         // }
+    //         // addPictureOnMap(data);
+    //     }
+    // );
+// }
+
+// map.on('click', onMapClick);
+
+var imageCount = 0;
+
+function addPictureOnMap(data) {
+    let base64 = data.picBase64;
+    let lat = data.exif.location.lat;
+    let lng = data.exif.location.lng;
+    var image = L.popup([lat, lng], {autoPan: false, autoClose: false, closeButton: false})
+        .setContent(`<div class="photo"><img src=data:image/jpeg;base64,${base64} id="img${imageCount}" style="width: inherit;"/></div>`)
+        .openOn(map);
+    document.getElementById(`img${imageCount}`).addEventListener("click", () => {clickPhoto(image)});
+    imageCount++;
 }
-
-map.on('click', onMapClick);
-
 
 if (localStorage.getItem("user") !== null) {
     userName = localStorage.getItem("user");
@@ -179,6 +224,7 @@ if (localStorage.getItem("user") !== null) {
     document.getElementById("profile").style.display = "block";
 } else {
     // alert("Please login first");
+    document.getElementById("profile").style.display = "block";
     document.getElementById("login").style.display = "block";
 }
 
@@ -264,18 +310,18 @@ document.getElementsByClassName("put-button")[0].addEventListener("click", () =>
     //         console.log(data);
     //     }
     // );
-    fetch('http://localhost:3000/readPicture?picId=lhqhn62j2we4vu0wb', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-            }
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-            }
-            );
+    // fetch('http://localhost:3000/deletePicture?picId=lhqhn62j2we4vu0wb', {
+    //     method: 'DELETE',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         'Accept': 'application/json'
+    //         }
+    //         })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             console.log(data);
+    //         }
+    //         );
 
     // fetch(`http://localhost:3000/createPicture?userName=${userName}&picBase64=${src}&tag=${tags}&description=${description}&exif=${exifExtract}`, {
     //     method: 'POST',
@@ -420,7 +466,7 @@ var description = "Consequuntur reiciendis illo non suscipit necessitatibus dolo
 function clickPhoto(image) {
     let latlng = image.getLatLng();
     // console.log(image.getContent());
-    let imageName = image.getContent().split(" ")[2].split("/")[3].split('"')[0];
+    // let imageName = image.getContent().split(" ")[2].split("/")[3].split('"')[0];
     // console.log(imageName);
     // if (toolTip == undefined) {
     let photoDiv = document.createElement("div");
@@ -429,9 +475,10 @@ function clickPhoto(image) {
     closeButton.setAttribute("id", "close-button");
     closeButton.textContent = "X";
     let img = document.createElement("img");
+    let src = image.getContent().split(" ")[2].split("src=")[1];
     // img.setAttribute("id", "imageName");
     // console.log(imageName);
-    img.setAttribute("src", "../Mapic/images/"+imageName);
+    img.setAttribute("src", src);
     // EXIF.getData(img, function() {
     //     var allMetaData = EXIF.getAllTags(this);
     //     console.log(allMetaData);

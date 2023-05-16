@@ -269,6 +269,25 @@ class Database {
     return obj;
   }
 
+  async readAllPictures() {
+    const obj = { success: false, message: "", data: null };
+    // let result = await this.pictureDB.find().toArray();
+    try {
+      const result = await this.pictureDB.find().toArray();
+      if (result) {
+        obj.success = true;
+        obj.message = "Read all pictures.";
+        obj.data = result;
+      } else {
+        obj.message = `No pictures found.`;
+      }
+    } catch (error) {
+      obj.message = `Error occurred while reading pictures: ${error}`;
+    }
+    console.log(obj.message);
+    return obj;
+  }
+
   /**
    * Delete a picture from the pictureDB,
    * also delete it from its owner's pictures array
