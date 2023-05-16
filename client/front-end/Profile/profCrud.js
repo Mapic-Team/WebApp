@@ -1,5 +1,6 @@
 
-export async function readUser(name){
+class profCrud{
+ async readUser(name){
     try{
         const response = await fetch(`/readUser`, {
             method: 'GET',
@@ -13,7 +14,7 @@ export async function readUser(name){
         return false;
     }
 }
-export async function createUser(name,password){
+ async  createUser(name,password){
     try{
         const response = await fetch(`/createUser`, {
             method: 'POST',
@@ -29,7 +30,7 @@ export async function createUser(name,password){
     }
 }
 
-export async function deleteUser(name){
+async deleteUser(name){
     try{
         const response = await fetch(`/createUser`, {
             method: 'DELETE',
@@ -43,8 +44,7 @@ export async function deleteUser(name){
         return false;
     }
 }
-
-export async function getPicture(picid){
+async getPicture(picid){
     try{
         const response = await fetch(`/readPicture`, {
             method: 'GET',
@@ -59,7 +59,7 @@ export async function getPicture(picid){
     }
 }
 
-export async function getBestPic(){
+async getBestPic(){
     try{
         const response = await fetch(`/getMostLikedPic`, {
             method: 'GET',
@@ -73,7 +73,7 @@ export async function getBestPic(){
     }
 }
 
-export async function changeSetting(name , settings){
+async changeSetting(name , settings){
     try{
         const response = await fetch(`/updateSettings`, {
             method: 'POST',
@@ -88,3 +88,7 @@ export async function changeSetting(name , settings){
         return false;
     }
 }
+}
+
+const pcrud = new profCrud()
+export {pcrud}

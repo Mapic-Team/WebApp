@@ -14,7 +14,7 @@ let user = "";
 let curUser = {};
 let settings = {};
 
-
+import { pcrud } from "./profCrud.js";
 
 await fetch('/test',{
     method: 'POST',
