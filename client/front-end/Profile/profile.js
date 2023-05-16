@@ -14,15 +14,14 @@ let user = "";
 let curUser = {};
 let settings = {};
 
-import { pcrud } from "./profCrud.js";
+import { mapicCrud } from "../../CRUD.js";
 
-await fetch('/test',{
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'}
-});
 
 //initiate the profile page
 user = localStorage.getItem('user');
+curUser = await mapicCrud.readUser(user);
+console.log(curUser);
+
 /*curUser = await readUser(user);
 console.log(curUser.pictures)
 document.getElementById('userid').innerHTML = `${user}`;
@@ -78,17 +77,17 @@ updateDesc.addEventListener("click", (event)=>{
 });
 
 picChange.addEventListener("change",handleFiles ,false);
-function handleFiles(){
+async function handleFiles(){
     const file = this.files[0];
     //console.log(file);
     let reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = readerEvent =>{
+    reader.onload = async readerEvent =>{
         var content = readerEvent.target.result;
         image.src = content;
         curUser.profilePicture = content;
         console.log(curUser.profilePicture);
-        updateDB();
+        await mapicCrud.updateProfilePicture(user,content);
         //console.log(content);
         //sessionStorage.setItem("pic",content);
         //probably add db to this?
@@ -99,14 +98,14 @@ function handleFiles(){
 logout.addEventListener("click", (event) => {
     //we clear the local storage so it knows we logged out
     localStorage.clear();
-    location.href = "../Mapic/index.html";
+    location.href = "index.html";
 });
 //TODO RETRIEVE DB PART.
 
-document.getElementById("delete").addEventListener("click",(event)=>{
+document.getElementById("delete").addEventListener("click",async (event)=>{
     localStorage.clear();
-    deleteUser(user);
-    location.href = "../Mapic/index.html";
+    await mapicCrud.deleteUser(user);
+    location.href = "index.html";
 });
 
 /*function updateDB(){

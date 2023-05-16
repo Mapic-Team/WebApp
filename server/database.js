@@ -1,4 +1,5 @@
 import { MongoClient } from "mongodb";
+import { default_pic } from "./default_profile_pic.js";
 import md5 from "md5";
 
 const connectionString =
@@ -128,6 +129,8 @@ class Database {
       userName: userName,
       password: password,
       pictures: [],
+      profilePicture: default_pic,
+      settings:{}
     };
     try {
       const result = await this.userDB.insertOne(user);

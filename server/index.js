@@ -20,7 +20,9 @@ app.use(cors(corsOptions));
 /***************************** user CRD routes *************************/
 
 app.post('/createUser', async (req, res) => {
+    console.log(req.body)
     const { userName, password } = req.body;
+    console.log(userName , password)
     const result = await database.createUser(userName, password);
     if (result.success) {
     res.status(200).send(result);
@@ -32,8 +34,11 @@ app.post('/createUser', async (req, res) => {
   
 
 app.get('/readUser', async (req, res) => {
+    //console.log('readReq gotten')
     const userName = req.query.userName; // Retrieve the userName from the query parameter
+    //console.log(userName);
     const result = await database.readUser(userName);
+    //console.log(result);
     if (result.success) {
       res.status(200).send(result);
     } else {
