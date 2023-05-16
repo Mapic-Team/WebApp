@@ -1,0 +1,15 @@
+[
+    {
+        "userName": "Iris",
+        "password": "12345678",
+        "profileDescription": "A good person",
+        "profilePicture": "",
+        "settings": {
+            "Theme": "black",
+            "Privatemode": false
+        },
+        "pictures": [
+            "3w0jgnbk5sdghu0l3"
+        ]
+    }
+]
