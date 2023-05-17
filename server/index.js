@@ -2,14 +2,17 @@ import { database } from "./database.js";
 import express from 'express';
 import logger from 'morgan'
 import cors from 'cors';
+import bodyParser from 'body-parser';
 
 const app = express();
 const port = process.env.PORT || 3000;
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true}));
+// app.use(express.json());
+// app.use(express.urlencoded({limit: "50mb", extended: false}));
 app.use(logger('dev'));
 app.use('/', express.static('client'));
-  
+
 const corsOptions ={
    origin:'*', 
    credentials:true,            //access-control-allow-credentials:true
