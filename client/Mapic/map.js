@@ -218,6 +218,7 @@ function addPictureOnMap(data) {
   let description = data.description;
   let ownerName = data.ownerName;
   let tags = data.tags;
+  let time = data.createdTime;
   var image = L.popup([lat, lng], {
     autoPan: false,
     autoClose: false,
@@ -228,7 +229,7 @@ function addPictureOnMap(data) {
     )
     .openOn(map);
   document.getElementById(`img${imageCount}`).addEventListener("click", () => {
-    clickPhoto(image, ownerName, description, tags);
+    clickPhoto(image, ownerName, description, tags, time);
   });
   imageCount++;
 }
@@ -281,7 +282,7 @@ document
   .addEventListener("click", () => {
     let lat = exifExtract.location.lat;
     let lng = exifExtract.location.lng;
-    // console.log("put button clicked");
+
     let tags = [];
     if (document.getElementById("tag-box") !== null) {
       tags = document.getElementById("tag-box").value.split(",");
@@ -294,6 +295,7 @@ document
     if (localStorage.getItem("user") !== null) {
       userName = localStorage.getItem("user");
     }
+    let time = new Date();
 
     // let src = document.getElementById("upload-preview").src;
     // let div = document.createElement("div");
@@ -312,17 +314,13 @@ document
         `<div class="photo"><img src=${base64} id="img${imageCount}" style="width: inherit;"/></div>`
       )
       .openOn(map);
-    // console.log(image);
 
-    // let image = L.popup([lat, lng], {autoPan: false, autoClose: false, closeButton: false})
-    // .setContent(div)
-    // .openOn(map);
     resetUpload();
-    // console.log(image);
+
     document
       .getElementById(`img${imageCount}`)
       .addEventListener("click", () => {
-        clickPhoto(image);
+        clickPhoto(image, userName, description, tags, time);
       });
     imageCount++;
 
@@ -520,20 +518,10 @@ document.getElementById("upload").onchange = function (e) {
   // console.log(base64);
   // console.log(exifExtract);
 };
-// console.log(image2.getLatLng().lat);
-// let photo = document.getElementsByClassName("photo");
-// photo[0].addEventListener("click", () => {clickPhoto(image2)});
-// photo[1].addEventListener("click", () => {clickPhoto(image3)});
-// photo[2].addEventListener("click", () => {clickPhoto(image4)});
-
 var toolTip;
-//var description ="Consequuntur reiciendis illo non suscipit necessitatibus dolores doloribus sed atque. Quos rem excepturi ut eum et eaque facere et. Illo quos voluptatem ratione sint numquam dolor assumenda. Ea et et sapiente distinctio et aut aspernatur necessitatibus est. Est velit debitis enim ";
-//  'Esse et et quos animi animi. Quibusdam et porro et praesentium maiores dolores facilis.' +
-//  'Voluptas molestias sapiente aperiam culpa. Et doloribus maiores omnis quisquam dolores.' +
-// 'Esse est et ut rem et praesentium quibusdam eaque. Aut consectetur illum placeat repellendus nam.' +
-//  'Exercitationem dolorem tempora.';
-
-function clickPhoto(image, ownerName, description, tags) {
+function clickPhoto(image, ownerName, description, tags, time) {
+  const line_separator = document.createElement("hr");
+  const line_break = document.createElement("br");
   let latlng = image.getLatLng();
   // console.log(image.getContent());
   // let imageName = image.getContent().split(" ")[2].split("/")[3].split('"')[0];
@@ -557,13 +545,20 @@ function clickPhoto(image, ownerName, description, tags) {
   img.setAttribute("src", src);
   img.setAttribute("style", "width:inherit");
 
-  let line_separator = document.createElement("hr");
-  let line_break = document.createElement("br");
+  let nameTimeContainer = document.createElement("div");
+  nameTimeContainer.style.display = "flex";
+  nameTimeContainer.style.justifyContent = "space-between";
 
   let ownerNameSection = document.createElement("div");
   ownerNameSection.setAttribute("id", "ownerName");
   ownerNameSection.textContent = ownerName;
   ownerNameSection.style.fontWeight = "bold";
+
+  let timeSection = document.createElement("div");
+  timeSection.textContent = time;
+
+  nameTimeContainer.appendChild(ownerNameSection);
+  nameTimeContainer.appendChild(timeSection);
 
   let descriptionPara = document.createElement("div");
   descriptionPara.setAttribute("id", "description");
@@ -601,7 +596,7 @@ function clickPhoto(image, ownerName, description, tags) {
   photoDiv.appendChild(closeButton);
   photoDiv.appendChild(img);
   photoDiv.appendChild(line_separator);
-  photoDiv.appendChild(ownerNameSection);
+  photoDiv.appendChild(nameTimeContainer);
   photoDiv.appendChild(line_separator);
   photoDiv.appendChild(descriptionPara);
   photoDiv.appendChild(tagSection);
