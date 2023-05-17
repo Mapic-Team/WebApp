@@ -2,16 +2,17 @@ import { mapicCrud } from "../CRUD.js";
 
 const searchResults = document.getElementById('search-results');
 const searchInput = document.getElementById('search-input');
+const trendResults = document.getElementById('trend-results');
 
 
 // window.addEventListener('load', displayPics);
-// window.addEventListener('load', showTrends);
 window.addEventListener('load', displayTopTags);
 searchInput.addEventListener("keypress", (e) => {
     if (e.key === 'Enter') {
         search();
       }
 });
+window.addEventListener('load', showTrends);
 
 /**
  * displays up to ten most common tags when nothing is searched.
@@ -26,7 +27,7 @@ async function displayTopTags() {
         const tagBody = tag.querySelector("[data-tag-body]")
         tagBody.textContent = t;
         searchResults.append(tag);
-    })
+    });
 }
 
 /**
@@ -46,8 +47,22 @@ async function search() {
             const tagBody = tag.querySelector("[data-tag-body]")
             tagBody.textContent = t;
             searchResults.append(tag);
-        })
+        });
     }
+}
+
+async function showTrends() {
+    const trendTemplate = document.querySelector("[data-trend-template]")
+    const result = await mapicCrud.getTrending();
+    const pictures = result.data;
+    console.log(pictures);
+    pictures.forEach(pic => {
+        const trendImg = trendTemplate.content.cloneNode(true).children[0];
+        trendImg.src = pic.picBase64;
+        trendImg.alt = pic._id;
+        console.log(trendResults);
+        trendResults.append(trendImg);
+    });
 }
 
 // const imageScroll = document.getElementById('image-scroll-bar');
@@ -69,18 +84,4 @@ async function search() {
 //     })
 // }
 
-// function showTrends() {
-//     const trendTemplate = document.querySelector("[data-trend-template]")
-//     let counter = 0;
-//     pictures.forEach(doc => {
-//         if(counter > 5) {
-//             return;
-//         }
-//         if(doc.like >= 10) {
-//             const trend = trendTemplate.content.cloneNode(true).children[0]
-//             const trendImg = tag.getElementByClass('trending-img');
-//             trendImg.src = doc.picBase64;
-//             searchResults.append(trend);
-//         }
-//     })
-// }
+
