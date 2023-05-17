@@ -165,6 +165,21 @@ class CRUD{
             return false;
         } 
     }
+
+    async matchTags(input) {
+        try {
+            const response = await fetch(`${this.server_url}/matchTags/${input}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            });
+            const data = await response.json();
+            return data;
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
+    }
+      
    
     /************************************ Update Functions ******************************************/
 
