@@ -52,12 +52,18 @@ class CRUD{
 
     /************************************ picture CRD Functions ******************************************/
 
-    async createPicture(picture){
+    async createPicture(userName, base64, tags, description, exifExtract){
         try{
-            const response = await fetch(`${this.server_url}/createUser`, {
+            const response = await fetch(`${this.server_url}/createPicture`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body:JSON.stringify({picture:picture})
+                body: JSON.stringify({
+                    ownerName: userName,
+                    imgBase: base64,
+                    tags: tags,
+                    description: description,
+                    exif: exifExtract
+                    })
             });
             const data = await response.json();
             return data;

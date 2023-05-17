@@ -309,27 +309,30 @@ document.getElementsByClassName("put-button")[0].addEventListener("click", () =>
     document.getElementById(`img${imageCount}`).addEventListener("click", () => {clickPhoto(image)});
     imageCount++;
 
+    mapicCrud.createPicture(userName, base64, tags, description, exifExtract).then(res => {
+        console.log(res);
+    });
 
-    fetch('http://localhost:3000/createPicture', {
-        method: 'POST',
-        headers: {
-            // 'mode': 'cors',
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-            },
-        body: JSON.stringify({
-                ownerName: userName,
-                imgBase: base64,
-                tags: tags,
-                description: description,
-                exif: exifExtract
-                })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        }
-    );
+    // fetch('http://localhost:3000/createPicture', {
+    //     method: 'POST',
+    //     headers: {
+    //         // 'mode': 'cors',
+    //         'Content-Type': 'application/json',
+    //         'Accept': 'application/json'
+    //         },
+    //     body: JSON.stringify({
+    //             ownerName: userName,
+    //             imgBase: base64,
+    //             tags: tags,
+    //             description: description,
+    //             exif: exifExtract
+    //             })
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         console.log(data);
+    //     }
+    // );
     // fetch('http://localhost:3000/readPicture?picId=lhqhn62j2we4vu0wb', {
     //     method: 'DELETE',
     //     headers: {
