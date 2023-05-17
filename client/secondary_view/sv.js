@@ -1,6 +1,7 @@
-import { mapicCrud } from "../../CRUD.js";
+import { mapicCrud } from "../CRUD.js";
 
 let pictures = await mapicCrud.getTrending();
+console.log(pictures);
 let topTenTags = await mapicCrud.getTenMostCommonTags();
 const searchInput = document.getElementById('search-input');
 const searchResults = document.getElementById('search-results');
