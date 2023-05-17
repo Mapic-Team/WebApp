@@ -37,18 +37,14 @@ if(curUser.settings != undefined){
         privateCheck = true;
     }
 }
-//console.log(curUser.profilePicture);
 if(curUser.profilePicture == undefined){
     image.src = "data:img/png;base64,"+default_pic;
     await mapicCrud.changeProfilePic(user,default_pic);
 }
 else{
-    //console.log(curUser.profilePicture);
     image.src = "data:img/png;base64,"+curUser.profilePicture;
 }
-//console.log(curUser)
 if(curUser.profileDescription != undefined){
-    //console.log(curUser.profileDescription);
     desc.innerHTML = curUser.profileDescription;
 }
 else{
@@ -60,12 +56,10 @@ if (bestPic.data == null){
     document.getElementById("bestPost").innerHTML = "No pictures yet!";
 }
 else{
-    //console.log(bestPic.data);
     document.getElementById("best").src = bestPic.data.picBase64;
     document.getElementById("hearts").innerHTML = `<i class="fa fa-solid fa-heart"></i>:${bestPic.data.like}`
 }
 //initialize the gallery
-console.log(curUser.pictures == undefined||curUser.pictures.length == 0);
 if(curUser.pictures == undefined||curUser.pictures.length == 0){
     document.getElementById('pictures').innerHTML = `<h4 class="modal-title">No pictures in gallery</h4>`;
 }
@@ -101,18 +95,13 @@ else{
 }
 
 dark.addEventListener("click", async (event) => {
-    //TODO LINK IT TO THE POUCHDB
-    //remove the previous lists 
     updateTheme('darkTheme');
-    //localStorage.setItem("theme","black");
     settings.theme = 'darkTheme';
     await mapicCrud.changeSetting(user,settings);
 });
 
 light.addEventListener("click", async (event)=>{
-    //TODO LINK IT TO THE POUCHDB
     updateTheme('whiteTheme');
-    //localStorage.setItem("theme","white");
     settings.theme = 'whiteTheme';
     console.log (settings)
     await mapicCrud.changeSetting(user,settings);
@@ -120,25 +109,20 @@ light.addEventListener("click", async (event)=>{
 
 privatemode.addEventListener("click", async (event) =>{
     privateCheck = privateCheck?false:true;
-    //console.log(privateCheck);
-    //TODO LINK IT TO DB
     settings.isVisible = privateCheck;
     await mapicCrud.changeSetting(user,settings);
 });
 
 updateDesc.addEventListener("click",async (event)=>{
-    //console.log("ok!");
     desc.innerHTML = newDesc.value;
     console.log(desc.innerHTML);
     newDesc.value = "Your new description!";
-    //TODO LINK IT TO DB
     await mapicCrud.changeDescription(user,desc.innerHTML);
 });
 
 picChange.addEventListener("change",handleFiles ,false);
 async function handleFiles(){
     const file = this.files[0];
-    //console.log(file);
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = async readerEvent =>{
@@ -148,7 +132,6 @@ async function handleFiles(){
         console.log(content.substring(22));
         await mapicCrud.changeProfilePic(user,content.substring(22));
     }
-    //updateDB();
 }
 
 logout.addEventListener("click", (event) => {
@@ -163,17 +146,9 @@ document.getElementById("delete").addEventListener("click",async (event)=>{
     location.href = "index.html";
 });
 
-/*function updateDB(){
-    updateUser(user,curUser.password, desc.innerHTML,image.src ,settings, curUser.pictures);
-    console.log(curUser);
-}
-*/
 document.getElementById("delPics").addEventListener('click',(event) =>{
-    console.log("clicked delpic");
     const collection = document.getElementsByClassName("picToBeDel");
-    console.log(collection);
     for (let i = 0; i < collection.length; i++) {
-        console.log(collection[0].id);
         mapicCrud.deletePicture(collection[0].id);
         collection[0].remove();
     }
@@ -181,7 +156,6 @@ document.getElementById("delPics").addEventListener('click',(event) =>{
 
 function updateTheme(theme){
     for(let elem in themElems){
-        //console.log(themElems[elem]);
         document.getElementById(themElems[elem]).setAttribute("class", themElems[elem]);
         document.getElementById(themElems[elem]).classList.add(theme);
     }
