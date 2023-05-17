@@ -162,11 +162,12 @@ function closeAllPictures() {
 // var popup = L.popup();
 
 // function onMapClick(e) {
-    // tooltip
-    // popup
-    //     .setLatLng(e.latlng)
-    //     .setContent("You clicked the map at " + e.latlng.toString())
-    //     .openOn(map);
+//     // popup
+//     //     .setLatLng(e.latlng)
+//     //     .setContent("You clicked the map at " + e.latlng.toString())
+//     //     .openOn(map);
+//     return e.latlng;
+// }
 // closeAllPictures();
     // fetch('http://localhost:3000/readPicture?picId=lhprjr1813macmaha', {
     //     method: 'GET',
@@ -320,7 +321,7 @@ document.getElementsByClassName("put-button")[0].addEventListener("click", () =>
             console.log(data);
         }
     );
-    // fetch('http://localhost:3000/deletePicture?picId=lhqhn62j2we4vu0wb', {
+    // fetch('http://localhost:3000/readPicture?picId=lhqhn62j2we4vu0wb', {
     //     method: 'DELETE',
     //     headers: {
     //         'Content-Type': 'application/json',
@@ -428,6 +429,30 @@ document.getElementById("upload").onchange = function(e) {
             let location = document.createElement("div");
             location.setAttribute("id", "location-info");
             location.textContent = "Location: " + exifExtract.location.lat + ", " + exifExtract.location.lng;
+            if (exifExtract.location.lat !== 0 && exifExtract.location.lng !== 0) {
+                location.textContent = "Location: " + exifExtract.location.lat + ", " + exifExtract.location.lng;
+            } else {
+                location.textContent = "No location data found in image.";
+                // click button to manually add location on map
+                let addLocation = document.createElement("button");
+                addLocation.setAttribute("id", "add-location");
+                addLocation.textContent = "Add Location";
+                location.appendChild(addLocation);
+                addLocation.addEventListener("click", () => {
+                    location.textContent = "Click on the map to add location.";
+                    //change cursor to crosshair
+                    document.getElementById("map").style.cursor = "crosshair";
+
+                    map.on('click', function(e) {
+                        exifExtract.location.lat = e.latlng.lat;
+                        exifExtract.location.lng = e.latlng.lng;
+                        location.textContent = "Location: " + exifExtract.location.lat + ", " + exifExtract.location.lng;
+                        document.getElementById("map").style.cursor = "grab";
+                        map.off('click');
+                    });
+                }
+                );
+            }
             document.getElementById("upload-window").appendChild(location);
         } else {
             alert("No EXIF data found in image '" + file.name + "'.");
