@@ -65,51 +65,56 @@ async function showTrends() {
 }
 
 async function fillImageScrollBar() {
-    const imageScrollBar = document.getElementById('image-scroll-bar');
     const template = document.querySelector('[data-img-template]');
   
     for (let i = 0; i < 10; i++) {
       const picture = await mapicCrud.readOnePicture();
   
       if (picture.success) {
-        const imageElement = template.content.querySelector('[data-img-pic]');
-        const descriptionElement = template.content.querySelector('[data-img-description]');
-  
-        imageElement.src = picture.data.picBase64;
-        imageElement.alt = picture.data._id;
-        descriptionElement.textContent = picture.data.description;
-  
-        imageScrollBar.appendChild(template.content.cloneNode(true));
+        loadOnePic(picture);
       }
     }
   }
 
 async function displayPics() {
-    console.log('eneterd function')
     const scrollPosition = imageScrollBar.scrollTop;
     const scrollHeight = imageScrollBar.scrollHeight;
     const clientHeight = imageScrollBar.clientHeight;
     
-    console.log(`scrollPosition: ${scrollPosition}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
     if (scrollPosition >= scrollHeight - clientHeight - 905) {
       // User has scrolled to the bottom or beyond
-      console.log(scrollPosition);
       const picture = await mapicCrud.readOnePicture();
   
       if (picture.success) {
         // Picture data is available
-        const template = document.querySelector('[data-img-template]');
-        const imageElement = template.content.querySelector('[data-img-pic]');
-        const descriptionElement = template.content.querySelector('[data-img-description]');
-  
-        imageElement.src = picture.data.picBase64;
-        imageElement.alt = picture.data._id;
-        descriptionElement.textContent = picture.data.description;
-  
-        // Append the cloned template to the imageScrollBar
-        imageScrollBar.appendChild(template.content.cloneNode(true));
+        loadOnePic(picture);
       }
     }
 }
 
+async function loadOnePic(picture) {
+  const template = document.querySelector('[data-img-template]');
+        const imageElement = template.content.querySelector('[data-img-pic]');
+        const descriptionElement = template.content.querySelector('[data-img-description]');
+        const likeButton = template.content.querySelector('[data-img-like]');
+        const commentButton = template.content.querySelector('[data-img-comment]');
+        const tagsElement = template.content.querySelector('[data-img-tags]');
+        const ownerElement = template.content.querySelector('[data-img-owner]');
+        const timeElement = template.content.querySelector('[data-img-time]');
+
+        console.log(picture.data);
+  
+        imageElement.src = picture.data.picBase64;
+        imageElement.alt = picture.data._id;
+        descriptionElement.textContent = picture.data.description;
+        likeButton.textContent = picture.data.like;
+        tagsElement.textContent = picture.data.tags;
+        ownerElement.textContent = picture.data.ownerName;
+        const date = new Date(picture.data.createdTime);
+        timeElement.textContent = date.toDateString();
+        commentButton.textContent = "COMMENT";
+  
+        // Append the cloned template to the imageScrollBar
+        imageScrollBar.appendChild(template.content.cloneNode(true));
+}
 
