@@ -83,6 +83,21 @@ class CRUD{
         }
     }
 
+    async readAllPictures(){
+        try{
+            const response = await fetch(`${this.server_url}/readAllPictures`, {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
+            });
+            const data = await response.json();
+            return data;
+        }
+        catch(err){
+            console.log(err);
+            return false;
+        }
+    }
+
     async deletePicture(picId){
         try{
         const response = await fetch(`${this.server_url}/createUser?picId=${picId}`, {
