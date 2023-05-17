@@ -175,6 +175,8 @@ ul {
   width: inherit;
   margin-top: 15px;
   order: 1;
+  object-fit: scale-down;
+  max-height: 380px;
 }
 
 #upload {
@@ -200,6 +202,13 @@ ul {
   background: rgba(225,225,225,0.8);
   border: none;
   margin-bottom: 5px;
+}
+
+#add-location {
+  background:rgb(250, 250, 250);
+  border:2px solid rgba(0,0,0,0.2);
+  float: right;
+  border-radius:4px;
 }
 
 .put-button {
