@@ -29,26 +29,31 @@
             <div id="center-bar" class="flex-item">
                 <div id="image-scroll-bar" style="overflow-y: scroll">
                    <template data-img-template>
-                    <center>
-                        <li>
-                            <div class="owner-time-container">
-                            <span class="owner" data-img-owner></span>
-                            <span class="time" data-img-time></span>
-                            </div>
-                        </li>
-                        <br></br>
-                        <div class="image-container">
-                            <img src="" alt="" class = "center-pic" data-img-pic>
-                        </div>
-                        <p class="description" data-img-description></p>
-                        <a class="tags" data-img-tags></a>
-                        <br></br>
-                        <button class="like" data-img-like></button>
-                        <button class="comment" data-img-comment></button>
-                        <p></p>
+                        <center>
+                            <li>
+                                <div class="info-box">
+                                    <div class="owner-time-container">
+                                        <span class="owner" data-img-owner></span>
+                                        <span class="time" data-img-time></span>
+                                    </div>
+                                    <br></br>
+                                    <div class="image-container">
+                                        <img src="" alt="" class="center-pic" data-img-pic>
+                                    </div>
+                                    <div class="info-text">
+                                        <p class="description" data-img-description></p>
+                                        <a class="tags" data-img-tags></a>
+                                    </div>
+                                    <p></p>
+                                    <div class="buttons">
+                                        <button class="like" data-img-like></button>
+                                        <button class="comment" data-img-comment></button>
+                                    </div>
+                                </div>
+                            </li>
                         </center>
                     </template>
-
+                    <br></br>
                     <div id="img-results"></div>
                 </div>
             </div>

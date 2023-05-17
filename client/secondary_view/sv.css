@@ -24,14 +24,14 @@ li {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 700px;
+  max-width: 600px;
   margin: 0 auto;
   overflow: hidden;
 }
 
 .center-pic {
-  max-height: 50%;
-  max-width: 50%;
+  max-height: 90%;
+  max-width: 90%;
   padding-left: 10%;
   padding-right: 10%;
 }
@@ -173,18 +173,19 @@ ul {
   justify-content: space-between;
 }
 .owner {
+  font-size: 16pt;
   text-align: right;
-  margin-left: 20%;
+  margin-left: 5%;
   font-weight: bold;
 }
 
 .time {
-  margin-right: 20%;
+  margin-right: 5%;
   text-align: right;
 }
 
 .description {
-  font-size: 18px;
+  font-size: 16pt;
   color: #333333;
   font-style: italic;
   text-align: center;
@@ -286,4 +287,14 @@ ul {
 
 #image-scroll-bar::-webkit-scrollbar {
   display: none;
+}
+
+.info-box {
+  align-items: center;
+  height: fit-content;
+  border-radius: 10px;
+  border-color: rgb(200, 200, 200);
+  border-style: groove;
+  padding: 5%;
+  background-color: #ffffff;
 }

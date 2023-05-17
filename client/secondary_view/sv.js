@@ -141,7 +141,7 @@ async function loadOnePic(picture) {
 
   // Append the cloned template to the imageScrollBar
   imgResults.appendChild(line_break);
-  imgResults.appendChild(line_separator);
   imgResults.appendChild(template.content.cloneNode(true));
-  imgResults.appendChild(line_separator);
+  //imgResults.appendChild(line_separator);
+  imgResults.appendChild(line_break);
 }
