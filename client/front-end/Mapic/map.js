@@ -182,38 +182,40 @@ function closeAllPictures() {
     //     }
     // );
 
-    // fetch('http://localhost:3000/readAllPictures', {
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         'Accept': 'application/json'
-    //         }
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         console.log(data.data);
-    //         for (let i = 0; i < 3; i++) {
-    //             addPictureOnMap(data.data[i]);
-    //         }
-    //         // for (let curr of data.data) {
-    //         //     addPictureOnMap(curr);
-    //         // }
-    //         // addPictureOnMap(data);
-    //     }
-    // );
+    fetch('http://localhost:3000/readAllPictures', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.data);
+            // for (let i = 0; i < 2; i++) {
+            //     addPictureOnMap(data.data[i]);
+            // }
+            for (let curr of data.data) {
+                addPictureOnMap(curr);
+            }
+            // console.log(imageCount);
+        }
+    );
 // }
 
 // map.on('click', onMapClick);
 
 var imageCount = 0;
 
+
 function addPictureOnMap(data) {
     let base64 = data.picBase64;
     let lat = data.exif.location.lat;
     let lng = data.exif.location.lng;
     var image = L.popup([lat, lng], {autoPan: false, autoClose: false, closeButton: false})
-        .setContent(`<div class="photo"><img src=data:image/jpeg;base64,${base64} id="img${imageCount}" style="width: inherit;"/></div>`)
+        .setContent(`<div class="photo"><img src=${base64} id="img${imageCount}" style="width: inherit;"/></div>`)
         .openOn(map);
+    // console.log(image);
     document.getElementById(`img${imageCount}`).addEventListener("click", () => {clickPhoto(image)});
     imageCount++;
 }
@@ -261,7 +263,7 @@ document.getElementById("upload-btn").addEventListener("click", () => {
 
 document.getElementsByClassName("put-button")[0].addEventListener("click", () => {
     let lat = exifExtract.location.lat;
-    let lng = -exifExtract.location.lng;
+    let lng = exifExtract.location.lng;
     // console.log("put button clicked");
     let tags = [];
     if (document.getElementById("tag-box") !== null) {
@@ -276,40 +278,48 @@ document.getElementsByClassName("put-button")[0].addEventListener("click", () =>
         userName = localStorage.getItem("user");
     }
 
-    let src = document.getElementById("upload-preview").src;
-    let div = document.createElement("div");
-    div.setAttribute("class", "photo");
-    let img = document.createElement("img");
-    img.setAttribute("src", src);
-    img.setAttribute("id", "2");
-    img.setAttribute("style", "width: inherit;");
-    div.appendChild(img);
+    // let src = document.getElementById("upload-preview").src;
+    // let div = document.createElement("div");
+    // div.setAttribute("class", "photo");
+    // let img = document.createElement("img");
+    // img.setAttribute("src", base64);
+    // img.setAttribute("id", `img${imageCount}`);
+    // img.setAttribute("style", "width: inherit;");
+    // div.appendChild(img);
+    var image = L.popup([lat, lng], {autoPan: false, autoClose: false, closeButton: false})
+        .setContent(`<div class="photo"><img src=${base64} id="img${imageCount}" style="width: inherit;"/></div>`)
+        .openOn(map);
+    // console.log(image);
 
-    let image = L.popup([lat, lng], {autoPan: false, autoClose: false, closeButton: false})
-    .setContent(div)
-    .openOn(map);
+    // let image = L.popup([lat, lng], {autoPan: false, autoClose: false, closeButton: false})
+    // .setContent(div)
+    // .openOn(map);
     resetUpload();
-    // console.log(window.base64);
+    // console.log(image);
+    document.getElementById(`img${imageCount}`).addEventListener("click", () => {clickPhoto(image)});
+    imageCount++;
 
-    // fetch('http://localhost:3000/createPicture', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         'Accept': 'application/json'
-    //         },
-    //     body: JSON.stringify({
-    //             ownerName: userName,
-    //             picBase64: src,
-    //             tags: tags,
-    //             description: description,
-    //             exif: exifExtract
-    //             })
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         console.log(data);
-    //     }
-    // );
+
+    fetch('http://localhost:3000/createPicture', {
+        method: 'POST',
+        headers: {
+            // 'mode': 'cors',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+            },
+        body: JSON.stringify({
+                ownerName: userName,
+                imgBase: base64,
+                tags: tags,
+                description: description,
+                exif: exifExtract
+                })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        }
+    );
     // fetch('http://localhost:3000/deletePicture?picId=lhqhn62j2we4vu0wb', {
     //     method: 'DELETE',
     //     headers: {
@@ -404,6 +414,7 @@ document.getElementById("upload").onchange = function(e) {
                 
                 exifLat = longLat.toFixed(8);
                 exifLng = longLng.toFixed(8);
+                exifLng = -exifLng;
             }
 
             exifExtract = {
@@ -443,10 +454,6 @@ document.getElementById("upload").onchange = function(e) {
     // console.log(exifExtract);
     
 
-}
-
-function addPicture () {
-    console.log(exifExtract);
 }
 // console.log(image2.getLatLng().lat);
 // let photo = document.getElementsByClassName("photo");
