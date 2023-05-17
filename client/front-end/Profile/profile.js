@@ -1,3 +1,5 @@
+import { default_pic } from "./defaultPic.js";
+
 const dark = document.getElementById('themeDark');
 const light = document.getElementById('themeLight');
 const content = document.getElementById('content');
@@ -10,70 +12,90 @@ const picChange = document.getElementById('file-input');
 const image = document.getElementById("circle");
 let reader = new FileReader();
 const logout = document.getElementById("logout");
+
 let user = "";
 let curUser = {};
 let settings = {};
-
-import { mapicCrud } from "../../CRUD.js";
-
-
-//initiate the profile page
-user = localStorage.getItem('user');
-curUser = await mapicCrud.readUser(user);
-console.log(curUser);
-
-/*curUser = await readUser(user);
-console.log(curUser.pictures)
-document.getElementById('userid').innerHTML = `${user}`;
-settings = curUser["settings"];
-if(Object.keys(settings).includes("theme")){
-    updateTheme(curUser.settings["theme"]);
-}
-desc.innerHTML = curUser['profileDescription'];
-            //sessionStorage.setItem("pic",content);
-            //probably add db to this?
-image.src = curUser["profilePicture"];
-if(curUser.pictures.length == 0){
-    console.log(document.getElementById("bestPost").innerHTML)
-    document.getElementById("bestPost").innerHTML = "No pictures yet!";
-}
-*/
 //initilize it to false, but we'll update it according to the db later
 var privateCheck = false;
+import { mapicCrud } from "../../CRUD.js";
+image.src = "data:img/png;base64,"+default_pic;
+console.log(curUser["hi"]);
+//initiate the profile page
 
-dark.addEventListener("click", (event) => {
+user = localStorage.getItem('user');
+
+curUser = await mapicCrud.readUser(user);
+curUser = curUser.data;
+if(curUser["settings"] != undefined){
+    settings = curUser.settings;
+    if(Object.keys(settings).includes("theme")){
+        updateTheme(curUser.settings["theme"]);
+    }
+    if(Object.keys(settings).includes("privateMode")){
+        privateCheck = true;
+    }
+}
+
+if(curUser["profilePicture"] != undefined){
+    image.src = "data:img/png;base64,"+default_pic;
+    await mapicCrud.updateProfilePicture(user,default_pic);
+}
+if(curUser["description"] != undefined){
+    desc.innerHTML = curUser["description"];
+}
+else{
+    desc.innerHTML = "I am new to Mapic!"
+}
+
+let bestPic = await mapicCrud.getMostLikedPic(user);
+if (bestPic.data == null){
+    document.getElementById("bestPost").innerHTML = "No pictures yet!";
+}
+else{
+    const best = await mapicCrud.getPicture(bestPic.data);
+    document.getElementById("best").src = "data:img/png;base64,"+best.picBaseID;
+    document.getElementById("hearts").innerHTML = `:${best.like}`
+}
+//initialize the gallery
+if(curUser.pictues.length > 0){
+    const gallery = document.getElementById('galleryGrid')
+    const div = document.createElement('div');
+}
+
+dark.addEventListener("click", async (event) => {
     //TODO LINK IT TO THE POUCHDB
     //remove the previous lists 
     updateTheme('darkTheme');
     //localStorage.setItem("theme","black");
     settings.theme = 'darkTheme';
-    updateDB();
+    await mapicCrud.changeSetting(user,settings);
 });
 
-light.addEventListener("click", (event)=>{
+light.addEventListener("click", async (event)=>{
     //TODO LINK IT TO THE POUCHDB
     updateTheme('whiteTheme');
     //localStorage.setItem("theme","white");
     settings.theme = 'whiteTheme';
     console.log (settings)
-    updateDB();
+    await mapicCrud.changeSetting(user,settings);
 });
 
-privatemode.addEventListener("click", (event) =>{
+privatemode.addEventListener("click", async (event) =>{
     privateCheck = privateCheck?false:true;
     //console.log(privateCheck);
     //TODO LINK IT TO DB
     settings.isVisible = privateCheck;
-    updateDB();
+    await mapicCrud.changeSetting(user,settings);
 });
 
-updateDesc.addEventListener("click", (event)=>{
+updateDesc.addEventListener("click",async (event)=>{
     //console.log("ok!");
     desc.innerHTML = newDesc.value;
     console.log(desc.innerHTML);
     newDesc.value = "Your new description!";
     //TODO LINK IT TO DB
-    updateDB();
+    await mapicCrud.changeDescription(user,desc.innerHTML);
 });
 
 picChange.addEventListener("change",handleFiles ,false);
@@ -86,11 +108,8 @@ async function handleFiles(){
         var content = readerEvent.target.result;
         image.src = content;
         curUser.profilePicture = content;
-        console.log(curUser.profilePicture);
-        await mapicCrud.updateProfilePicture(user,content);
-        //console.log(content);
-        //sessionStorage.setItem("pic",content);
-        //probably add db to this?
+        console.log(content.substring(22));
+        await mapicCrud.updateProfilePicture(user,content.substring(22));
     }
     //updateDB();
 }
@@ -100,7 +119,6 @@ logout.addEventListener("click", (event) => {
     localStorage.clear();
     location.href = "index.html";
 });
-//TODO RETRIEVE DB PART.
 
 document.getElementById("delete").addEventListener("click",async (event)=>{
     localStorage.clear();
@@ -113,6 +131,7 @@ document.getElementById("delete").addEventListener("click",async (event)=>{
     console.log(curUser);
 }
 */
+
 
 function updateTheme(theme){
     for(let elem in themElems){
