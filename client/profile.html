@@ -11,7 +11,7 @@
     <link rel = "stylesheet" href = "./front-end/Profile/profile.css">
     <link rel = "stylesheet" href = "https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
     <!-- Our Custom CSS -->
-    
+    <script type="module" src="./front-end/Profile/profile.js"></script>
     <!-- Font Awesome JS -->
 </head>
 
@@ -22,7 +22,7 @@
                 <a href = "index.html"><h1 class = "fs-1 bg-white text-dark px-5 me-2 d-block">MAPIC</h1></a>
 
             </div>
-            <ul class = "list-unstyled px-2">
+            <ul class = "list-unstyled px-2" id = "test">
             <li class = "active" data-rel = "1"><a href = "#" class ="text-decoration-none px-3 py-2 d-block active"><i class="fal fa-sharp fa-solid fa-chart-bar active"></i>Statistics </a></li>
             <li class = "" data-rel = "2"><a href = "#" class ="text-decoration-none px-3 py-2 d-block"><i class="fal fa-solid fa-wrench"></i>Settings</a></li>
             <li class = "" data-rel = "3"><a  href = "#" class ="text-decoration-none px-3 py-2 d-block"><i class="fal fa-regular fa-shield"></i>Privacy</a></li>
@@ -128,13 +128,7 @@
         $('#picChange').on('click',function(){
             $('#file-input').trigger('click');
         })
-       // $('#saveDesc').on("click", function(){
-           // var databack = $("#staticBackdrop #newDesc").val().trim();
-            //console.log(databack);
-            //$('#profDesc').html(databack);
-        //})
     </script>
-    <script type="module" src="./front-end/Profile/profile.js"></script>
 </body>
 
 </html>

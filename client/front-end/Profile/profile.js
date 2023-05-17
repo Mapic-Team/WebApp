@@ -28,7 +28,7 @@ user = localStorage.getItem('user');
 curUser = await mapicCrud.readUser(user);
 curUser = curUser.data;
 document.getElementById('userid').innerHTML = user
-if(curUser["settings"] != undefined){
+if(curUser.settings != undefined){
     settings = curUser.settings;
     if(Object.keys(settings).includes("theme")){
         updateTheme(curUser.settings["theme"]);
@@ -82,6 +82,18 @@ else{
         galleryPic.classList.add('gridobj');
         let getPic = await mapicCrud.getPicture(picid);
         galleryPic.src = getPic.data.picBase64;
+        galleryPic.addEventListener('click',(event)=>{
+            if (galleryPic.classList.contains("picToBeDel")){
+                galleryPic.classList.remove("picToBeDel");
+                galleryPic.classList.add("gridobj");
+                console.log(galleryPic.classList);
+            }
+            else{
+                galleryPic.classList.remove("gridobj");
+                galleryPic.classList.add("picToBeDel");
+                console.log(galleryPic.classList);
+            }
+        });
         gallery.appendChild(galleryPic);
     }
     document.getElementById('pictures').appendChild(gallery);
@@ -164,3 +176,4 @@ function updateTheme(theme){
         document.getElementById(themElems[elem]).classList.add(theme);
     }
 }
+
