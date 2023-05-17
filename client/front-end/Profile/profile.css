@@ -9,6 +9,11 @@ body{
     min-height: 250px;
 }
 
+img{
+    max-width: 100%;
+    max-height: 100%;
+    display: block; /* remove extra space below image */
+}
 #content{
     min-height: 100vh;
     width: 100%;
@@ -183,7 +188,7 @@ hr.h-color{
 .picToBeDel{
     height: 100px;
     width: 100px;
-    padding: 20px;
+    padding: 10px;
     border:10px,solid,rgb(133, 0, 0);
 }
 
@@ -200,6 +205,5 @@ hr.h-color{
 .gridobj{
     height: 100px;
     width: 100px;
-    padding: 20px;
 }
 

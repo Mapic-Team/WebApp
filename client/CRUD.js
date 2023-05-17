@@ -26,7 +26,7 @@ class crud{
    
    async deleteUser(name){
        try{
-           const response = await fetch(`/createUser?userName=${name}`, {
+           const response = await fetch(`/deleteUser?userName=${name}`, {
                method: 'DELETE',
                headers: {'Content-Type': 'application/json'},
            });
@@ -53,7 +53,7 @@ class crud{
    
    async createPicture(picture){
     try{
-        const response = await fetch(`/createUser`, {
+        const response = await fetch(`/createPicture`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body:JSON.stringify({picture:picture})
@@ -68,7 +68,7 @@ class crud{
 
    async deletePicture(picId){
         try{
-        const response = await fetch(`/createUser?picId=${picId}`, {
+        const response = await fetch(`/deletePicture?picId=${picId}`, {
             method: 'DELETE',
             headers: {'Content-Type': 'application/json'},
         });

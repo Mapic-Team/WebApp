@@ -77,24 +77,25 @@ else{
     gallery.classList.add('galleryGrid')
     console.log(curUser.pictures);
     for(let picid of curUser.pictures){
+        let pic = document.createElement('div');
         console.log(picid)
         let galleryPic = document.createElement('img');
-        galleryPic.classList.add('gridobj');
+        pic.classList.add('gridobj');
         let getPic = await mapicCrud.getPicture(picid);
         galleryPic.src = getPic.data.picBase64;
+        pic.id = picid;
         galleryPic.addEventListener('click',(event)=>{
-            if (galleryPic.classList.contains("picToBeDel")){
-                galleryPic.classList.remove("picToBeDel");
-                galleryPic.classList.add("gridobj");
-                console.log(galleryPic.classList);
+            if (pic.classList.contains("picToBeDel")){
+                pic.classList.remove("picToBeDel");
+                pic.classList.add("gridobj");
             }
             else{
-                galleryPic.classList.remove("gridobj");
-                galleryPic.classList.add("picToBeDel");
-                console.log(galleryPic.classList);
+                pic.classList.remove("gridobj");
+                pic.classList.add("picToBeDel");
             }
         });
-        gallery.appendChild(galleryPic);
+        pic.appendChild(galleryPic)
+        gallery.appendChild(pic);
     }
     document.getElementById('pictures').appendChild(gallery);
 }
@@ -167,7 +168,16 @@ document.getElementById("delete").addEventListener("click",async (event)=>{
     console.log(curUser);
 }
 */
-
+document.getElementById("delPics").addEventListener('click',(event) =>{
+    console.log("clicked delpic");
+    const collection = document.getElementsByClassName("picToBeDel");
+    console.log(collection);
+    for (let i = 0; i < collection.length; i++) {
+        console.log(collection[0].id);
+        mapicCrud.deletePicture(collection[0].id);
+        collection[0].remove();
+    }
+})
 
 function updateTheme(theme){
     for(let elem in themElems){
