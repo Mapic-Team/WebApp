@@ -231,7 +231,8 @@ function addPictureOnMap(data) {
 }
 
 if (localStorage.getItem("user") !== null) {
-    userName = localStorage.getItem("user");
+    window.userName = localStorage.getItem("user");
+    // console.lof(userName);
     document.getElementById("login").style.display = "none";
     document.getElementById("profile").style.display = "block";
 } else {
@@ -283,10 +284,11 @@ document.getElementsByClassName("put-button")[0].addEventListener("click", () =>
     if (document.getElementById("description-box") !== null) {
         description = document.getElementById("description-box").value;
     }
-    let userName = "Iris";
-    if (localStorage.getItem("user") !== null) {
-        userName = localStorage.getItem("user");
-    }
+    // let userName = "Iris";
+    // if (localStorage.getItem("user") !== null) {
+    //     userName = localStorage.getItem("user");
+    // }
+    // console.log(userName);
 
     // let src = document.getElementById("upload-preview").src;
     // let div = document.createElement("div");
