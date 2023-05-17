@@ -116,7 +116,7 @@ class crud{
         const response = await fetch(`/updateProfilePicture`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body:JSON.stringify({userName:name,profilePicture: profilePic})
+            body:JSON.stringify({userName:name,profilePic:profilePic})
         });
         const data = await response.json();
         return data;

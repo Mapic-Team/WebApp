@@ -20,13 +20,14 @@ let settings = {};
 var privateCheck = false;
 import { mapicCrud } from "../../CRUD.js";
 image.src = "data:img/png;base64,"+default_pic;
-console.log(curUser["hi"]);
+
 //initiate the profile page
 
 user = localStorage.getItem('user');
 
 curUser = await mapicCrud.readUser(user);
 curUser = curUser.data;
+document.getElementById('userid').innerHTML = user
 if(curUser["settings"] != undefined){
     settings = curUser.settings;
     if(Object.keys(settings).includes("theme")){
@@ -36,13 +37,19 @@ if(curUser["settings"] != undefined){
         privateCheck = true;
     }
 }
-
-if(curUser["profilePicture"] != undefined){
+console.log(curUser.profilePicture);
+if(curUser.profilePicture == undefined){
     image.src = "data:img/png;base64,"+default_pic;
-    await mapicCrud.updateProfilePicture(user,default_pic);
+    await mapicCrud.changeProfilePic(user,default_pic);
 }
-if(curUser["description"] != undefined){
-    desc.innerHTML = curUser["description"];
+else{
+    console.log(curUser.profilePicture);
+    image.src = "data:img/png;base64,"+curUser.profilePicture;
+}
+console.log(curUser)
+if(curUser.profileDescription != undefined){
+    console.log(curUser.profileDescription);
+    desc.innerHTML = curUser.profileDescription;
 }
 else{
     desc.innerHTML = "I am new to Mapic!"
@@ -54,13 +61,24 @@ if (bestPic.data == null){
 }
 else{
     const best = await mapicCrud.getPicture(bestPic.data);
-    document.getElementById("best").src = "data:img/png;base64,"+best.picBaseID;
+    document.getElementById("best").src = "data:img/png;base64,"+best.picBase64;
     document.getElementById("hearts").innerHTML = `:${best.like}`
 }
 //initialize the gallery
-if(curUser.pictues.length > 0){
+if(curUser.pictues == undefined||curUser.pictues.length == 0){
+    document.getElementById('pictures').innerHTML = `<h4 class="modal-title">No pictures in gallery</h4>`;
+}
+else{
+    document.getElementById('pictures').innerHTML =`<div class = "galleryGrid"></div>
+    <button type = "button" id="delPics" class="btn btn-danger">Delete Pictures</button>`;
     const gallery = document.getElementById('galleryGrid')
-    const div = document.createElement('div');
+    for(let picid in curUser.pictues){
+        let galleryPic = document.createElement('img');
+        galleryPic.classList.add('galleryGrid');
+        let getPic = await mapicCrud.getPicture(picid);
+        galleryPic.src = getPic.data.picBase64;
+        gallery.appendChild(galleryPic);
+    }
 }
 
 dark.addEventListener("click", async (event) => {
@@ -109,7 +127,7 @@ async function handleFiles(){
         image.src = content;
         curUser.profilePicture = content;
         console.log(content.substring(22));
-        await mapicCrud.updateProfilePicture(user,content.substring(22));
+        await mapicCrud.changeProfilePic(user,content.substring(22));
     }
     //updateDB();
 }
