@@ -196,6 +196,18 @@ app.get('/getTenMostCommonTags', async(req,res) =>{
     }
 });
 
+app.get('/matchTags/:input', async (req, res) => {
+    const input = req.params.input;
+    const result = await database.matchTags(input);
+    if (result.success) {
+      res.status(200).send(result);
+    } else {
+      res.status(400).send(result);
+    }
+  });
+  
+
+
 // app.post('/test',async (req,res)=>{
 //     console.log('TEST FOR ROUTE WORKED')
 // })

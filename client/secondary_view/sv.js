@@ -1,15 +1,22 @@
 import { mapicCrud } from "../CRUD.js";
 
-
-
-const searchInput = document.getElementById('search-input');
 const searchResults = document.getElementById('search-results');
+const searchInput = document.getElementById('search-input');
 
-// searchInput.addEventListener("input", search());
+
 // window.addEventListener('load', displayPics);
 // window.addEventListener('load', showTrends);
 window.addEventListener('load', displayTopTags);
+searchInput.addEventListener("keypress", (e) => {
+    if (e.key === 'Enter') {
+        search();
+      }
+});
 
+/**
+ * displays up to ten most common tags when nothing is searched.
+ * @returns {Promise<void>}
+ */
 async function displayTopTags() {
     const tagTemplate = document.querySelector("[data-tag-template]")
     const result = await mapicCrud.getTenMostCommonTags();
@@ -22,13 +29,26 @@ async function displayTopTags() {
     })
 }
 
-// /**
-//  * Does not have an input param, gets the string directly from the searchInput element
-//  * @return {void}
-//  */
-// async function search() {
-//     const tagTemplate = document.querySelector("[data-tag-template]");
-// }
+/**
+ * Does not have an input param, gets the string directly from the searchInput element
+ * case sensitive matching
+ * @return {Promise<void>}
+ */
+async function search() {
+    const tagTemplate = document.querySelector("[data-tag-template]");
+    const v = searchInput.value;
+    searchResults.innerHTML = '';
+    const result = await mapicCrud.matchTags(v);
+    const topTenTags = result.data;
+    if(topTenTags) {
+        topTenTags.forEach(t => {
+            const tag = tagTemplate.content.cloneNode(true).children[0]
+            const tagBody = tag.querySelector("[data-tag-body]")
+            tagBody.textContent = t;
+            searchResults.append(tag);
+        })
+    }
+}
 
 // const imageScroll = document.getElementById('image-scroll-bar');
 

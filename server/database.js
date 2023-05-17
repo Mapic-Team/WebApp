@@ -523,6 +523,40 @@ class Database {
     return obj;
   }
 
+  /**
+   * Given a string, match up to ten tags that contains the given string
+   * @param {String} input 
+   */
+  async matchTags(input) {
+    const obj = { success: false, message: "", data: null };
+    const regex = new RegExp(input, "i");
+    const pipeline = [
+      { $match: { tags: regex } },
+      { $unwind: "$tags" },
+      { $match: { tags: regex } },
+      {
+        $group: {
+          _id: "$tags",
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+      { $limit: 10 },
+    ];
+    try {
+      const result = await this.pictureDB.aggregate(pipeline).toArray();
+      const matchedTags = result.map((entry) => entry._id);
+      obj.message = "";
+      obj.success = true;
+      obj.data = matchedTags;
+    } catch (error) {
+      obj.message = `Error occurred while matching tags: ${error}`;
+    }
+    console.log(obj.message);
+    return obj;
+  }
+  
+
   /***************************** r/w functions for Mapic (homepage) *****************************/
 
   /***************************** r/w functions for profile page *****************************/
