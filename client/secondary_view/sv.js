@@ -5,7 +5,6 @@ const searchInput = document.getElementById('search-input');
 const trendResults = document.getElementById('trend-results');
 const imageScrollBar = document.getElementById('image-scroll-bar');
 
-// window.addEventListener('load', displayPics);
 window.addEventListener('load', displayTopTags);
 searchInput.addEventListener("keypress", (e) => {
     if (e.key === 'Enter') {
@@ -69,10 +68,6 @@ async function fillImageScrollBar() {
     const imageScrollBar = document.getElementById('image-scroll-bar');
     const template = document.querySelector('[data-img-template]');
   
-    while (imageScrollBar.firstChild) {
-      imageScrollBar.removeChild(imageScrollBar.firstChild);
-    }
-  
     for (let i = 0; i < 10; i++) {
       const picture = await mapicCrud.readOnePicture();
   
@@ -90,12 +85,15 @@ async function fillImageScrollBar() {
   }
 
 async function displayPics() {
+    console.log('eneterd function')
     const scrollPosition = imageScrollBar.scrollTop;
     const scrollHeight = imageScrollBar.scrollHeight;
     const clientHeight = imageScrollBar.clientHeight;
-  
-    if (scrollPosition >= scrollHeight - clientHeight) {
+    
+    console.log(`scrollPosition: ${scrollPosition}, scrollHeight: ${scrollHeight}, clientHeight: ${clientHeight}`);
+    if (scrollPosition >= scrollHeight - clientHeight - 905) {
       // User has scrolled to the bottom or beyond
+      console.log(scrollPosition);
       const picture = await mapicCrud.readOnePicture();
   
       if (picture.success) {
