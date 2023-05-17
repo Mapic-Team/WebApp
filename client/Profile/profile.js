@@ -75,7 +75,7 @@ else{
         console.log(picid)
         let galleryPic = document.createElement('img');
         pic.classList.add('gridobj');
-        let getPic = await mapicCrud.getPicture(picid);
+        let getPic = await mapicCrud.readPicture(picid);
         galleryPic.src = getPic.data.picBase64;
         pic.id = picid;
         galleryPic.addEventListener('click',(event)=>{
