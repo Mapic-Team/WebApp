@@ -14,7 +14,7 @@
         <div id="page-container">
             <div id="left-bar" class="flex-item">
                 <div id="search-container" class="grid-container">
-                    <input id="search-input" value="Search for tags here">
+                    <input id="search-input" placeholder="Search for tags here">
                     <h2>Results</h2>
                     <template data-tag-template>
                         <div class="tag">
@@ -27,18 +27,27 @@
             </div>
             <div id="center-bar" class="flex-item">
                 <div id="image-scroll-bar" style="overflow-y: scroll">
-                    <template data-img-template>
+                   <template data-img-template>
+                    <center>
                         <li>
+                            <div class="owner-time-container">
                             <span class="owner" data-img-owner></span>
                             <span class="time" data-img-time></span>
+                            </div>
                         </li>
-                        <img src="" alt="" data-img-pic>
+                        <br></br>
+                        <div class="image-container">
+                            <img src="" alt="" class = "center-pic" data-img-pic>
+                        </div>
                         <p class="description" data-img-description></p>
                         <a class="tags" data-img-tags></a>
+                        <br></br>
                         <button class="like" data-img-like></button>
                         <button class="comment" data-img-comment></button>
                         <p></p>
+                        </center>
                     </template>
+
                     <div id="img-results"></div>
                 </div>
             </div>
@@ -47,7 +56,7 @@
                     <div id="trends">
                         <h2>Trending</h2>
                         <template data-trend-template>
-                                <img src="" alt="" data-trend-img>
+                                <img src="" alt="" class= "right-bar-pic" data-trend-img>
                         </template>
                         <div id="trend-results"></div>
                     <div id="trending-images">
