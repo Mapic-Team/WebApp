@@ -6,6 +6,8 @@
 // });
 // import * as db from '/server/database.js';
 
+import { mapicCrud } from "../CRUD.js";
+
 
 var amherst = [42.373034, -72.519632];
 
@@ -183,25 +185,32 @@ function closeAllPictures() {
     //     }
     // );
 
-    fetch('http://localhost:3000/readAllPictures', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.data);
-            // for (let i = 0; i < 2; i++) {
-            //     addPictureOnMap(data.data[i]);
-            // }
-            for (let curr of data.data) {
-                addPictureOnMap(curr);
-            }
+    // fetch('http://localhost:3000/readAllPictures', {
+    //     method: 'GET',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         'Accept': 'application/json'
+    //         }
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         console.log(data.data);
+    //         // for (let i = 0; i < 2; i++) {
+    //         //     addPictureOnMap(data.data[i]);
+    //         // }
+    //         for (let curr of data.data) {
+    //             addPictureOnMap(curr);
+    //         }
             // console.log(imageCount);
+    //     }
+    // );
+    mapicCrud.readAllPictures().then(res => {
+        console.log(res.data);
+        for (let curr of res.data) {
+            addPictureOnMap(curr);
         }
-    );
+    });
+
 // }
 
 // map.on('click', onMapClick);

@@ -194,7 +194,6 @@ app.get('/getTenMostCommonTags', async(req,res) =>{
     } else {
         res.status(400).send(result);
     }
-    res.end();
 });
 
 // app.post('/test',async (req,res)=>{

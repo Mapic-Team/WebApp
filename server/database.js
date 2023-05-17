@@ -498,6 +498,7 @@ class Database {
    * @return {Object} { success: boolean, message: string, data: Array<String> }
    */
   async getTenMostCommonTags() {
+    const obj = { success: false, message: "", data: null };
     const pipeline = [
       { $unwind: "$tags" },
       {
@@ -509,9 +510,17 @@ class Database {
       { $sort: { count: -1 } },
       { $limit: 10 },
     ];
-    const result = await this.pictureDB.aggregate(pipeline).toArray();
-    const commonTags = result.map((entry) => entry._id);
-    return commonTags;
+    try {
+      const result = await this.pictureDB.aggregate(pipeline).toArray();
+      const commonTags = result.map((entry) => entry._id);
+      obj.message = "";
+      obj.success = true;
+      obj.data = commonTags;
+    } catch(error) {
+      obj.message = `Error occured while retrieving common tags: ${error}`;
+    }
+    console.log(obj.message);
+    return obj;
   }
 
   /***************************** r/w functions for Mapic (homepage) *****************************/
