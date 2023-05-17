@@ -28,7 +28,7 @@ class crud{
    
    async deleteUser(name){
        try{
-           const response = await fetch(`/createUser?userName${name}`, {
+           const response = await fetch(`/createUser?userName=${name}`, {
                method: 'DELETE',
                headers: {'Content-Type': 'application/json'},
            });
@@ -41,7 +41,7 @@ class crud{
    }
    async getPicture(picid){
        try{
-           const response = await fetch(`/readPicture?picId= ${picid}`, {
+           const response = await fetch(`/readPicture?picId=${picid}`, {
                method: 'GET',
                headers: {'Content-Type': 'application/json'},
            });
@@ -70,7 +70,7 @@ class crud{
 
    async deletePicture(picId){
         try{
-        const response = await fetch(`/createUser?picId${picId}`, {
+        const response = await fetch(`/createUser?picId=${picId}`, {
             method: 'DELETE',
             headers: {'Content-Type': 'application/json'},
         });
@@ -82,9 +82,9 @@ class crud{
         }
    }
 
-   async getMostLikedPic(){
+   async getMostLikedPic(user){
        try{
-           const response = await fetch(`/getMostLikedPic`, {
+           const response = await fetch(`/getMostLikedPic?userName=${user}`, {
                method: 'GET',
                headers: {'Content-Type': 'application/json'}
            });
