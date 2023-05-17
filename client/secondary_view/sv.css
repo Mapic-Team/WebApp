@@ -210,15 +210,10 @@ ul {
     text-transform: uppercase;
     transition: 0.5s;
 }
-  
-.nav a:hover {
-    background-color: darkgray;
-    color: black;
-}
 
-/* .nav ul li a:hover {
-color: #aebec0;
-}  */
+.nav ul li a:hover {
+    color: #aebec0;
+} 
 .nav ul li a:hover::after {
     transform: scaleX(1);
     transform-origin: left;
