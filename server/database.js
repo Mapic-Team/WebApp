@@ -557,6 +557,7 @@ class Database {
   /**
    * Given a string, match up to ten tags that contains the given string
    * @param {String} input 
+   * @return {Promise<Object>} { success: boolean, message: string, data: Array<String> }
    */
   async matchTags(input) {
     const obj = { success: false, message: "", data: null };
@@ -586,6 +587,32 @@ class Database {
     console.log(obj.message);
     return obj;
   }
+
+  /**
+   * find up to ten imgaes in the database that has the input tag
+   * @param {String} tag 
+   * @return {Promise<Object>} { success: boolean, message: string, data: Array<picture> }
+   */
+  async getPictureByTag(tag) {
+    const obj = { success: false, message: "", data: null };
+    const pipeline = [
+      { $match: { tags: tag } },
+      { $limit: 10 },
+    ];
+  
+    try {
+      const result = await this.pictureDB.aggregate(pipeline).toArray();
+      obj.message = "";
+      obj.success = true;
+      obj.data = result;
+    } catch (error) {
+      obj.message = `Error occurred while matching tags: ${error}`;
+    }
+  
+    console.log(obj.message);
+    return obj;
+  }  
+  
   
 
   /***************************** r/w functions for Mapic (homepage) *****************************/

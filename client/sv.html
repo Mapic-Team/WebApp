@@ -18,7 +18,7 @@
                     <h2>Results</h2>
                     <template data-tag-template>
                         <div class="tag">
-                            <div class="body" data-tag-body></div>
+                            <button class="body" data-tag-body></botton >
                         </div>
                     </template>
                     <div id="search-results">
@@ -28,14 +28,18 @@
             <div id="center-bar" class="flex-item">
                 <div id="image-scroll-bar" style="overflow-y: scroll">
                     <template data-img-template>
-                        <span class="owner" data-img-owner></span>
-                        <span class="time" data-img-time></span>
+                        <li>
+                            <span class="owner" data-img-owner></span>
+                            <span class="time" data-img-time></span>
+                        </li>
                         <img src="" alt="" data-img-pic>
                         <p class="description" data-img-description></p>
                         <a class="tags" data-img-tags></a>
                         <button class="like" data-img-like></button>
                         <button class="comment" data-img-comment></button>
+                        <p></p>
                     </template>
+                    <div id="img-results"></div>
                 </div>
             </div>
             <div id="right-bar" class="flex-item">

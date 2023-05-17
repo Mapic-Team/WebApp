@@ -210,7 +210,18 @@ app.get('/matchTags/:input', async (req, res) => {
     } else {
       res.status(400).send(result);
     }
-  });
+});
+
+app.get('/getPictureByTag', async (req, res) => {
+    const result = await database.getPictureByTag(req.query.tag);
+    if (result.success) {
+      res.status(200).send(result);
+    } else {
+      res.status(400).send(result);
+    }
+    res.end();
+});
+  
   
 
 
