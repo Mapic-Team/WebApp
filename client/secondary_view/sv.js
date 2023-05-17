@@ -131,7 +131,10 @@ async function loadOnePic(picture) {
 
   if (picture.tags.length !== 0) {
     picture.tags.map((tag) => {
-      tagsElement.textContent += ` [${tag}] `;
+      let tagButton = document.createElement("button");
+      tagButton.classList.add("tag-in-post");
+      tagButton.textContent += tag;
+      tagsElement.appendChild(tagButton);
     });
   } else {
     tagsElement.textContent += ` ${picture.ownerName} has not added any tags yet. :-(`;
@@ -144,6 +147,5 @@ async function loadOnePic(picture) {
   // Append the cloned template to the imageScrollBar
   imgResults.appendChild(line_break);
   imgResults.appendChild(template.content.cloneNode(true));
-  //imgResults.appendChild(line_separator);
   imgResults.appendChild(line_break);
 }

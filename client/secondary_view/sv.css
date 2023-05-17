@@ -104,7 +104,7 @@ li {
 }
 
 .nav {
-  background-color: #000000;
+  background: linear-gradient(to right, #000000, #898888);
   overflow: hidden;
   width: 100%;
   color: whitesmoke;
@@ -262,27 +262,40 @@ ul {
   box-shadow: 0 0 5px rgba(92, 158, 255, 0.5);
 }
 
-.tag {
+.tag-list {
   margin: 10px;
+}
+.tag-in-post {
+  color: gray;
+  background-color: whitesmoke;
+}
+
+.tag {
+  margin: 5px;
 }
 
 .body {
-  margin-left: 2%;
-  padding: 10px 20px;
   background-color: #4caf50;
   color: white;
+}
+.body,
+.tag-in-post {
+  margin-left: 2%;
+  padding: 10px 20px;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s;
   border-radius: 5%;
 }
 
-.body:hover {
+.body,
+.tag-in-post :hover {
   background-color: #45a049;
 }
 
-.body:active {
-  animation: button-click-animation 0.3s;
+.body,
+.tag-in-post:active {
+  animation: button-click-animation 0.5s;
 }
 
 @keyframes button-click-animation {
