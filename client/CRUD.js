@@ -194,7 +194,20 @@ class CRUD{
             return false;
         }
     }
-      
+    
+    async getPictureByTag(tag) {
+        try {
+          const response = await fetch(`${this.server_url}/getPictureByTag?tag=${tag}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+          });
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.log(error);
+          return false;
+        }
+    }      
    
     /************************************ Update Functions ******************************************/
 

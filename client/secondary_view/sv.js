@@ -4,6 +4,7 @@ const searchResults = document.getElementById('search-results');
 const searchInput = document.getElementById('search-input');
 const trendResults = document.getElementById('trend-results');
 const imageScrollBar = document.getElementById('image-scroll-bar');
+const imgResults = document.getElementById('img-results');
 
 window.addEventListener('load', displayTopTags);
 searchInput.addEventListener("keypress", (e) => {
@@ -20,14 +21,10 @@ imageScrollBar.addEventListener('scroll', displayPics);
  * @returns {Promise<void>}
  */
 async function displayTopTags() {
-    const tagTemplate = document.querySelector("[data-tag-template]")
     const result = await mapicCrud.getTenMostCommonTags();
     const topTenTags = result.data;
     topTenTags.forEach(t => {
-        const tag = tagTemplate.content.cloneNode(true).children[0]
-        const tagBody = tag.querySelector("[data-tag-body]")
-        tagBody.textContent = t;
-        searchResults.append(tag);
+        loadOneTag(t);
     });
 }
 
@@ -37,19 +34,34 @@ async function displayTopTags() {
  * @return {Promise<void>}
  */
 async function search() {
-    const tagTemplate = document.querySelector("[data-tag-template]");
     const v = searchInput.value;
     searchResults.innerHTML = '';
     const result = await mapicCrud.matchTags(v);
     const topTenTags = result.data;
     if(topTenTags) {
         topTenTags.forEach(t => {
-            const tag = tagTemplate.content.cloneNode(true).children[0]
-            const tagBody = tag.querySelector("[data-tag-body]")
-            tagBody.textContent = t;
-            searchResults.append(tag);
+            loadOneTag(t);
         });
     }
+}
+
+async function loadOneTag(t) {
+  const tagTemplate = document.querySelector("[data-tag-template]")
+  const tag = tagTemplate.content.cloneNode(true).children[0]
+  const tagBody = tag.querySelector("[data-tag-body]")
+  tagBody.textContent = t;
+  tagBody.addEventListener('click', () => reloadByTag(t));
+  searchResults.append(tag);
+}
+
+async function reloadByTag(t) {
+  const result = await mapicCrud.getPictureByTag(t);
+  if(result.success) {
+    imgResults.innerHTML = '';
+    for(const picture of result.data) {
+      loadOnePic(picture); 
+    }
+  }
 }
 
 async function showTrends() {
@@ -68,10 +80,10 @@ async function fillImageScrollBar() {
     const template = document.querySelector('[data-img-template]');
   
     for (let i = 0; i < 10; i++) {
-      const picture = await mapicCrud.readOnePicture();
+      const result = await mapicCrud.readOnePicture();
   
-      if (picture.success) {
-        loadOnePic(picture);
+      if (result.success) {
+        loadOnePic(result.data);
       }
     }
   }
@@ -83,11 +95,11 @@ async function displayPics() {
     
     if (scrollPosition >= scrollHeight - clientHeight - 905) {
       // User has scrolled to the bottom or beyond
-      const picture = await mapicCrud.readOnePicture();
+      const result = await mapicCrud.readOnePicture();
   
-      if (picture.success) {
+      if (result.success) {
         // Picture data is available
-        loadOnePic(picture);
+        loadOnePic(result.data);
       }
     }
 }
@@ -101,20 +113,18 @@ async function loadOnePic(picture) {
         const tagsElement = template.content.querySelector('[data-img-tags]');
         const ownerElement = template.content.querySelector('[data-img-owner]');
         const timeElement = template.content.querySelector('[data-img-time]');
-
-        console.log(picture.data);
   
-        imageElement.src = picture.data.picBase64;
-        imageElement.alt = picture.data._id;
-        descriptionElement.textContent = picture.data.description;
-        likeButton.textContent = picture.data.like;
-        tagsElement.textContent = picture.data.tags;
-        ownerElement.textContent = picture.data.ownerName;
-        const date = new Date(picture.data.createdTime);
+        imageElement.src = picture.picBase64;
+        imageElement.alt = picture._id;
+        descriptionElement.textContent = picture.description;
+        likeButton.textContent = picture.like;
+        tagsElement.textContent = picture.tags;
+        ownerElement.textContent = picture.ownerName;
+        const date = new Date(picture.createdTime);
         timeElement.textContent = date.toDateString();
         commentButton.textContent = "COMMENT";
   
         // Append the cloned template to the imageScrollBar
-        imageScrollBar.appendChild(template.content.cloneNode(true));
+        imgResults.appendChild(template.content.cloneNode(true));
 }
 
