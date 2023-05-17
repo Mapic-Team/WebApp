@@ -122,7 +122,8 @@ async function loadOnePic(picture) {
 
   imageElement.src = picture.picBase64;
   imageElement.alt = picture._id;
-  descriptionElement.textContent = picture.description;
+  descriptionElement.textContent =
+    picture.description === "" ? "Shares a Photo" : picture.description;
   likeButton.textContent = picture.like;
   tagsElement.textContent = "Tags: ";
 
