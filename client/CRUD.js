@@ -1,7 +1,6 @@
 
 class crud{
     async readUser(name){
-        console.log("what");
         const response = await fetch(`/readUser?userName=${name}`, {
                method: 'GET',
                headers: {'Content-Type': 'application/json'},
@@ -11,7 +10,6 @@ class crud{
            return data;
    }
     async createUser(name,password){
-        console.log("create");
        try{
            const response = await fetch(`/createUser`, {
                method: 'POST',

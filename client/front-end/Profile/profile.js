@@ -37,18 +37,18 @@ if(curUser["settings"] != undefined){
         privateCheck = true;
     }
 }
-console.log(curUser.profilePicture);
+//console.log(curUser.profilePicture);
 if(curUser.profilePicture == undefined){
     image.src = "data:img/png;base64,"+default_pic;
     await mapicCrud.changeProfilePic(user,default_pic);
 }
 else{
-    console.log(curUser.profilePicture);
+    //console.log(curUser.profilePicture);
     image.src = "data:img/png;base64,"+curUser.profilePicture;
 }
-console.log(curUser)
+//console.log(curUser)
 if(curUser.profileDescription != undefined){
-    console.log(curUser.profileDescription);
+    //console.log(curUser.profileDescription);
     desc.innerHTML = curUser.profileDescription;
 }
 else{
@@ -60,25 +60,31 @@ if (bestPic.data == null){
     document.getElementById("bestPost").innerHTML = "No pictures yet!";
 }
 else{
-    const best = await mapicCrud.getPicture(bestPic.data);
-    document.getElementById("best").src = "data:img/png;base64,"+best.picBase64;
-    document.getElementById("hearts").innerHTML = `:${best.like}`
+    //console.log(bestPic.data);
+    document.getElementById("best").src = bestPic.data.picBase64;
+    document.getElementById("hearts").innerHTML = `<i class="fa fa-solid fa-heart"></i>:${bestPic.data.like}`
 }
 //initialize the gallery
-if(curUser.pictues == undefined||curUser.pictues.length == 0){
+console.log(curUser.pictures == undefined||curUser.pictures.length == 0);
+if(curUser.pictures == undefined||curUser.pictures.length == 0){
     document.getElementById('pictures').innerHTML = `<h4 class="modal-title">No pictures in gallery</h4>`;
 }
 else{
-    document.getElementById('pictures').innerHTML =`<div class = "galleryGrid"></div>
+    console.log("hasphotos")
+    document.getElementById('pictures').innerHTML =`
     <button type = "button" id="delPics" class="btn btn-danger">Delete Pictures</button>`;
-    const gallery = document.getElementById('galleryGrid')
-    for(let picid in curUser.pictues){
+    const gallery = document.createElement('div');
+    gallery.classList.add('galleryGrid')
+    console.log(curUser.pictures);
+    for(let picid of curUser.pictures){
+        console.log(picid)
         let galleryPic = document.createElement('img');
-        galleryPic.classList.add('galleryGrid');
+        galleryPic.classList.add('gridobj');
         let getPic = await mapicCrud.getPicture(picid);
         galleryPic.src = getPic.data.picBase64;
         gallery.appendChild(galleryPic);
     }
+    document.getElementById('pictures').appendChild(gallery);
 }
 
 dark.addEventListener("click", async (event) => {

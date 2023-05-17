@@ -193,3 +193,8 @@ hr.h-color{
     grid: repeat(15, auto) / auto-flow;
     margin-bottom: 3em;
 }
+
+.gridobj{
+    height: 100px;
+    width: 100px;
+}
