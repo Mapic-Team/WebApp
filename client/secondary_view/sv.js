@@ -3,7 +3,7 @@ import { mapicCrud } from "../CRUD.js";
 const searchResults = document.getElementById('search-results');
 const searchInput = document.getElementById('search-input');
 const trendResults = document.getElementById('trend-results');
-
+const imageScrollBar = document.getElementById('image-scroll-bar');
 
 // window.addEventListener('load', displayPics);
 window.addEventListener('load', displayTopTags);
@@ -13,6 +13,8 @@ searchInput.addEventListener("keypress", (e) => {
       }
 });
 window.addEventListener('load', showTrends);
+window.addEventListener('load', fillImageScrollBar);
+imageScrollBar.addEventListener('scroll', displayPics);
 
 /**
  * displays up to ten most common tags when nothing is searched.
@@ -55,33 +57,61 @@ async function showTrends() {
     const trendTemplate = document.querySelector("[data-trend-template]")
     const result = await mapicCrud.getTrending();
     const pictures = result.data;
-    console.log(pictures);
     pictures.forEach(pic => {
         const trendImg = trendTemplate.content.cloneNode(true).children[0];
         trendImg.src = pic.picBase64;
         trendImg.alt = pic._id;
-        console.log(trendResults);
         trendResults.append(trendImg);
     });
 }
 
-// const imageScroll = document.getElementById('image-scroll-bar');
+async function fillImageScrollBar() {
+    const imageScrollBar = document.getElementById('image-scroll-bar');
+    const template = document.querySelector('[data-img-template]');
+  
+    while (imageScrollBar.firstChild) {
+      imageScrollBar.removeChild(imageScrollBar.firstChild);
+    }
+  
+    for (let i = 0; i < 10; i++) {
+      const picture = await mapicCrud.readOnePicture();
+  
+      if (picture.success) {
+        const imageElement = template.content.querySelector('[data-img-pic]');
+        const descriptionElement = template.content.querySelector('[data-img-description]');
+  
+        imageElement.src = picture.data.picBase64;
+        imageElement.alt = picture.data._id;
+        descriptionElement.textContent = picture.data.description;
+  
+        imageScrollBar.appendChild(template.content.cloneNode(true));
+      }
+    }
+  }
 
-// function displayPics() {
-//     const imgTemplate = document.querySelector("[data-img-template]");
-//     pictures.forEach(doc => {
-//         const imgDiv = imgTemplate.content.cloneNode(true).children[0];
-//         const pic = imgDiv.querySelector("[data-img-pic]");
-//         const description = imgDiv.querySelector("[data-img-description]");
-//         const like = imgDiv.querySelector("[data-img-like]");
-//         const comment = imgDiv.querySelector("[data-img-comment]");
-//         pic.src = doc.picBase64;
-//         pic.alt = doc.picId;
-//         description = doc.description;
-//         like = doc.like;
-//         comment = doc.comment;
-//         imageScroll.append(imgDiv);
-//     })
-// }
+async function displayPics() {
+    const scrollPosition = imageScrollBar.scrollTop;
+    const scrollHeight = imageScrollBar.scrollHeight;
+    const clientHeight = imageScrollBar.clientHeight;
+  
+    if (scrollPosition >= scrollHeight - clientHeight) {
+      // User has scrolled to the bottom or beyond
+      const picture = await mapicCrud.readOnePicture();
+  
+      if (picture.success) {
+        // Picture data is available
+        const template = document.querySelector('[data-img-template]');
+        const imageElement = template.content.querySelector('[data-img-pic]');
+        const descriptionElement = template.content.querySelector('[data-img-description]');
+  
+        imageElement.src = picture.data.picBase64;
+        imageElement.alt = picture.data._id;
+        descriptionElement.textContent = picture.data.description;
+  
+        // Append the cloned template to the imageScrollBar
+        imageScrollBar.appendChild(template.content.cloneNode(true));
+      }
+    }
+}
 
 

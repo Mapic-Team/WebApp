@@ -104,6 +104,21 @@ class CRUD{
         }
     }
 
+    async readOnePicture() {
+        try {
+          const response = await fetch(`${this.server_url}/readOnePicture`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+          });
+          const data = await response.json();
+          return data;
+        } catch (err) {
+          console.log(err);
+          return false;
+        }
+      }
+      
+
     async deletePicture(picId){
         try{
         const response = await fetch(`${this.server_url}/createUser?picId=${picId}`, {

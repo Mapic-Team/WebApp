@@ -271,7 +271,10 @@ class Database {
     console.log(obj.message);
     return obj;
   }
-
+   /**
+    * Get all pictures from the databse
+    * @returns {Promise<Object>}{ success: boolean, message: string, data: Array<pictures>}
+    */
   async readAllPictures() {
     const obj = { success: false, message: "", data: null };
     // let result = await this.pictureDB.find().toArray();
@@ -291,6 +294,34 @@ class Database {
     return obj;
   }
 
+  /**
+   * read One random picture from the database
+   * @returns {Promise<Object>} { success: boolean, message: string, data: picture}
+   */
+  async readOnePicture() {
+    const obj = { success: false, message: "", data: null };
+    try {
+      const count = await this.pictureDB.countDocuments();
+      if (count === 0) {
+        obj.message = "No pictures found.";
+        return obj;
+      }
+      const randomIndex = Math.floor(Math.random() * count);
+      const result = await this.pictureDB.findOne({}, { skip: randomIndex });
+      if (result) {
+        obj.success = true;
+        obj.message = "Read one picture.";
+        obj.data = result;
+      } else {
+        obj.message = "No pictures found.";
+      }
+    } catch (error) {
+      obj.message = `Error occurred while reading a picture: ${error}`;
+    }
+    console.log(obj.message);
+    return obj;
+  }
+  
   /**
    * Delete a picture from the pictureDB,
    * also delete it from its owner's pictures array
