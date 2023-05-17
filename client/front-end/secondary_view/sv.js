@@ -1,7 +1,7 @@
-import * as pdb from '../pouchDB.js';
+import { mapicCrud } from "../../CRUD.js";
 
-let pictures = pdb.dumpPictures();
-
+let pictures = await mapicCrud.getTrending();
+let topTenTags = await mapicCrud.getTenMostCommonTags();
 const searchInput = document.getElementById('search-input');
 const searchResults = document.getElementById('search-results');
 
