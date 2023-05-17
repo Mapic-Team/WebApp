@@ -1,6 +1,8 @@
 body {
     background-color: #ddd;
+    margin: 0;
     height: 100vh;
+    overflow: hidden;
 }
 
 #page-container {
@@ -177,21 +179,47 @@ img {
     grid-column: 2 / 3;
 }
 
-.topnav {
+.nav {
     background-color: white;
     overflow: hidden;
+    width: -webkit-fill-available;
+    background: linear-gradient(rgba(47, 48, 56, 0.8), rgba(47, 48, 56, 0.2));
 }
 
-.topnav a {
+ul {
+    padding-inline-start: 0;
+}
+
+.nav ul {
+    overflow: hidden;
+    justify-content: space-between;
+    list-style-type: none;
+}
+
+.nav ul li {
     float: left;
-    color: black;
-    text-align: center;
-    padding: 14px 16px;
+    padding: 10px 25px 10px 25px;
+}
+
+.nav ul li a {
+    position: relative;
+    display: block;
+    font-family: Lato, sans-serif;
+    color: #ecf0f1;
     text-decoration: none;
-    font-size: 17px;
+    text-transform: uppercase;
+    transition: 0.5s;
 }
   
-.topnav a:hover {
+.nav a:hover {
     background-color: darkgray;
     color: black;
+}
+
+/* .nav ul li a:hover {
+color: #aebec0;
+}  */
+.nav ul li a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
 }
