@@ -67,7 +67,6 @@ hr.h-color{
 }
 #butona{
     position: absolute;
-    bottom:0;
     right:0;
 }
 #loca{
@@ -77,7 +76,24 @@ hr.h-color{
 }
 .border-10{
     border-style:solid;
-     border-width: 2px;
+    border-width: 2px;  
+}
+
+.outLeft{
+    border-style:solid;
+    border-left-width: 2px;
+    border-right-width: 0px;
+    border-top-width: 2px;
+    border-bottom-width:0px;
+    
+}
+
+.outRight{
+    border-style:solid;
+    border-left-width: 0px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width:0px;
 }
 #post{
     position: absolute;
@@ -186,24 +202,29 @@ hr.h-color{
 }
 
 .picToBeDel{
+    overflow: hidden;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: maroon;
+    width:100px;
     height: 100px;
-    width: 100px;
-    padding: 10px;
-    border:10px,solid,rgb(133, 0, 0);
+    padding: 3px;
+    
 }
 
 .galleryGrid{
-    width:100%;
+    width:90%;
     max-height: 100%;
     margin: auto;
     display: grid;
     grid: repeat(15, auto) / auto-flow;
-    margin-bottom: 3em;
-    padding:10px
 }
 
 .gridobj{
-    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
     width: 100px;
+    height: 100px;
+    padding:1px;
 }
 
