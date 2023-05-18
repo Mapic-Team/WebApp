@@ -200,7 +200,7 @@ function closeAllPictures() {
 //     }
 // );
 mapicCrud.readAllPictures().then((res) => {
-  console.log(res.data);
+//   console.log(res.data);
   for (let curr of res.data) {
     addPictureOnMap(curr);
   }
@@ -219,7 +219,7 @@ function addPictureOnMap(data) {
   let description = data.description;
   let ownerName = data.ownerName;
   let tags = data.tags;
-  let time = data.createdTime;
+  let time = data.exif.time;
   var image = L.popup([lat, lng], {
     autoPan: false,
     autoClose: false,
@@ -303,7 +303,7 @@ document
     let lng = exifExtract.location.lng;
 
     let tags = [];
-    if (document.getElementById("tag-box") !== null) {
+    if (document.getElementById("tag-box") !== "") {
       tags = document.getElementById("tag-box").value.split(",");
     }
     let description = "";
@@ -335,7 +335,7 @@ document
       .openOn(map);
 
     resetUpload();
-
+    let time = exifExtract.time;
     document
       .getElementById(`img${imageCount}`)
       .addEventListener("click", () => {
