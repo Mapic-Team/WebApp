@@ -4,6 +4,14 @@
         <title>Secondary View</title>
         <link rel="stylesheet" href="./secondary_view/sv.css">
     </head>
+    <script>
+        function getInputValue() {
+            var value = prompt("Enter your comment:");
+            if (value !== null) {
+                alert("Input value: " + value);
+            }
+        }
+    </script>
     <body>
         <div class="nav">
             <ul>
@@ -47,7 +55,7 @@
                                     <p></p>
                                     <div class="buttons">
                                         <button class="like" data-img-like></button>
-                                        <button class="comment" data-img-comment></button>
+                                        <button class="comment" onclick="getInputValue()" data-img-comment></button>
                                     </div>
                                 </div>
                             </li>
