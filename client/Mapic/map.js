@@ -594,10 +594,18 @@ function clickPhoto(image, ownerName, description, tags, time) {
   let commentButton = document.createElement("button");
   commentButton.setAttribute("id", "comment-button");
   commentButton.textContent = "Send";
-  commentButton.setAttribute("style", "border-radius: 10px");
+  commentButton.setAttribute("style", "border-radius: 10px");  
   commentDiv.appendChild(commentInput);
   commentDiv.appendChild(commentButton);
-
+  document.getElementById("comment-button").addEventListener("click", () => {
+    let comment = document.getElementById("comment").value;
+    if (comment !== "") {
+        mapicCrud.addComment(imageName, comment).then((res) => {
+            console.log(res);
+        });
+    } else {
+        alert("Please write a comment first.");
+    }
   photoDiv.appendChild(closeButton);
   photoDiv.appendChild(img);
   photoDiv.appendChild(line_separator);
