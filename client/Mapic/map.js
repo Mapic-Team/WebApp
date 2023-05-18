@@ -186,11 +186,13 @@ document.getElementById("upload").onchange = function (e) {
   description.setAttribute("id", "description-box");
   description.setAttribute("placeholder", "Write Description Here...");
   document.getElementById("upload-window").appendChild(description);
+  description.classList.add("input-d");
 
     let tag = document.createElement("input");
     tag.setAttribute("id", "tag-box");
     tag.setAttribute("type", "text");
     tag.setAttribute("placeholder", "Add Tags Here, Separated by ','");
+    tag.classList.add("input");
     document.getElementById("upload-window").appendChild(tag);
 
 
