@@ -267,12 +267,17 @@ function resetUpload() {
     document.getElementById("upload-preview").remove();
   }
   document.getElementsByClassName("file-button")[0].style.display = "block";
+  
+  document
   document.getElementsByClassName("put-button")[0].style.display = "none";
   if (document.getElementById("location-info") !== null) {
     document.getElementById("location-info").remove();
   }
   if (document.getElementById("description-box") !== null) {
     document.getElementById("description-box").remove();
+  }
+  if (document.getElementById("tag-box") !== null) {
+    document.getElementById("tag-box").remove();
   }
 }
 
