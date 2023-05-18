@@ -249,10 +249,14 @@ if (isLogin()) {
     document.getElementById("profile").style.display = "block";
     mapicCrud.readUser(userName).then((res) => {
         let currUser = res.data;
-        let avatar = "data:img/png;base64,"+ currUser.profilePicture;
-    // }
-        document.getElementById("avatar").src = avatar;
-        document.getElementById("avatar").style.display = "block";
+        if (currUser.profilePicture === undefined) {
+            document.getElementById("avatar").src = "data:img/png;base64," + default_pic;
+            document.getElementById("avatar").style.display = "block";
+        } else {
+            let avatar = "data:img/png;base64,"+ currUser.profilePicture;
+            document.getElementById("avatar").src = avatar;
+            document.getElementById("avatar").style.display = "block";
+        }
     });
     
 } else {
