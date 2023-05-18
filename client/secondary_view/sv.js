@@ -7,11 +7,7 @@ const imageScrollBar = document.getElementById("image-scroll-bar");
 const imgResults = document.getElementById("img-results");
 
 window.addEventListener("load", displayTopTags);
-searchInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") {
-    search();
-  }
-});
+searchInput.addEventListener("change", search);
 window.addEventListener("load", showTrends);
 window.addEventListener("load", fillImageScrollBar);
 imageScrollBar.addEventListener("scroll", displayPics);
@@ -39,9 +35,8 @@ async function displayTopTags() {
 async function search() {
   const v = searchInput.value;
   const regex = /^\s*$/;
-
+  searchResults.innerHTML = "";
   if (!regex.test(v) && v !== null) {
-    searchResults.innerHTML = "";
     const result = await mapicCrud.matchTags(v);
     const topTenTags = result.data;
     if (topTenTags) {
@@ -116,7 +111,6 @@ async function displayPics() {
 }
 
 async function loadOnePic(picture) {
-  const line_separator = document.createElement("hr");
   const line_break = document.createElement("br");
 
   const template = document.querySelector("[data-img-template]");
