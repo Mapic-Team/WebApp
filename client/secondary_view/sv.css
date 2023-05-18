@@ -42,7 +42,7 @@ li {
 
 #left-bar {
   width: 15%;
-  background-color: black;
+  background: linear-gradient(rgba(47, 48, 56, 0.8), rgba(47, 48, 56, 0.2));
   color: white;
   padding-left: 2%;
   padding-right: 2%;
@@ -77,7 +77,7 @@ li {
 
 #right-bar {
   width: 20%;
-  background-color: black;
+  background: linear-gradient(rgba(47, 48, 56, 0.8), rgba(47, 48, 56, 0.2));
   color: white;
 }
 
@@ -104,7 +104,7 @@ li {
 }
 
 .nav {
-  background: linear-gradient(to right, #000000, #898888);
+  background: rgba(47, 48, 56, 0.8);
   overflow: hidden;
   width: 100%;
   color: whitesmoke;
@@ -261,6 +261,9 @@ ul {
   outline: none;
   box-shadow: 0 0 5px rgba(92, 158, 255, 0.5);
 }
+.tag {
+  margin: 5px;
+}
 
 .tag-list {
   margin: 10px;
@@ -270,14 +273,11 @@ ul {
   background-color: whitesmoke;
 }
 
-.tag {
-  margin: 5px;
-}
-
 .body {
   background-color: #4caf50;
   color: white;
 }
+
 .body,
 .tag-in-post {
   margin-left: 2%;
@@ -288,13 +288,22 @@ ul {
   border-radius: 5%;
 }
 
-.body,
-.tag-in-post :hover {
+.body:hover {
   background-color: #45a049;
 }
+.tag-in-post:hover {
+  background-color: #898888;
+  color: white;
+}
+.tag-in-post:focus {
+  background-color: #333333;
+  color: whitesmoke;
+}
 
-.body,
 .tag-in-post:active {
+  animation: button-click-animation 0.5s;
+}
+.body:active {
   animation: button-click-animation 0.5s;
 }
 
