@@ -278,7 +278,7 @@ class CRUD{
             const response = await fetch(`${this.server_url}/addComment`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body:JSON.stringify({picId:picId,comment: comment, commenter: commenter})
+                body:JSON.stringify({picId:picId,comment: comment, ownerName: commenter})
             });
             const data = await response.json();
             return data;
