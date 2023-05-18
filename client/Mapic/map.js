@@ -620,7 +620,7 @@ function clickPhoto(image,id, ownerName, description, tags, time) {
 
   commentButton.addEventListener("click", () => {
     // console.log(`${id}`);
-    // mapicCrud.addComment(id, commentInput.value, userName).then((res) => {
+    mapicCrud.addComment(id, commentInput.value, userName).then((res) => {
         // console.log(res);
         
         let comment = document.createElement("div");
@@ -630,8 +630,8 @@ function clickPhoto(image,id, ownerName, description, tags, time) {
 
         // console.log({id, commentInput.value, userName});
         // console.log(commentInput.value);
-        // }
-    // );
+        }
+    );
     commentInput.style.display = "none";
     commentButton.style.display = "none";
   });
