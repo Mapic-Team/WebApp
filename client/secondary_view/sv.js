@@ -23,8 +23,11 @@ imageScrollBar.addEventListener("scroll", displayPics);
 async function displayTopTags() {
   const result = await mapicCrud.getTenMostCommonTags();
   const topTenTags = result.data;
+  const regex = /^\s*$/;
   topTenTags.forEach((t) => {
-    loadOneTag(t);
+    if (!regex.test(t)) {
+      loadOneTag(t);
+    }
   });
 }
 
@@ -35,13 +38,21 @@ async function displayTopTags() {
  */
 async function search() {
   const v = searchInput.value;
-  searchResults.innerHTML = "";
-  const result = await mapicCrud.matchTags(v);
-  const topTenTags = result.data;
-  if (topTenTags) {
-    topTenTags.forEach((t) => {
-      loadOneTag(t);
-    });
+  const regex = /^\s*$/;
+
+  if (!regex.test(v) && v !== null) {
+    searchResults.innerHTML = "";
+    const result = await mapicCrud.matchTags(v);
+    const topTenTags = result.data;
+    if (topTenTags) {
+      topTenTags.forEach((t) => {
+        if (!regex.test(t)) {
+          loadOneTag(t);
+        }
+      });
+    }
+  } else {
+    displayTopTags();
   }
 }
 
