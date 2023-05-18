@@ -27,7 +27,7 @@ class CRUD{
                 headers: {'Content-Type': 'application/json'},
             });
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             return data;
         } catch(err) {
             console.log(err);
@@ -273,12 +273,12 @@ class CRUD{
             return false;
         } 
     }
-    async addComment(picId, comment){
+    async addComment(picId, comment, commenter){
         try{
             const response = await fetch(`${this.server_url}/addComment`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body:JSON.stringify({picId:picId,comment: comment})
+                body:JSON.stringify({picId:picId,comment: comment, commenter: commenter})
             });
             const data = await response.json();
             return data;

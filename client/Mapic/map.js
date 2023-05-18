@@ -220,6 +220,7 @@ function addPictureOnMap(data) {
   let ownerName = data.ownerName;
   let tags = data.tags;
   let time = data.exif.time;
+  let id = data._id;
   var image = L.popup([lat, lng], {
     autoPan: false,
     autoClose: false,
@@ -230,7 +231,7 @@ function addPictureOnMap(data) {
     )
     .openOn(map);
   document.getElementById(`img${imageCount}`).addEventListener("click", () => {
-    clickPhoto(image, ownerName, description, tags, time);
+    clickPhoto(image,id, ownerName, description, tags, time);
   });
   imageCount++;
 }
@@ -348,7 +349,7 @@ document
     document
       .getElementById(`img${imageCount}`)
       .addEventListener("click", () => {
-        clickPhoto(image, userName, description, tags, time);
+        clickPhoto(image,id,  userName, description, tags, time);
       });
     imageCount++;
 
@@ -533,7 +534,7 @@ document.getElementById("upload").onchange = function (e) {
   // console.log(exifExtract);
 };
 var toolTip;
-function clickPhoto(image, ownerName, description, tags, time) {
+function clickPhoto(image,id, ownerName, description, tags, time) {
   const line_separator = document.createElement("hr");
   const line_break = document.createElement("br");
   let latlng = image.getLatLng();
@@ -616,6 +617,24 @@ function clickPhoto(image, ownerName, description, tags, time) {
   photoDiv.appendChild(tagSection);
   photoDiv.appendChild(line_break);
   photoDiv.appendChild(commentDiv);
+
+  commentButton.addEventListener("click", () => {
+    // console.log(`${id}`);
+    // mapicCrud.addComment(id, commentInput.value, userName).then((res) => {
+        // console.log(res);
+        
+        let comment = document.createElement("div");
+        comment.setAttribute("class", "comment");
+        comment.textContent = `${userName}: ${commentInput.value}`;
+        commentDiv.appendChild(comment);
+
+        // console.log({id, commentInput.value, userName});
+        // console.log(commentInput.value);
+        // }
+    // );
+    commentInput.style.display = "none";
+    commentButton.style.display = "none";
+  });
   // }
   // console.log(toolTip);
   if (toolTip == undefined) {
