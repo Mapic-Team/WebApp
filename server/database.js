@@ -10,7 +10,7 @@ await client.connect();
 
 class Database {
   constructor() {
-    const database = client.db("Mapic_database");
+    const database = client.db("Mapic");
     this.db = database;
     this.userDB = database.collection("userDB");
     this.pictureDB = database.collection("pictureDB");
