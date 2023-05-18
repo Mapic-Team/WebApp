@@ -76,20 +76,22 @@ else{
         let galleryPic = document.createElement('img');
         pic.classList.add('gridobj');
         let getPic = await mapicCrud.readPicture(picid);
-        galleryPic.src = getPic.data.picBase64;
-        pic.id = picid;
-        galleryPic.addEventListener('click',(event)=>{
-            if (pic.classList.contains("picToBeDel")){
-                pic.classList.remove("picToBeDel");
-                pic.classList.add("gridobj");
-            }
-            else{
-                pic.classList.remove("gridobj");
-                pic.classList.add("picToBeDel");
-            }
-        });
-        pic.appendChild(galleryPic)
-        gallery.appendChild(pic);
+        if (getPic.data!=null){
+            galleryPic.src = getPic.data.picBase64;
+            pic.id = picid;
+            galleryPic.addEventListener('click',(event)=>{
+                if (pic.classList.contains("picToBeDel")){
+                    pic.classList.remove("picToBeDel");
+                    pic.classList.add("gridobj");
+                }
+                else{
+                    pic.classList.remove("gridobj");
+                    pic.classList.add("picToBeDel");
+                }
+            });
+            pic.appendChild(galleryPic)
+            gallery.appendChild(pic);
+        }
     }
     document.getElementById('pictures').appendChild(gallery);
 }
