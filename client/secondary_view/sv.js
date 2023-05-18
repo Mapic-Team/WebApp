@@ -148,6 +148,19 @@ async function loadOnePic(picture) {
   const date = new Date(picture.createdTime);
   timeElement.textContent = date.toDateString();
   commentButton.textContent = "COMMENT";
+  imgResults.addEventListener("click", function (event) {
+    if (event.target.matches("[data-img-like]")) {
+      console.log(event.target);
+      mapicCrud.changeLikeBy(event.target.picId, picture.like + 1); //need to fix
+      event.target.textContent = picture.like + 1;
+    }
+  });
+  imgResults.addEventListener("click", function (event) {
+    if (event.target.matches("[data-img-comment]")) {
+      console.log(event.target);
+      mapicCrud.addComment(picture.picId); //need to fix
+    }
+  });
 
   // Append the cloned template to the imageScrollBar
   imgResults.appendChild(line_break);
