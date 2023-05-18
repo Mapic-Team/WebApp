@@ -40,13 +40,19 @@ if(curUser.settings != undefined){
     }
 }
 //old profiles didn't initialize with profile pics so we give them the default here
+console.log(curUser.profilePicture)
 if(curUser.profilePicture == undefined){
     image.src = "data:img/png;base64,"+default_pic;
     await mapicCrud.changeProfilePic(user,default_pic);
 }
 //else we get it from the gotten user
 else{
-    image.src = "data:img/png;base64,"+curUser.profilePicture;
+    if(curUser.profilePicture==default_pic){
+        image.src = "data:img/png;base64,"+default_pic;
+    }
+    else{
+        image.src = curUser.profilePicture;
+    }
 }
 //we see if they have a description, if they do update if else show default
 if(curUser.profileDescription != undefined){
@@ -142,8 +148,7 @@ async function handleFiles(){
         var content = readerEvent.target.result;
         image.src = content;
         curUser.profilePicture = content;
-        console.log(content.substring(22));
-        await mapicCrud.changeProfilePic(user,content.substring(22));
+        await mapicCrud.changeProfilePic(user,content);
     }
 }
 
