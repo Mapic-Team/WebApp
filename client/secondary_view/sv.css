@@ -13,6 +13,16 @@ li {
   display: flex;
   align-items: space-between;
   height: 100%;
+  background-color: #e2ecf2;
+}
+
+#image-scroll-bar {
+  background-color: #e2ecf2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  scroll-snap-type: y mandatory;
+  overscroll-behavior-y: contain;
 }
 
 .grid-container {
@@ -42,10 +52,16 @@ li {
 
 #left-bar {
   width: 15%;
-  background: linear-gradient(rgba(47, 48, 56, 0.8), rgba(47, 48, 56, 0.2));
+  background: #303237;
   color: white;
   padding-left: 2%;
   padding-right: 2%;
+}
+
+#right-bar {
+  width: 20%;
+  background: #303237;
+  color: white;
 }
 
 #left-bar-container {
@@ -64,21 +80,6 @@ li {
 
 #results {
   grid-column: 2 / 1;
-}
-
-#image-scroll-bar {
-  background-color: white;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  scroll-snap-type: y mandatory;
-  overscroll-behavior-y: contain;
-}
-
-#right-bar {
-  width: 20%;
-  background: linear-gradient(rgba(47, 48, 56, 0.8), rgba(47, 48, 56, 0.2));
-  color: white;
 }
 
 #right-bar-container {
@@ -104,7 +105,7 @@ li {
 }
 
 .nav {
-  background: rgba(47, 48, 56, 0.8);
+  background: linear-gradient(rgba(47, 48, 56, 0.8), rgb(100 112 124 / 80%));
   overflow: hidden;
   width: 100%;
   color: whitesmoke;
@@ -129,14 +130,14 @@ ul {
   position: relative;
   display: block;
   font-family: Lato, sans-serif;
-  color: #c2c2c2;
+  color: #ecf0f1;
   text-decoration: none;
   text-transform: uppercase;
   transition: color 0.5s;
 }
 
 .nav ul li a:hover {
-  color: #737373;
+  color: #aebec0;
 }
 
 .nav ul li a::after {
@@ -146,7 +147,7 @@ ul {
   height: 2px;
   bottom: -2px;
   left: 0;
-  background-color: #737373;
+  background-color: #6daeda;
   transform: scaleX(0);
   transform-origin: right;
   transition: transform 0.5s;
