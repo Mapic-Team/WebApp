@@ -18,7 +18,7 @@ let curUser = {};
 let settings = {};
 //initilize it to false, but we'll update it according to the db later
 var privateCheck = false;
-import { mapicCrud } from "../../CRUD.js";
+import { mapicCrud } from "../CRUD.js";
 image.src = "data:img/png;base64,"+default_pic;
 
 //initiate the profile page

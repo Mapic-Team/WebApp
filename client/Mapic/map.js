@@ -7,6 +7,7 @@
 // import * as db from '/server/database.js';
 
 import { mapicCrud } from "../CRUD.js";
+import { default_pic } from "../Profile/defaultPic.js";
 
 var amherst = [42.373034, -72.519632];
 
@@ -234,14 +235,27 @@ function addPictureOnMap(data) {
   imageCount++;
 }
 
-if (localStorage.getItem("user") !== null) {
+function isLogin() {
+  if (localStorage.getItem("user") !== null) {
+    return true;
+  }
+  return false;
+}
+
+if (isLogin()) {
     window.userName = localStorage.getItem("user");
     // console.lof(userName);
     document.getElementById("login").style.display = "none";
     document.getElementById("profile").style.display = "block";
+    mapicCrud.readUser(userName).then((res) => {
+        let currUser = res.data;
+        let avatar = "data:img/png;base64,"+ currUser.profilePicture;
+    // }
+        document.getElementById("avatar").src = avatar;
+        document.getElementById("avatar").style.display = "block";
+    });
+    
 } else {
-  // alert("Please login first");
-  document.getElementById("profile").style.display = "block";
   document.getElementById("login").style.display = "block";
 }
 
@@ -267,15 +281,19 @@ document.getElementById("close-btn").addEventListener("click", () => {
 });
 
 document.getElementById("upload-btn").addEventListener("click", () => {
-  if (
-    document.getElementById("upload-window").style.display == "" ||
-    document.getElementById("upload-window").style.display == "none"
-  ) {
-    document.getElementById("upload-window").style.display = "flex";
-    document.getElementsByClassName("put-button")[0].style.display = "none";
-  } else {
-    resetUpload();
-  }
+    if(isLogin()) {
+        if (
+        document.getElementById("upload-window").style.display == "" ||
+        document.getElementById("upload-window").style.display == "none"
+        ) {
+        document.getElementById("upload-window").style.display = "flex";
+        document.getElementsByClassName("put-button")[0].style.display = "none";
+        } else {
+        resetUpload();
+        }
+    } else {
+        alert("Please login first to use this feature.");
+    }
 });
 
 document
@@ -364,25 +382,6 @@ document
     //         }
     //         );
 
-    // fetch(`http://localhost:3000/createPicture?userName=${userName}&picBase64=${src}&tag=${tags}&description=${description}&exif=${exifExtract}`, {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         'Accept': 'application/json'
-    //     },
-    // body: JSON.stringify({
-    //     userName: userName,
-    //     picBase64: window.base64,
-    //     tags: tags,
-    //     description: description,
-    //     exif: exifExtract
-    // })
-    // })
-    // .then(response => response.json())
-    // .then(data => {
-    //     console.log(data);
-    // }
-    // );
     // fetch('http://localhost:3000/readUser?userName=Iris', {
     //     method: 'GET',
     //     headers: {
@@ -409,6 +408,14 @@ document.getElementById("upload").onchange = function (e) {
   description.setAttribute("id", "description-box");
   description.setAttribute("placeholder", "Write Description Here...");
   document.getElementById("upload-window").appendChild(description);
+
+    let tag = document.createElement("input");
+    tag.setAttribute("id", "tag-box");
+    tag.setAttribute("type", "text");
+    tag.setAttribute("placeholder", "Add Tags Here, Separated by ','");
+    document.getElementById("upload-window").appendChild(tag);
+
+
 
   document.getElementsByClassName("put-button")[0].style.display = "block";
   var file = e.target.files[0];
@@ -472,16 +479,13 @@ document.getElementById("upload").onchange = function (e) {
           exifExtract.location.lng;
       } else {
         location.textContent = "No location data found in image.";
-        // click button to manually add location on map
         let addLocation = document.createElement("button");
         addLocation.setAttribute("id", "add-location");
         addLocation.textContent = "Add Location";
         location.appendChild(addLocation);
         addLocation.addEventListener("click", () => {
           location.textContent = "Click on the map to add location.";
-          //change cursor to crosshair
           document.getElementById("map").style.cursor = "crosshair";
-
           map.on("click", function (e) {
             exifExtract.location.lat = e.latlng.lat;
             exifExtract.location.lng = e.latlng.lng;

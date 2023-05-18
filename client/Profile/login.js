@@ -2,7 +2,7 @@
 
 //import { createUser, readUser} from "../pouchDB.js";
 
-import { mapicCrud } from "../../CRUD.js";
+import { mapicCrud } from "../CRUD.js";
 //const check = require('profile.js')
 const logUser =  document.getElementById("logUser");
 const logPass = document.getElementById("logPass");
@@ -42,7 +42,7 @@ document.getElementById("signup").addEventListener("click" ,async (event)=>{
 document.getElementById("login").addEventListener("click" ,async (event)=>{
     if(await isValidLogin()){
         localStorage.setItem("user", logUser.value);
-        location.href = "profile.html"
+        location.href = "index.html"
     }
 });
 /**
