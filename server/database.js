@@ -2,8 +2,7 @@ import { MongoClient } from "mongodb";
 import { default_pic } from "./default_profile_pic.js";
 import md5 from "md5";
 
-const connectionString =
-  "mongodb+srv://Barricature:wTz63sS8Nv7uECS0@cluster0.pmk22hf.mongodb.net/?retryWrites=true&w=majority";
+const connectionString = null; // Change this to connection string otherwise won't work
 
 const client = new MongoClient(connectionString);
 await client.connect();
