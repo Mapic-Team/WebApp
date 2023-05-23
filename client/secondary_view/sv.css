@@ -42,7 +42,7 @@ li {
 }
 
 #left-bar {
-  width: 15%;
+  width: fit-content 15%;
   background: #303237;
   color: white;
   padding-left: 2%;
