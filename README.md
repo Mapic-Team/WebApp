@@ -1,4 +1,5 @@
-https://umass-cs-326.github.io/docs/project/ui-design/
+https://umass-cs-326.github.io/docs/project/ui-design/\\
+### Final video: https://youtu.be/4fBlFV3Pnvw
 # Team 1 Project
 
 ## Application Name
